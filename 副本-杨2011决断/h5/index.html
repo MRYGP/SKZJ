@@ -300,7 +300,7 @@
         </div>
       </div>
 
-      <div class="landscape">请竖屏观看<br>这是一段为手机竖屏设计的人生副本</div>
+      <div class="landscape">请竖屏观看<br>这段人生</div>
     </section>
   </main>
 
@@ -376,7 +376,7 @@
 
     function durationFor(card) {
       if (card.fixed) return card.fixed;
-      const raw = (card.text || card.title || "").replace(/[\\s\\n，。——、“”【】（）]/g, "");
+      const raw = (card.text || card.title || "").replace(/[\s\n，。——、“”【】（）]/g, "");
       return Math.max(3200, raw.length * 280 + 1200);
     }
 
@@ -413,8 +413,8 @@
 
         if (card.pause) {
           content.innerHTML = `
-            <div class="kicker">自动播放已停止，请选择</div>
             <div class="text small">${escapeHtml(card.title)}</div>
+            <div class="kicker">（点一个）</div>
             <div class="choices">
               ${card.choices.map((choice, i) => `<button class="choice" data-choice="${i}">${escapeHtml(choice.label)}</button>`).join("")}
             </div>
@@ -450,7 +450,7 @@
     function renderBranch(text, nextIndex) {
       stage.classList.add("fade");
       window.setTimeout(() => {
-        content.innerHTML = `<div class="kicker">这条路，被划掉了</div><div class="text small">${escapeHtml(text)}</div>`;
+        content.innerHTML = `<div class="text small">${escapeHtml(text)}</div>`;
         stage.classList.remove("fade");
         clearTimer();
         timer = window.setTimeout(() => {
