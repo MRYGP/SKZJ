@@ -136,13 +136,18 @@
 
     .card-photo {
       display: block;
-      width: min(72vw, 330px);
+      width: min(78%, 360px);
       max-height: 42vh;
-      margin: 0 auto 22px;
+      margin: 0 auto 24px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 4px;
       border: 1px solid rgba(244, 239, 230, 0.2);
       box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
+    }
+
+    .photo-copy {
+      display: grid;
+      gap: 14px;
     }
 
     .choices {
@@ -365,7 +370,7 @@
       { id: "26", type: "center", text: "三百万的业务。\n一百块的报酬。", fixed: 4200 },
       { id: "27", text: "你接住那张钱，心里没去算多少，也没觉得有什么——只有一个念头，清清楚楚：\n我还成单了。\n路，砍开了第一道口子。" },
       { id: "28", text: "后面的事，快得超出想象。满城的企业攥着承兑没处兑，客户带着客户来。当年甩你一百块的那些人，后来要做资金，都得先找你——你也从没计较过那一甩。一年多后，你付了一套房的一半房款，卡里还有四十万。两年后你在网上认识一个姑娘，第一次自我介绍，报的就是这两个数。后来，她成了你的妻子。", small: true },
-      { id: "29", image: "assets/img/card29.png", selfVoice: "assets/audio/card29-self-voice.mp3", text: "那个没有伸手去拿水杯的下午，到今天，十五年。\n【待杨判字】现在想起来还是会怕——没有那个下午，我不知道日子会烂成什么样。说夸张点，我就像悬崖上的一棵小树，石头底下的一根草：没人栽，没人浇，硬生生，自己长出来的。", small: true },
+      { id: "29", type: "photo", img: "assets/img/card29.png", audio: "assets/audio/card29.m4a", fixed: 14000, text: "那个没有伸手去拿水杯的下午，到今天，十五年。\n“现在想起来还是会怕——没有那个下午，我不知道日子会烂成什么样。说夸张点，我就像悬崖上的一棵小树，石头底下的一根草：没人栽，没人浇，硬生生，自己长出来的。”【待杨判字】" },
       { id: "tail", type: "tail", text: "你的生活里，有没有那张挂在脖子上的饼？\n——", cta: "把你人生里最重要的那个时刻，也做成这样一段路" }
     ];
 
@@ -384,6 +389,7 @@
     let paused = false;
     let running = false;
     let touchMoved = false;
+    let activeAudio = null;
 
     function durationFor(card) {
       if (card.fixed) return card.fixed;
@@ -406,6 +412,29 @@
       timer = null;
     }
 
+    function stopActiveAudio() {
+      if (!activeAudio) return;
+      activeAudio.pause();
+      activeAudio.currentTime = 0;
+      activeAudio = null;
+    }
+
+    function playCardAudio(card) {
+      stopActiveAudio();
+      if (!card.audio) return;
+      activeAudio = new Audio(card.audio);
+      try {
+        const playResult = activeAudio.play();
+        if (playResult && typeof playResult.catch === "function") {
+          playResult.catch(() => {
+            stopActiveAudio();
+          });
+        }
+      } catch (error) {
+        stopActiveAudio();
+      }
+    }
+
     function scheduleNext(card) {
       clearTimer();
       if (!running || paused || card.pause || card.type === "tail") return;
@@ -423,6 +452,7 @@
         ].filter(Boolean).join(" ");
 
         if (card.pause) {
+          stopActiveAudio();
           content.innerHTML = `
             <div class="text small">${escapeHtml(card.title)}</div>
             <div class="kicker">（点一个）</div>
@@ -438,6 +468,7 @@
             });
           });
         } else if (card.type === "tail") {
+          stopActiveAudio();
           content.innerHTML = `
             <div class="${cls}">${escapeHtml(card.text)}</div>
             <div class="choices">
@@ -449,8 +480,19 @@
             contactModal.classList.add("show");
             contactModal.setAttribute("aria-hidden", "false");
           });
+        } else if (card.type === "photo") {
+          const [lead, ...rest] = card.text.split("\n");
+          content.innerHTML = `
+            <img class="card-photo" src="${escapeHtml(card.img)}" alt="">
+            <div class="photo-copy">
+              <div class="text">${escapeHtml(lead)}</div>
+              <div class="text small">${escapeHtml(rest.join("\n"))}</div>
+            </div>
+          `;
+          playCardAudio(card);
         } else {
-          content.innerHTML = `${card.image ? `<img class="card-photo" src="${escapeHtml(card.image)}" alt="">` : ""}<div class="${cls}">${escapeHtml(card.text)}</div>`;
+          stopActiveAudio();
+          content.innerHTML = `<div class="${cls}">${escapeHtml(card.text)}</div>`;
         }
         setProgress();
         stage.classList.remove("fade");
@@ -461,6 +503,7 @@
     function renderBranch(text, nextIndex) {
       stage.classList.add("fade");
       window.setTimeout(() => {
+        stopActiveAudio();
         content.innerHTML = `<div class="text small">${escapeHtml(text)}</div>`;
         stage.classList.remove("fade");
         clearTimer();
@@ -501,6 +544,7 @@
       if (!running) return;
       paused = true;
       clearTimer();
+      if (activeAudio) activeAudio.pause();
       phone.classList.add("paused");
     }
 
@@ -508,6 +552,14 @@
       if (!running) return;
       paused = false;
       phone.classList.remove("paused");
+      if (activeAudio) {
+        try {
+          const playResult = activeAudio.play();
+          if (playResult && typeof playResult.catch === "function") {
+            playResult.catch(() => {});
+          }
+        } catch (error) {}
+      }
       scheduleNext(mainCards[index]);
     }
 
