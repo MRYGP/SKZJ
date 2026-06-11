@@ -134,6 +134,17 @@
 
     .text strong { color: #fff7d9; font-weight: 800; }
 
+    .card-photo {
+      display: block;
+      width: min(72vw, 330px);
+      max-height: 42vh;
+      margin: 0 auto 22px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid rgba(244, 239, 230, 0.2);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
+    }
+
     .choices {
       display: grid;
       gap: 12px;
@@ -354,7 +365,7 @@
       { id: "26", type: "center", text: "三百万的业务。\n一百块的报酬。", fixed: 4200 },
       { id: "27", text: "你接住那张钱，心里没去算多少，也没觉得有什么——只有一个念头，清清楚楚：\n我还成单了。\n路，砍开了第一道口子。" },
       { id: "28", text: "后面的事，快得超出想象。满城的企业攥着承兑没处兑，客户带着客户来。当年甩你一百块的那些人，后来要做资金，都得先找你——你也从没计较过那一甩。一年多后，你付了一套房的一半房款，卡里还有四十万。两年后你在网上认识一个姑娘，第一次自我介绍，报的就是这两个数。后来，她成了你的妻子。", small: true },
-      { id: "29", text: "那个没有伸手去拿水杯的下午，到今天，十五年。\n【杨的一句话·占位】" },
+      { id: "29", image: "assets/img/card29.png", selfVoice: "assets/audio/card29-self-voice.mp3", text: "那个没有伸手去拿水杯的下午，到今天，十五年。\n【待杨判字】现在想起来还是会怕——没有那个下午，我不知道日子会烂成什么样。说夸张点，我就像悬崖上的一棵小树，石头底下的一根草：没人栽，没人浇，硬生生，自己长出来的。", small: true },
       { id: "tail", type: "tail", text: "你的生活里，有没有那张挂在脖子上的饼？\n——", cta: "把你人生里最重要的那个时刻，也做成这样一段路" }
     ];
 
@@ -439,7 +450,7 @@
             contactModal.setAttribute("aria-hidden", "false");
           });
         } else {
-          content.innerHTML = `<div class="${cls}">${escapeHtml(card.text)}</div>`;
+          content.innerHTML = `${card.image ? `<img class="card-photo" src="${escapeHtml(card.image)}" alt="">` : ""}<div class="${cls}">${escapeHtml(card.text)}</div>`;
         }
         setProgress();
         stage.classList.remove("fade");
