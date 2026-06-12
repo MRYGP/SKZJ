@@ -1,3 +1,5 @@
+> ⚠️ 【归档声明 · 2026-06-14】本文件为历史指令备份。现行系统指令为杨手动重贴于 Claude Project 设置中的 v2 版（本地仓库=唯一事实源，不再维护上传版知识库）；本文件不再具有指令效力，仅作演化记录保留。
+
 # KAIROS 自传项目 · Claude Project 自定义指令
 
 用法：建 Claude Project 时，把本文件内容粘进“项目说明 / Custom Instructions”。
