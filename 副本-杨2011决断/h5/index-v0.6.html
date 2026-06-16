@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
+  <!-- 已被 v0.7 转正取代·2026-06-16·留判真历史H5·现行见 index.html -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>人生馆001号 · 2011，那只水杯</title>
@@ -10,8 +11,7 @@
       --fg: #f4efe6;
       --muted: rgba(244, 239, 230, 0.7);
       --line: rgba(244, 239, 230, 0.18);
-      --accent: #d7b46a;     /* 暖金：觉醒/砍刀/逆转 */
-      --cold: #6f8aa8;       /* 冷蓝：低谷里唯一的光＝显示器（克制使用） */
+      --accent: #d7b46a;
       --danger: #9b2f24;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -73,15 +73,7 @@
         radial-gradient(circle at 50% 72%, rgba(215, 180, 106, 0.08), transparent 42%),
         #080807;
       opacity: 1;
-      transition: opacity 0.6s ease, background 1.2s ease;
-    }
-
-    /* 低谷：屋里唯一的光来自显示器，蓝的 —— 冷蓝替换暖金辉光，克制 */
-    .stage.cold {
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.02), transparent 22%),
-        radial-gradient(circle at 50% 60%, rgba(111, 138, 168, 0.12), transparent 46%),
-        #07080a;
+      transition: opacity 0.6s ease;
     }
 
     .stage.fade { opacity: 0; }
@@ -137,22 +129,11 @@
     .text.heart {
       text-align: center;
       font-size: clamp(29px, 8.4vw, 52px);
-      line-height: 1.3;
+      line-height: 1.24;
       font-weight: 760;
     }
 
     .text strong { color: #fff7d9; font-weight: 800; }
-
-    /* 砍刀：一字一顿 —— 三行依次浮现 */
-    .reveal-line {
-      display: block;
-      opacity: 0;
-      transform: translateY(8px);
-      animation: lineIn 0.9s ease forwards;
-    }
-    @keyframes lineIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
 
     .card-photo {
       display: block;
@@ -164,21 +145,11 @@
       border: 1px solid rgba(244, 239, 230, 0.2);
       box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
     }
-    /* 真容照缺省时的占位（本窗口预览用；落盘后接真实照片不显示） */
-    .photo-fallback {
-      display: grid;
-      place-items: center;
-      width: min(78%, 360px);
-      height: 30vh;
-      margin: 0 auto 24px;
-      border: 1px solid rgba(244, 239, 230, 0.18);
-      border-radius: 4px;
-      color: rgba(244, 239, 230, 0.42);
-      font-size: 14px;
-      background: rgba(255,255,255,0.03);
-    }
 
-    .photo-copy { display: grid; gap: 14px; }
+    .photo-copy {
+      display: grid;
+      gap: 14px;
+    }
 
     .choices {
       display: grid;
@@ -197,35 +168,35 @@
       font-size: clamp(18px, 4.7vw, 24px);
       line-height: 1.35;
       backdrop-filter: blur(8px);
-      transition: background 0.15s ease, border-color 0.15s ease;
     }
 
     .choice:active {
       background: rgba(215, 180, 106, 0.18);
       border-color: rgba(215, 180, 106, 0.52);
     }
-    .choice:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
 
     .progress {
       position: absolute;
-      left: 0; bottom: 0;
-      width: 100%; height: 2px;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 2px;
       z-index: 5;
       background: rgba(244, 239, 230, 0.1);
     }
+
     .progress > span {
       display: block;
-      width: 0; height: 100%;
+      width: 0;
+      height: 100%;
       background: var(--accent);
       transition: width 0.3s linear;
     }
 
     .hint {
       position: absolute;
-      left: 20px; right: 20px;
+      left: 20px;
+      right: 20px;
       bottom: calc(18px + var(--safe-bottom));
       z-index: 3;
       color: rgba(244, 239, 230, 0.48);
@@ -234,6 +205,7 @@
       opacity: 0;
       transition: opacity 0.2s ease;
     }
+
     .paused .hint { opacity: 1; }
 
     .cover, .modal, .landscape {
@@ -249,7 +221,10 @@
         linear-gradient(180deg, #11100d, #050504);
     }
 
-    .cover-inner, .modal-inner { width: 100%; text-align: center; }
+    .cover-inner, .modal-inner {
+      width: 100%;
+      text-align: center;
+    }
 
     .title {
       margin: 0 0 12px;
@@ -274,13 +249,6 @@
       color: #11100d;
       font-size: 20px;
       font-weight: 700;
-    }
-
-    .muted-note {
-      margin-top: 18px;
-      color: rgba(244, 239, 230, 0.4);
-      font-size: 12px;
-      line-height: 1.5;
     }
 
     .secondary {
@@ -317,13 +285,9 @@
       font-size: 22px;
       line-height: 1.5;
     }
+
     @media (orientation: landscape) and (max-height: 640px) {
       .landscape { display: flex; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .stage { transition: opacity 0.2s ease; }
-      .reveal-line { animation-duration: 0.01s; }
     }
   </style>
 </head>
@@ -341,7 +305,6 @@
           <h1 class="title">2011，<br>那只水杯</h1>
           <p class="subtitle">人不是一步跌进深渊的，<br>是差一寸没有伸手。</p>
           <button class="primary" id="startBtn">开始</button>
-          <p class="muted-note">本预览无配音；成片由本人真声 + 纪录片腔旁白 + 配乐承载。</p>
         </div>
       </div>
 
@@ -359,35 +322,19 @@
   </main>
 
   <script>
-    /* mood:"cold" = 低谷冷蓝；reveal:"lines" = 砍刀一字一顿；mainCards 顺序即播放顺序 */
     const mainCards = [
       { id: "1", type: "center", text: "2011年。\n长沙，红花坡。", fixed: 4000 },
-      { id: "2", mood: "cold", small: true, text: "下午两点多，你刚醒。60平米的出租屋，帘子拉着——白天也拉着。屋里唯一的光来自显示器，蓝的。烟灰缸是满的。" },
+      { id: "2", text: "下午两点多，你刚醒。60平米的出租屋，帘子拉着——白天也拉着。屋里唯一的光来自显示器，蓝的。烟灰缸是满的。", small: true },
       { id: "3", text: "又一部电影。你已经不记得这个月看了多少部。1米65，165斤，没穿上衣，肚子搭在桌沿上。" },
-      { id: "4", type: "center", text: "你口渴了。", fixed: 3400 },
-      { id: "5", small: true, text: "一个黑杯子在桌上，里面泡着一大杯浓茶。离你的手，只有一个拳头的距离。" },
-      { id: "5b", small: true, text: "你伸了下手。——够不到。得把上身往前送一下，才够得着。" },
-      {
-        id: "pause-0",
-        pause: true,
-        title: "就差把上身往前送这一下。\n送，还是不送？",
-        choices: [
-          { label: "往前够——把茶端过来", branch: "你打算把上身送过去——" },
-          { label: "算了，等会儿再说", branch: "等会儿。电影还没完。" }
-        ]
-      },
-      { id: "6", type: "center", text: "身子没有动。", fixed: 4200 },
-      { id: "7", small: true, text: "然后，一个画面毫无来由地冒出来——那个故事里的妇人，丈夫把一张大饼挂在她脖子上出了远门。她饿死了。因为懒得把饼转过来。" },
-      { id: "7b", type: "center", text: "你莫名有点害怕。\n像是往下，看见了一个深渊。", fixed: 4200 },
-      { id: "7c", type: "center", text: "你就那么停着。\n大概，一分钟。", fixed: 3600 },
-      { id: "7d", type: "center", text: "再也不能这样过下去了。\n绝对不行。", fixed: 4600 },
+      { id: "4", type: "center", text: "你口渴了。", fixed: 4000 },
+      { id: "5", text: "一个黑杯子在桌上，里面泡着一大杯浓茶。离你的手，只有一个拳头的距离——光伸手，还差那么一点，得把上身往前送一下。", small: true },
+      { id: "6", type: "center", text: "你没有动。", fixed: 4000 },
+      { id: "7", text: "就在这一秒，一个画面毫无来由地冒出来——那个故事里的妇人，丈夫把一张大饼挂在她脖子上出了远门。她饿死了。因为懒得把饼转过来。", small: true },
       { id: "8", type: "center", text: "35岁。", fixed: 4000 },
-      { id: "8b", mood: "cold", small: true, text: "你是初中就考上中专的人——那年头，包分配、吃国家粮。在爸妈眼里，你这辈子稳了，往后是享福的命。\n三十五岁，你没怎么向他们伸过手，这已经算好。他们一句怨话都没当面说过。可那点没说出口的失望，你看得见。" },
-      { id: "9", mood: "cold", small: true, text: "五十公里外就是老家。这座城里住着你的同学、你的熟人，你一个都没联系过。你每天说的话不超过十句：“一包烟。”——对小超市老板。“回锅肉炒饭。”——对小吃店老板。他不用问，你也不用多说。" },
-      { id: "10", mood: "cold", small: true, text: "凌晨三四点睡，下午一两点起。楼下小吃店收摊的动静，就是你的午夜报时。靠在网上倒点软件给香港、台湾的客户，每个月能活下来，余不下什么。" },
-      { id: "10b", mood: "cold", small: true, text: "你给自己起的网名，是“宅男”。说真的，这个世界跟你没什么关系——你像个过客，一个看客。" },
+      { id: "9", text: "五十公里外就是老家。这座城里住着你的同学、你的熟人，你一个都没联系过。你每天说的话不超过十句：“一包烟。”——对小超市老板。“回锅肉炒饭。”——对小吃店老板。他不用问，你也不用多说。", small: true },
+      { id: "10", text: "凌晨三四点睡，下午一两点起。楼下小吃店收摊的动静，就是你的午夜报时。靠在网上倒点软件给香港、台湾的客户，每个月能活下来，余不下什么。", small: true },
       { id: "11", text: "你突然想明白一件事，它比任何债主都可怕：\n没有人管你。\n堕落下去，一分钱成本都没有。" },
-      { id: "12", text: "如果今天和昨天一样——十年后的今天，也会和今天一样。可是……怎么活？" },
+      { id: "12", text: "如果今天和昨天一样——十年后的今天，也会和今天一样。再也不能这样活下去了。可是……怎么活？" },
       {
         id: "pause-1",
         pause: true,
@@ -401,7 +348,7 @@
       },
       { id: "13", text: "你翻自己的家底。文凭、技能、人脉、本钱——几乎是空的。" },
       { id: "14", type: "center", text: "但记忆里，\n有一张牌。", fixed: 4000 },
-      { id: "15", small: true, text: "村里的大哥，和另外三个人，把一个信托的资金方介绍给一家房地产公司，募了六千万。每人1%中介费——一人六十万。" },
+      { id: "15", text: "村里的大哥，和另外三个人，把一个信托的资金方介绍给一家房地产公司，募了六千万。每人1%中介费——一人六十万。", small: true },
       { id: "16", text: "大哥是村里公认的聪明人。可你上学时，是方圆十几里的学生偶像。" },
       { id: "17", type: "center", text: "他都可以。\n我为什么不行？", fixed: 4000 },
       {
@@ -413,17 +360,17 @@
           { label: "B. 干。把百度当老师，自己砍进去", branch: null }
         ]
       },
-      { id: "18", type: "heart", reveal: "lines", fixed: 5600, text: "前面全是荆棘。\n但我要用砍刀，\n砍出一条路来。" },
+      { id: "18", type: "heart", text: "前面全是荆棘。\n但我要用砍刀，\n砍出一条路来。", fixed: 5200 },
       { id: "19", text: "你把百度当成老师。什么是信托，什么是过桥，什么是资金方——一个词一个词地查，一页一页地啃。" },
-      { id: "20", small: true, text: "出门的时候，兜里多了一个小本子、一支笔。学来的要点抄在前面几页；见了客户、见了同行，边听边记——生怕哪个词没搞懂，被人看出是新来的。多年以后，还有同行笑着问你：杨总，你那个小本子呢？" },
-      { id: "21", small: true, text: "然后你听说：有人做承兑，三百万本金，三个月，赚了三百万。这一行，你又是一天没干过。可砍刀既然开了路，没道理在岔口停下。" },
-      { id: "22", small: true, text: "你沿着街走，仰着头，把一块块招牌上的电话抄进一部诺基亚——按键上的字母早磨没了，但你一只手打字如飞。一条，一条，发给那些素不相识的老板。" },
+      { id: "20", text: "出门的时候，兜里多了一个小本子、一支笔。学来的要点抄在前面几页；见了客户、见了同行，边听边记——生怕哪个词没搞懂，被人看出是新来的。多年以后，还有同行笑着问你：杨总，你那个小本子呢？", small: true },
+      { id: "21", text: "然后你听说：有人做承兑，三百万本金，三个月，赚了三百万。这一行，你又是一天都没干过。可砍刀既然开了路，没道理在岔口停下。", small: true },
+      { id: "22", text: "你沿着街走，仰着头，把一块块招牌上的电话抄进一部诺基亚——按键上的字母早磨没了，但你一只手打字如飞。一条，一条，发给那些素不相识的老板。", small: true },
       { id: "23", type: "center", text: "“老板，\n我做承兑业务的。”", fixed: 4200 },
       { id: "24", text: "第一单来了。三百万的承兑，你带着资金方做成。客户的办公室里，资金方这单赚了一万多。" },
       { id: "25", text: "临走，他从兜里抽出一张百元钞，甩了过来。“带路费。”" },
       { id: "26", type: "center", text: "三百万的业务。\n一百块的报酬。", fixed: 4200 },
       { id: "27", text: "你接住那张钱，心里没去算多少，也没觉得有什么——只有一个念头，清清楚楚：\n我还成单了。\n路，砍开了第一道口子。" },
-      { id: "28", small: true, text: "后面的事，快得超出想象。满城的企业攥着承兑没处兑，客户带着客户来。当年甩你一百块的那些人，后来要做资金，都得先找你——你也从没计较过那一甩。一年多后，你付了一套房的一半房款，卡里还有四十万。两年后你在网上认识一个姑娘，第一次自我介绍，报的就是这两个数。后来，她成了你的妻子。" },
+      { id: "28", text: "后面的事，快得超出想象。满城的企业攥着承兑没处兑，客户带着客户来。当年甩你一百块的那些人，后来要做资金，都得先找你——你也从没计较过那一甩。一年多后，你付了一套房的一半房款，卡里还有四十万。两年后你在网上认识一个姑娘，第一次自我介绍，报的就是这两个数。后来，她成了你的妻子。", small: true },
       { id: "29", type: "photo", img: "assets/img/card29.png", audio: "assets/audio/card29.m4a", fixed: 61265, text: "那个没有伸手去拿水杯的下午，到今天，十五年。\n“现在回想起来，其实很恐怖。如果我的人生没有那一次梦醒——按常理来说，大概率是会越来越差的。因为是在一个很封闭的环境下，没有什么变量的加入。甚至夸张一点说，我好像觉得，给我安排的剧本，就是悬崖上的一棵没一点土的小树苗，自己硬生生长出来了。又像是石头下面压的一棵小草，我自己硬生生钻出来的。”" },
       { id: "tail", type: "tail", text: "你的生活里，有没有那张挂在脖子上的饼？\n——", cta: "把你人生里最重要的那个时刻，也做成这样一段路" }
     ];
@@ -464,10 +411,6 @@
     function clearTimer() {
       if (timer) window.clearTimeout(timer);
       timer = null;
-    }
-
-    function setMood(card) {
-      stage.classList.toggle("cold", card && card.mood === "cold");
     }
 
     function stopActiveAudio() {
@@ -514,16 +457,9 @@
       timer = window.setTimeout(nextCard, durationFor(card));
     }
 
-    function buildRevealLines(text) {
-      return text.split("\n").map((line, i) =>
-        `<span class="reveal-line" style="animation-delay:${i * 0.95}s">${escapeHtml(line)}</span>`
-      ).join("");
-    }
-
     function renderCard(card) {
       stage.classList.add("fade");
       window.setTimeout(() => {
-        setMood(card);
         const cls = [
           "text",
           card.type === "center" || card.type === "tail" ? "center" : "",
@@ -565,8 +501,7 @@
         } else if (card.type === "photo") {
           const [lead, ...rest] = card.text.split("\n");
           content.innerHTML = `
-            <img class="card-photo" src="${escapeHtml(card.img)}" alt=""
-                 onerror="this.outerHTML='<div class=&quot;photo-fallback&quot;>〔真容照·落盘后接真实照片〕</div>'">
+            <img class="card-photo" src="${escapeHtml(card.img)}" alt="">
             <div class="photo-copy">
               <div class="text">${escapeHtml(lead)}</div>
               <div class="text small">${escapeHtml(rest.join("\n"))}</div>
@@ -585,9 +520,6 @@
           } else {
             stopActiveAudio();
           }
-        } else if (card.reveal === "lines") {
-          stopActiveAudio();
-          content.innerHTML = `<div class="${cls}">${buildRevealLines(card.text)}</div>`;
         } else {
           stopActiveAudio();
           content.innerHTML = `<div class="${cls}">${escapeHtml(card.text)}</div>`;
@@ -688,7 +620,10 @@
 
     stage.addEventListener("pointerup", () => {
       if (pressTimer) window.clearTimeout(pressTimer);
-      if (paused) { resume(); return; }
+      if (paused) {
+        resume();
+        return;
+      }
       if (!touchMoved) nextCard();
     });
 
