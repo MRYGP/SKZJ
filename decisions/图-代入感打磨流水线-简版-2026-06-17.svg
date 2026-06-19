@@ -1,0 +1,68 @@
+<svg viewBox="0 0 1140 400" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#555"/>
+    </marker>
+    <marker id="arrowLoop" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#b8862f"/>
+    </marker>
+  </defs>
+
+  <text x="20" y="34" font-size="19" font-weight="700" fill="#2b2b2b">代入感打磨流水线 · 模拟用户型 harness</text>
+  <text x="20" y="56" font-size="12.5" fill="#777">2026-06-17 · 前五格＝打磨工具；唯一校准尺度的是末格「真人下田」</text>
+
+  <!-- 五个灰格 + 一个红格，y=150 高70 -->
+  <!-- pitch 180: x = 20,200,380,560,740 ; 末格 920 -->
+  <g font-size="14.5" fill="#2b2b2b" text-anchor="middle">
+    <!-- 1 语料 -->
+    <rect x="20" y="150" width="150" height="72" rx="9" fill="#f4f1ea" stroke="#cfc7b5"/>
+    <text x="95" y="193" font-weight="600">语料</text>
+
+    <!-- 2 画靶 -->
+    <rect x="200" y="150" width="150" height="72" rx="9" fill="#f4f1ea" stroke="#cfc7b5"/>
+    <text x="275" y="186" font-weight="600">画靶</text>
+    <text x="275" y="206" font-size="11.5" fill="#777">三柱子点位</text>
+
+    <!-- 3 出初稿 -->
+    <rect x="380" y="150" width="150" height="72" rx="9" fill="#f4f1ea" stroke="#cfc7b5"/>
+    <text x="455" y="186" font-weight="600">出初稿</text>
+    <text x="455" y="206" font-size="11.5" fill="#777">SKZJ 写</text>
+
+    <!-- 4 agent 试看 -->
+    <rect x="560" y="150" width="150" height="72" rx="9" fill="#eef2f4" stroke="#b9c6cd"/>
+    <text x="635" y="186" font-weight="600">agent 试看</text>
+    <text x="635" y="206" font-size="11.5" fill="#777">模拟观众</text>
+
+    <!-- 5 人工审 -->
+    <rect x="740" y="150" width="150" height="72" rx="9" fill="#f4f1ea" stroke="#cfc7b5"/>
+    <text x="815" y="182" font-weight="600">人工审</text>
+    <text x="815" y="201" font-size="11.5" fill="#777">SKZJ 锚判据</text>
+    <text x="815" y="216" font-size="11.5" fill="#b8862f">「够了停」在此拍</text>
+
+    <!-- 6 真人下田（红） -->
+    <rect x="920" y="150" width="150" height="72" rx="9" fill="#fbeae7" stroke="#c0392b" stroke-width="1.6"/>
+    <text x="995" y="186" font-weight="700" fill="#c0392b">真人下田</text>
+    <text x="995" y="206" font-size="11.5" fill="#c0392b">唯一校准尺度</text>
+  </g>
+
+  <!-- 主流程箭头 -->
+  <g stroke="#555" stroke-width="1.6" fill="none">
+    <line x1="170" y1="186" x2="198" y2="186" marker-end="url(#arrow)"/>
+    <line x1="350" y1="186" x2="378" y2="186" marker-end="url(#arrow)"/>
+    <line x1="530" y1="186" x2="558" y2="186" marker-end="url(#arrow)"/>
+    <line x1="710" y1="186" x2="738" y2="186" marker-end="url(#arrow)"/>
+    <line x1="890" y1="186" x2="918" y2="186" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 循环箭头：agent试看 → 出初稿（下方回弯） -->
+  <path d="M 635 222 C 635 285, 455 285, 455 224" stroke="#b8862f" stroke-width="1.6" fill="none" stroke-dasharray="5 4" marker-end="url(#arrowLoop)"/>
+  <text x="545" y="305" font-size="12" fill="#b8862f" text-anchor="middle">仍旁观 → 写手改 → 重测</text>
+
+  <!-- 出口焊点注（人工审 → 真人下田 之上） -->
+  <text x="905" y="132" font-size="11.5" fill="#c0392b" text-anchor="middle">焊点</text>
+  <line x1="905" y1="136" x2="905" y2="148" stroke="#c0392b" stroke-width="1.2"/>
+
+  <!-- 底部焊点说明 -->
+  <text x="20" y="360" font-size="12.5" fill="#444">焊点：agent 说「有代入感」≠ 真人有代入感。出口必须接真人下田，否则 harness 在自我满足、空转。</text>
+  <text x="20" y="380" font-size="12.5" fill="#444">用它加速逼近，别用它代替下田——校准这把尺的东西永远在 harness 之外。</text>
+</svg>
