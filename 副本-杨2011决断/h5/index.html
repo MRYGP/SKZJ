@@ -3,16 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>人生馆001号 · 2011，那只水杯</title>
+  <title>人生馆001号 · 2011，那只水杯 · v1.1</title>
   <style>
     :root {
-      --bg: #080807;
-      --fg: #f4efe6;
-      --muted: rgba(244, 239, 230, 0.7);
-      --line: rgba(244, 239, 230, 0.18);
-      --accent: #d7b46a;     /* 暖金：觉醒/砍刀/逆转 */
-      --cold: #6f8aa8;       /* 冷蓝：低谷里唯一的光＝显示器（克制使用） */
-      --danger: #9b2f24;
+      --bg: #070706;
+      --fg: #f5efe4;
+      --muted: rgba(245, 239, 228, 0.68);
+      --line: rgba(245, 239, 228, 0.18);
+      --accent: #d8b76f;
+      --cold: #6f8aa8;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
@@ -46,9 +45,7 @@
       inset: 0;
       display: grid;
       place-items: center;
-      background:
-        radial-gradient(circle at 50% 20%, rgba(120, 93, 52, 0.18), transparent 38%),
-        linear-gradient(180deg, #0d0d0b 0%, #050504 100%);
+      background: #000;
     }
 
     .phone {
@@ -63,44 +60,93 @@
     .stage {
       position: absolute;
       inset: 0;
-      padding: calc(34px + var(--safe-top)) 26px calc(42px + var(--safe-bottom));
+      padding: calc(34px + var(--safe-top)) 24px calc(42px + var(--safe-bottom));
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: left;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.035), transparent 22%),
-        radial-gradient(circle at 50% 72%, rgba(215, 180, 106, 0.08), transparent 42%),
-        #080807;
       opacity: 1;
-      transition: opacity 0.6s ease, background 1.2s ease;
-    }
-
-    /* 低谷：屋里唯一的光来自显示器，蓝的 —— 冷蓝替换暖金辉光，克制 */
-    .stage.cold {
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.02), transparent 22%),
-        radial-gradient(circle at 50% 60%, rgba(111, 138, 168, 0.12), transparent 46%),
-        #07080a;
+      transition: opacity 0.52s ease;
     }
 
     .stage.fade { opacity: 0; }
 
-    .stage::before {
+    .bg-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.025), transparent 28%),
+        radial-gradient(circle at 50% 72%, rgba(216, 183, 111, 0.08), transparent 45%),
+        #070706;
+      transition: background 0.8s ease, filter 0.8s ease;
+    }
+
+    .bg-layer::after {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+        radial-gradient(circle at 50% 48%, transparent 0%, transparent 42%, rgba(0,0,0,0.62) 100%),
+        linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.42));
+      pointer-events: none;
+    }
+
+    .bg-night-off { background:
+      radial-gradient(circle at 48% 30%, rgba(72, 94, 116, 0.16), transparent 34%),
+      linear-gradient(180deg, #090b0d 0%, #030304 100%); }
+    .bg-blue-room { background:
+      radial-gradient(circle at 52% 46%, rgba(74, 118, 165, 0.2), transparent 38%),
+      linear-gradient(180deg, #0a0d11 0%, #050608 100%); }
+    .bg-screen { background:
+      radial-gradient(circle at 50% 36%, rgba(86, 136, 188, 0.22), transparent 34%),
+      linear-gradient(180deg, #0c1015 0%, #050608 100%); }
+    .bg-desk-dirty { background:
+      radial-gradient(circle at 46% 55%, rgba(92, 86, 72, 0.24), transparent 40%),
+      linear-gradient(180deg, #0a0b0d 0%, #050404 100%); }
+    .bg-cup { background:
+      radial-gradient(circle at 58% 56%, rgba(90, 87, 72, 0.26), transparent 30%),
+      linear-gradient(180deg, #09090a 0%, #050505 100%); }
+    .bg-silence { background:
+      radial-gradient(circle at 50% 52%, rgba(50, 56, 64, 0.12), transparent 34%),
+      linear-gradient(180deg, #050506 0%, #010101 100%); }
+    .bg-abyss { background:
+      radial-gradient(circle at 50% 18%, rgba(55, 72, 92, 0.16), transparent 26%),
+      linear-gradient(180deg, #07080a 0%, #000 78%); }
+    .bg-door { background:
+      radial-gradient(circle at 50% 24%, rgba(230, 210, 158, 0.32), transparent 30%),
+      linear-gradient(180deg, #1a1710 0%, #090806 100%); }
+    .bg-street { background:
+      radial-gradient(circle at 52% 44%, rgba(216, 183, 111, 0.23), transparent 40%),
+      linear-gradient(180deg, #14100a 0%, #070604 100%); }
+    .bg-knife { background:
+      radial-gradient(circle at 50% 42%, rgba(216, 183, 111, 0.32), transparent 34%),
+      linear-gradient(180deg, #100e09 0%, #050403 100%); }
+    .bg-notebook { background:
+      radial-gradient(circle at 48% 52%, rgba(216, 183, 111, 0.2), transparent 36%),
+      linear-gradient(180deg, #11100d 0%, #060504 100%); }
+    .bg-money { background:
+      radial-gradient(circle at 50% 52%, rgba(216, 183, 111, 0.28), transparent 38%),
+      linear-gradient(180deg, #151009 0%, #070504 100%); }
+    .bg-witness { background:
+      radial-gradient(circle at 50% 38%, rgba(245, 239, 228, 0.1), transparent 32%),
+      linear-gradient(180deg, #0b0a08 0%, #030303 100%); }
+
+    .grain {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,0.01) 1px, transparent 1px);
       background-size: 34px 34px;
-      opacity: 0.35;
+      opacity: 0.28;
       pointer-events: none;
     }
 
     .content {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       width: 100%;
       max-width: 560px;
     }
@@ -113,43 +159,42 @@
     }
 
     .text {
-      font-size: clamp(26px, 6.6vw, 40px);
+      font-size: clamp(25px, 6.3vw, 39px);
       line-height: 1.46;
       font-weight: 560;
       text-wrap: balance;
       white-space: pre-line;
+      text-shadow: 0 2px 18px rgba(0,0,0,0.6);
     }
 
     .text.small {
-      font-size: clamp(21px, 5.4vw, 30px);
+      font-size: clamp(20px, 5.15vw, 29px);
       line-height: 1.55;
       font-weight: 500;
-      color: rgba(244, 239, 230, 0.93);
+      color: rgba(245, 239, 228, 0.94);
     }
 
     .text.center {
       text-align: center;
-      font-size: clamp(34px, 10vw, 60px);
+      font-size: clamp(33px, 9.5vw, 58px);
       line-height: 1.18;
-      font-weight: 700;
+      font-weight: 720;
     }
 
     .text.heart {
       text-align: center;
-      font-size: clamp(29px, 8.4vw, 52px);
-      line-height: 1.3;
-      font-weight: 760;
+      font-size: clamp(29px, 8.2vw, 52px);
+      line-height: 1.28;
+      font-weight: 780;
     }
 
-    .text strong { color: #fff7d9; font-weight: 800; }
-
-    /* 砍刀：一字一顿 —— 三行依次浮现 */
     .reveal-line {
       display: block;
       opacity: 0;
       transform: translateY(8px);
-      animation: lineIn 0.9s ease forwards;
+      animation: lineIn 0.85s ease forwards;
     }
+
     @keyframes lineIn {
       to { opacity: 1; transform: translateY(0); }
     }
@@ -157,32 +202,32 @@
     .card-photo {
       display: block;
       width: min(78%, 360px);
-      max-height: 42vh;
+      max-height: 40vh;
       margin: 0 auto 24px;
       object-fit: cover;
       border-radius: 4px;
-      border: 1px solid rgba(244, 239, 230, 0.2);
-      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
+      border: 1px solid rgba(245, 239, 228, 0.22);
+      box-shadow: 0 18px 55px rgba(0,0,0,0.5);
     }
-    /* 真容照缺省时的占位（本窗口预览用；落盘后接真实照片不显示） */
+
     .photo-fallback {
       display: grid;
       place-items: center;
       width: min(78%, 360px);
       height: 30vh;
       margin: 0 auto 24px;
-      border: 1px solid rgba(244, 239, 230, 0.18);
+      border: 1px solid rgba(245, 239, 228, 0.2);
       border-radius: 4px;
-      color: rgba(244, 239, 230, 0.42);
+      color: rgba(245, 239, 228, 0.5);
       font-size: 14px;
-      background: rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.04);
     }
 
     .photo-copy { display: grid; gap: 14px; }
 
     .choices {
       display: grid;
-      gap: 12px;
+      gap: 14px;
       margin-top: 24px;
     }
 
@@ -190,45 +235,91 @@
       width: 100%;
       min-height: 58px;
       padding: 15px 16px;
-      border: 1px solid rgba(244, 239, 230, 0.23);
+      border: 1px solid rgba(245, 239, 228, 0.24);
       border-radius: 8px;
-      background: rgba(244, 239, 230, 0.08);
+      background: rgba(245, 239, 228, 0.08);
       text-align: left;
       font-size: clamp(18px, 4.7vw, 24px);
       line-height: 1.35;
       backdrop-filter: blur(8px);
-      transition: background 0.15s ease, border-color 0.15s ease;
     }
 
     .choice:active {
-      background: rgba(215, 180, 106, 0.18);
-      border-color: rgba(215, 180, 106, 0.52);
+      background: rgba(216, 183, 111, 0.18);
+      border-color: rgba(216, 183, 111, 0.52);
     }
-    .choice:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
+
+    .image-choices {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .image-choice {
+      position: relative;
+      min-height: 168px;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid rgba(245, 239, 228, 0.24);
+      border-radius: 8px;
+      background: #111;
+      text-align: left;
+    }
+
+    .image-choice .choice-art {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(60,66,74,0.7), rgba(8,8,8,0.96));
+    }
+
+    .image-choice[data-art="reach"] .choice-art {
+      background:
+        radial-gradient(circle at 68% 58%, rgba(160, 145, 105, 0.38), transparent 20%),
+        linear-gradient(135deg, rgba(86, 92, 96, 0.78), rgba(8,8,8,0.96));
+    }
+
+    .image-choice[data-art="sink"] .choice-art {
+      background:
+        radial-gradient(circle at 28% 36%, rgba(70, 112, 155, 0.34), transparent 24%),
+        linear-gradient(135deg, rgba(16, 18, 23, 0.92), rgba(4,4,4,0.98));
+    }
+
+    .image-choice .choice-label {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 12px;
+      z-index: 1;
+      color: rgba(245, 239, 228, 0.92);
+      font-size: clamp(17px, 4.5vw, 23px);
+      line-height: 1.35;
+      text-shadow: 0 2px 14px rgba(0,0,0,0.85);
     }
 
     .progress {
       position: absolute;
-      left: 0; bottom: 0;
-      width: 100%; height: 2px;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 2px;
       z-index: 5;
-      background: rgba(244, 239, 230, 0.1);
+      background: rgba(245, 239, 228, 0.1);
     }
     .progress > span {
       display: block;
-      width: 0; height: 100%;
+      width: 0;
+      height: 100%;
       background: var(--accent);
       transition: width 0.3s linear;
     }
 
     .hint {
       position: absolute;
-      left: 20px; right: 20px;
+      left: 20px;
+      right: 20px;
       bottom: calc(18px + var(--safe-bottom));
-      z-index: 3;
-      color: rgba(244, 239, 230, 0.48);
+      z-index: 4;
+      color: rgba(245, 239, 228, 0.48);
       font-size: 12px;
       text-align: center;
       opacity: 0;
@@ -236,7 +327,7 @@
     }
     .paused .hint { opacity: 1; }
 
-    .cover, .modal, .landscape {
+    .cover, .landscape {
       position: absolute;
       inset: 0;
       z-index: 10;
@@ -245,22 +336,30 @@
       justify-content: center;
       padding: 32px 26px;
       background:
-        radial-gradient(circle at 50% 35%, rgba(215, 180, 106, 0.16), transparent 34%),
+        radial-gradient(circle at 50% 34%, rgba(216, 183, 111, 0.16), transparent 34%),
         linear-gradient(180deg, #11100d, #050504);
     }
 
-    .cover-inner, .modal-inner { width: 100%; text-align: center; }
+    .cover-inner { width: 100%; text-align: center; }
 
     .title {
-      margin: 0 0 12px;
-      font-size: clamp(34px, 9.8vw, 58px);
+      margin: 0 0 18px;
+      font-size: clamp(35px, 10vw, 60px);
       line-height: 1.08;
-      font-weight: 800;
+      font-weight: 820;
     }
 
-    .subtitle {
-      margin: 0 0 28px;
-      color: var(--muted);
+    .tag {
+      margin: 0 0 14px;
+      color: rgba(245, 239, 228, 0.58);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+    }
+
+    .quote {
+      margin: 0 auto 28px;
+      max-width: 320px;
+      color: rgba(245, 239, 228, 0.78);
       font-size: clamp(16px, 4.2vw, 22px);
       line-height: 1.55;
     }
@@ -273,42 +372,15 @@
       background: var(--fg);
       color: #11100d;
       font-size: 20px;
-      font-weight: 700;
+      font-weight: 720;
     }
 
     .muted-note {
       margin-top: 18px;
-      color: rgba(244, 239, 230, 0.4);
+      color: rgba(245, 239, 228, 0.42);
       font-size: 12px;
       line-height: 1.5;
     }
-
-    .secondary {
-      margin-top: 14px;
-      min-height: 46px;
-      padding: 10px 16px;
-      border-radius: 8px;
-      border: 1px solid rgba(244, 239, 230, 0.28);
-      background: transparent;
-      color: var(--fg);
-      font-size: 16px;
-    }
-
-    .contact-card {
-      margin: 22px auto 18px;
-      width: min(62vw, 260px);
-      aspect-ratio: 1;
-      border: 1px dashed rgba(244, 239, 230, 0.38);
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      color: rgba(244, 239, 230, 0.6);
-      background: rgba(255,255,255,0.04);
-      font-size: 18px;
-    }
-
-    .modal { display: none; z-index: 20; background: rgba(5,5,4,0.92); }
-    .modal.show { display: flex; }
 
     .landscape {
       display: none;
@@ -317,6 +389,7 @@
       font-size: 22px;
       line-height: 1.5;
     }
+
     @media (orientation: landscape) and (max-height: 640px) {
       .landscape { display: flex; }
     }
@@ -331,6 +404,8 @@
   <main id="app">
     <section class="phone" id="phone">
       <div class="stage" id="stage">
+        <div class="bg-layer" id="bgLayer"></div>
+        <div class="grain"></div>
         <div class="content" id="content"></div>
       </div>
       <div class="progress"><span id="progressBar"></span></div>
@@ -339,18 +414,10 @@
       <div class="cover" id="cover">
         <div class="cover-inner">
           <h1 class="title">2011，<br>那只水杯</h1>
-          <p class="subtitle">人不是一步跌进深渊的，<br>是差一寸没有伸手。</p>
+          <p class="tag">2011 · 长沙红花坡</p>
+          <p class="quote">他以为自己活通透了——直到那只水杯，没够着。</p>
           <button class="primary" id="startBtn">开始</button>
-          <p class="muted-note">本预览无配音；成片由本人真声 + 纪录片腔旁白 + 配乐承载。</p>
-        </div>
-      </div>
-
-      <div class="modal" id="contactModal" aria-hidden="true">
-        <div class="modal-inner">
-          <h2 class="title">联系杨</h2>
-          <p class="subtitle">把你人生里最重要的那个时刻，也做成这样一段路。</p>
-          <div class="contact-card">杨微信二维码占位</div>
-          <button class="secondary" id="closeModal">返回</button>
+          <p class="muted-note">戴耳机更好。第一可跑版：卡1-22，图与声音可占位。</p>
         </div>
       </div>
 
@@ -359,83 +426,212 @@
   </main>
 
   <script>
-    /* mood:"cold" = 低谷冷蓝；reveal:"lines" = 砍刀一字一顿；mainCards 顺序即播放顺序 */
-    const mainCards = [
-      { id: "1", type: "center", text: "2011年。\n长沙，红花坡。", fixed: 4000 },
-      { id: "2", mood: "cold", small: true, text: "下午两点多，你刚醒。60平米的出租屋，帘子拉着——白天也拉着。屋里唯一的光来自显示器，蓝的。烟灰缸是满的。" },
-      { id: "3", text: "又一部电影。你已经不记得这个月看了多少部。1米65，165斤，没穿上衣，肚子搭在桌沿上。" },
-      { id: "4", type: "center", text: "你口渴了。", fixed: 3400 },
-      { id: "5", small: true, text: "一个黑杯子在桌上，里面泡着一大杯浓茶。离你的手，只有一个拳头的距离。" },
-      { id: "5b", small: true, text: "你伸了下手。够不到。得把上身往前送一下，才够得着。" },
+    const BED_TRACKS = {
+      fan: "assets/audio/bed-fan-placeholder.m4a",
+      street: "assets/audio/bed-street-placeholder.m4a"
+    };
+
+    const BGM_TRACKS = {
+      warm: "assets/audio/bgm-warm-placeholder.m4a"
+    };
+
+    const cards = [
+      {
+        id: "1",
+        bg: "night-off",
+        bed: "fan",
+        fixed: 5200,
+        text: ""
+      },
+      {
+        id: "2",
+        bg: "blue-room",
+        bed: "fan",
+        small: true,
+        text: "又是下午两三点。\n外面夜宵摊开张，\n你的一天，也开张了。"
+      },
+      {
+        id: "3",
+        bg: "screen",
+        bed: "fan",
+        small: true,
+        text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。\n还是昨天那本。"
+      },
+      {
+        id: "4",
+        bg: "screen",
+        bed: "fan",
+        small: true,
+        text: "你最爱看的，是那种到最后才发现——\n原来全错了的片子。"
+      },
+      {
+        id: "5",
+        bg: "screen",
+        bed: "fan",
+        small: true,
+        text: "有一部片子你一直忘不掉。\n一个人，坚信不疑的东西，真相却完全反过来。\n你刚写完它的影评，挂在网上。\n你觉得自己看得比谁都深。"
+      },
+      {
+        id: "6",
+        bg: "blue-room",
+        bed: "fan",
+        small: true,
+        text: "同在这座长沙城里，同学们有房有车，孩子都上小学了。\n你心里咯噔一下——又马上按下去：\n有什么了不起，活得那么累，那么俗。"
+      },
+      {
+        id: "7",
+        bg: "screen",
+        bed: "fan",
+        small: true,
+        text: "这话，你写在影评里，\n也跟自己说了很多遍。\n说到——你自己都信了。"
+      },
+      {
+        id: "8",
+        bg: "desk-dirty",
+        bed: "fan",
+        fixed: 5200,
+        text: ""
+      },
+      {
+        id: "9",
+        bg: "cup",
+        bed: "fan",
+        fixed: 4400,
+        text: ""
+      },
+      {
+        id: "10",
+        bg: "cup",
+        bed: "fan",
+        fixed: 4600,
+        text: "手悬在半空。\n杯子还在二三拳头外。\n要够着，得整个上身离开椅背，往前送一大下。"
+      },
       {
         id: "pause-0",
+        bg: "silence",
+        silent: true,
         pause: true,
-        title: "就差把上身往前送这一下。\n送，还是不送？",
+        choiceType: "image",
+        title: "",
         choices: [
-          { label: "往前够——把茶端过来", branch: "你打算把上身送过去——" },
-          { label: "算了，等会儿再说", branch: "等会儿。电影还没完。" }
+          {
+            label: "上身前倾，指尖快碰到那只脏杯子",
+            art: "reach",
+            feedback: "可那天，他没有。"
+          },
+          {
+            label: "手收回来，人陷回椅子，视线回到屏幕",
+            art: "sink",
+            feedback: null
+          }
         ]
       },
-      { id: "6", type: "center", text: "身子没有动。", fixed: 4200 },
-      { id: "7", small: true, text: "然后，一个画面毫无来由地冒出来——那个故事里的妇人，丈夫把一张大饼挂在她脖子上出了远门。她饿死了。因为懒得把饼转过来。" },
-      { id: "7b", type: "center", text: "你突然有一种恐惧。\n像是往下，看见了一个深渊。", fixed: 4200 },
-      { id: "7c", type: "center", text: "你就那么停着。\n大概，一分钟。", fixed: 3600 },
-      { id: "7d", type: "center", reveal: "lines", text: "再也不能这样过下去了。\n绝对不行。", fixed: 4600 },
-      { id: "8", type: "center", text: "35岁。", fixed: 4000 },
-      { id: "8b", mood: "cold", small: true, text: "你是初中毕业后考上中专的人——那年头，包分配、吃国家粮。在爸妈眼里，你这辈子稳了，往后是享福的命。\n三十五岁。他们一句怨话都没当面说过。可那点没说出口的失望，你感觉得到。" },
-      { id: "9", mood: "cold", small: true, text: "五十公里外就是老家。这座城里住着你的同学、你的熟人，你一个都没联系过。你每天说的话不超过十句：“一包烟。”——对小超市老板。“回锅肉炒饭。”——对小吃店老板。他不用问，你也不用多说。" },
-      { id: "10", mood: "cold", small: true, text: "凌晨三四点睡，下午一两点起。楼下小吃店收摊的动静，就是你的午夜报时。靠在网上倒点软件给香港、台湾的客户，每个月能活下来，余不下什么。" },
-      { id: "10b", mood: "cold", small: true, text: "你给自己起的网名，是“宅男”。说真的，这个世界跟你没什么关系——你像个过客，一个看客。" },
-      { id: "11", text: "你突然想明白一件事，它比任何债主都可怕：\n没有人管你。\n像一片落叶，落下来，没人知道，也没人在意。" },
-      { id: "12", text: "如果今天和昨天一样——十年后的今天，也会和今天一样。可是……怎么活？" },
       {
-        id: "pause-1",
-        pause: true,
-        title: "怎么活？",
-        choices: [
-          { label: "A. 找份工作上班", branch: "35岁，没技能没履历，放到人才市场上，可能没人请你。划掉。" },
-          { label: "B. 去做体力活", branch: "你对自己诚实——心里那点不肯说出口的清高，过不去这关。划掉。" },
-          { label: "C. 接着倒软件，攒点钱再说", branch: "“再说”这两个字，你已经说了几年了。它的尽头就是那个挂着饼的妇人。划掉。" },
-          { label: "D. 走出去——做什么，还不知道", branch: "对。先走出去。" }
-        ]
+        id: "11",
+        bg: "silence",
+        silent: true,
+        type: "center",
+        text: "身子，\n没有动。",
+        fixed: 3800
       },
-      { id: "13", text: "你翻自己的家底。文凭、技能、人脉、本钱——几乎是空的。" },
-      { id: "14", type: "center", text: "但记忆里，\n有一张牌。", fixed: 4000 },
-      { id: "15", small: true, text: "村里的大哥，和另外三个人，把一个信托的资金方介绍给一家房地产公司，募了六千万。每人1%中介费——一人六十万。" },
-      { id: "16", text: "大哥是村里公认的聪明人。可你上学时，方圆十几里，你都是别的家长口中别人家的孩子。" },
-      { id: "17", type: "center", text: "他都可以。\n我为什么不行？", fixed: 4000 },
       {
-        id: "pause-2",
-        pause: true,
-        title: "可你手里是什么，你自己清楚——35岁，没人带，没老师，没本钱，这行你一天没干过。",
-        choices: [
-          { label: "A. 水太深，没人带着，进去就是给人吃", branch: "奇怪的是，你在心里找这个声音——居然找不到。那段时间，你脑子里没有两个小人打架。只有一个画面，日夜在烧——" },
-          { label: "B. 干。把百度当老师，自己砍进去", branch: null }
-        ]
+        id: "12",
+        bg: "silence",
+        silent: true,
+        small: true,
+        text: "一个画面毫无来由地冒出来——\n那个妇人，丈夫把大饼挂在她脖子上出了远门。\n她饿死了。\n因为懒得把饼转过来。"
       },
-      { id: "18", type: "heart", reveal: "lines", fixed: 5600, text: "前面全是荆棘。\n但我要用砍刀，\n砍出一条路来。" },
-      { id: "19", text: "你把百度当成老师。什么是信托，什么是过桥，什么是资金方——一个词一个词地查，一页一页地啃。" },
-      { id: "20", small: true, text: "出门的时候，兜里多了一个小本子、一支笔。学来的要点抄在前面几页；见了客户、见了同行，边听边记——生怕哪个词没搞懂，被人看出是新来的。多年以后，还有同行笑着问你：杨总，你那个小本子呢？" },
-      { id: "21", small: true, text: "然后你听说：有人做承兑，三百万本金，三个月，赚了三百万。这一行，你又是一天没干过。可砍刀既然开了路，没道理在岔口停下。" },
-      { id: "22", small: true, text: "你沿着街走，仰着头，把一块块招牌上的电话抄进一部诺基亚——按键上的字母早磨没了，但你一只手打字如飞。一条，一条，发给那些素不相识的老板。" },
-      { id: "23", type: "center", text: "“老板，\n我做承兑业务的。”", fixed: 4200 },
-      { id: "24", text: "第一单来了。三百万的承兑，你带着资金方做成。客户的办公室里，资金方这单赚了一万多。" },
-      { id: "25", text: "临走，他从兜里抽出一张百元钞，甩了过来。“带路费。”" },
-      { id: "26", type: "center", text: "三百万的业务。\n一百块的报酬。", fixed: 4200 },
-      { id: "27", text: "你接住那张钱，心里没去算多少，也没觉得有什么——只有一个念头，清清楚楚：\n我还成单了。\n路，砍开了第一道口子。" },
-      { id: "28", small: true, text: "一年多后，你付了一套房一半的房款——三十多万。卡里还有四十万。两年后你在网上认识一个姑娘，第一次自我介绍，报的就是这两个数。后来，她成了你的妻子。" },
-      { id: "29", type: "photo", img: "assets/img/card29.png", audio: "assets/audio/card29.m4a", fixed: 61265, text: "那个没有伸手去拿水杯的下午，到今天，十五年。\n“现在回想起来，其实很恐怖。如果我的人生没有那一次梦醒——按常理来说，大概率是会越来越差的。因为是在一个很封闭的环境下，没有什么变量的加入。甚至夸张一点说，我好像觉得，给我安排的剧本，就是悬崖上的一棵没一点土的小树苗，自己硬生生长出来了。又像是石头下面压的一棵小草，我自己硬生生钻出来的。”" },
-      { id: "tail", type: "tail", text: "你的生活里，有没有那张挂在脖子上的饼？", cta: "把你人生里最重要的那个时刻，也做成这样一段路" }
+      {
+        id: "13",
+        bg: "abyss",
+        silent: true,
+        fixed: 5000,
+        text: ""
+      },
+      {
+        id: "14",
+        bg: "abyss",
+        silent: true,
+        type: "center",
+        text: "你就那么停着。\n大概，一分钟。",
+        fixed: 4200
+      },
+      {
+        id: "15",
+        bg: "silence",
+        silent: true,
+        type: "center",
+        reveal: "lines",
+        text: "再也不能这样过下去了！\n绝对不行！！！",
+        fixed: 5200
+      },
+      {
+        id: "16",
+        bg: "door",
+        bgm: "warm",
+        small: true,
+        text: "醒过来，你没急着怪外面没机会。\n你问的是：我到底卡在哪。\n想明白了——不是没路，是我把自己关在这屋里，根本没出去。"
+      },
+      {
+        id: "17",
+        bg: "street",
+        bed: "street",
+        bgm: "warm",
+        small: true,
+        text: "那就先把这个根解决了——出去，动起来。\n可往哪动？\n你想起隔壁那个大哥，看着也没什么了不起，照样把钱赚了。\n你想的不是“我要像他”——是：他能，这条路逻辑上就走得通，那我也能。"
+      },
+      {
+        id: "18",
+        bg: "knife",
+        bgm: "warm",
+        type: "heart",
+        reveal: "lines",
+        text: "你没等看清整条路。\n前面全是荆棘——\n但你认了：\n先动，先试了再说。\n要用砍刀，\n砍出一条路来。",
+        fixed: 7200
+      },
+      {
+        id: "19",
+        bg: "notebook",
+        bed: "street",
+        bgm: "warm",
+        small: true,
+        text: "你把百度当老师，一个词一个词地啃。\n出门兜里揣个小本子——\n生怕哪个词没懂，被人看出是新来的。"
+      },
+      {
+        id: "20",
+        bg: "money",
+        bed: "street",
+        bgm: "warm",
+        small: true,
+        text: "第一单，三百万的承兑，你带着资金方做成。\n临走，他甩过来一张一百块，“带路费”。\n你没去算这数对不对——心里只有一个念头，清清楚楚：\n我还成单了。\n路，砍开了第一道口子。"
+      },
+      {
+        id: "21",
+        bg: "witness",
+        silent: true,
+        type: "photo",
+        img: "assets/img/card21-placeholder.png",
+        audio: "assets/audio/card21-mother-20260620.m4a",
+        fixed: 90000,
+        text: "那个下午，到今天，十五年了。\n现在想起，还是从背脊升起一种没来由的恐惧。\n可怕的是当时一点都不觉得自己有问题。\n那时候还觉得自己活得挺明白，看不起那些追名逐利的人，觉得他们俗。\n看看小说、看看电影、写写影评，觉得精神世界比他们丰富，充实。\n现在才明白，那是潜意识在逃避，给自己的懒、自己的颓废，编了一个理由，还那样的合情合理，连自己都信了。\n水已经烫了，不知道；已经快烂了，也不知道。还在那儿觉得，挺好。\n那天，那只水杯就在手边，却懒得动一下身子……那一刻的触动，那个梦醒，有点不寒而栗！也许这辈子都不会发现：其实人生，完全可以有另一种选择。\n那是被自己吓醒的！"
+      },
+      {
+        id: "22",
+        bg: "witness",
+        silent: true,
+        type: "center",
+        text: "我们其实都有过这样的时刻——\n以为自己跟别人不一样，看得更透，活得更不同；\n其实，只是给自己找了一个很完美的理由，\n而且自己完全不觉得哪里不对。",
+        fixed: 9500
+      }
     ];
 
     const stage = document.getElementById("stage");
+    const bgLayer = document.getElementById("bgLayer");
     const content = document.getElementById("content");
     const cover = document.getElementById("cover");
     const startBtn = document.getElementById("startBtn");
     const progressBar = document.getElementById("progressBar");
     const phone = document.getElementById("phone");
-    const contactModal = document.getElementById("contactModal");
-    const closeModal = document.getElementById("closeModal");
 
     let index = 0;
     let timer = null;
@@ -444,21 +640,17 @@
     let running = false;
     let touchMoved = false;
     let activeAudio = null;
+    let bedAudio = null;
+    let bgmAudio = null;
+    let currentBed = null;
+    let currentBgm = null;
+    let unlocked = false;
+    let audioContext = null;
 
     function durationFor(card) {
       if (card.fixed) return card.fixed;
       const raw = (card.text || card.title || "").replace(/[\s\n，。——、“”【】（）]/g, "");
-      return Math.max(3200, raw.length * 280 + 1200);
-    }
-
-    function progressValue() {
-      const playable = mainCards.filter(card => !card.pause).length;
-      const played = mainCards.slice(0, index + 1).filter(card => !card.pause).length;
-      return Math.min(100, Math.max(0, (played / playable) * 100));
-    }
-
-    function setProgress() {
-      progressBar.style.width = `${progressValue()}%`;
+      return Math.max(3400, raw.length * 260 + 1100);
     }
 
     function clearTimer() {
@@ -466,21 +658,103 @@
       timer = null;
     }
 
-    function setMood(card) {
-      stage.classList.toggle("cold", card && card.mood === "cold");
+    function progressValue() {
+      const playable = cards.filter(card => !card.pause).length;
+      const played = cards.slice(0, index + 1).filter(card => !card.pause).length;
+      return Math.min(100, Math.max(0, (played / playable) * 100));
+    }
+
+    function setProgress() {
+      progressBar.style.width = `${progressValue()}%`;
+    }
+
+    function setBackground(card) {
+      bgLayer.className = "bg-layer";
+      if (card && card.bg) bgLayer.classList.add(`bg-${card.bg}`);
+    }
+
+    function unlockAudio() {
+      if (unlocked) return;
+      unlocked = true;
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (Ctx) {
+        try {
+          audioContext = new Ctx();
+          if (audioContext.state === "suspended") audioContext.resume();
+          const source = audioContext.createBufferSource();
+          source.buffer = audioContext.createBuffer(1, 1, 22050);
+          source.connect(audioContext.destination);
+          source.start(0);
+        } catch (error) {}
+      }
+    }
+
+    function stopAudio(audio) {
+      if (!audio) return;
+      audio.pause();
+      audio.currentTime = 0;
     }
 
     function stopActiveAudio() {
       if (!activeAudio) return;
-      activeAudio.pause();
-      activeAudio.currentTime = 0;
+      stopAudio(activeAudio);
       activeAudio = null;
+    }
+
+    function stopBed() {
+      stopAudio(bedAudio);
+      bedAudio = null;
+      currentBed = null;
+    }
+
+    function stopBgm() {
+      stopAudio(bgmAudio);
+      bgmAudio = null;
+      currentBgm = null;
+    }
+
+    function playLoop(kind, key, volume) {
+      const map = kind === "bed" ? BED_TRACKS : BGM_TRACKS;
+      const current = kind === "bed" ? currentBed : currentBgm;
+      if (!key || !map[key]) {
+        if (kind === "bed") stopBed();
+        if (kind === "bgm") stopBgm();
+        return;
+      }
+      if (current === key) return;
+      if (kind === "bed") stopBed();
+      if (kind === "bgm") stopBgm();
+      const audio = new Audio(map[key]);
+      audio.loop = true;
+      audio.volume = volume;
+      const playResult = audio.play();
+      if (playResult && typeof playResult.catch === "function") {
+        playResult.catch(() => {});
+      }
+      if (kind === "bed") {
+        bedAudio = audio;
+        currentBed = key;
+      } else {
+        bgmAudio = audio;
+        currentBgm = key;
+      }
+    }
+
+    function applyAudioState(card) {
+      if (card.silent) {
+        stopBed();
+        stopBgm();
+        return;
+      }
+      playLoop("bed", card.bed, 0.2);
+      playLoop("bgm", card.bgm, 0.16);
     }
 
     function playCardAudio(card, onEnded, onFallback) {
       stopActiveAudio();
       if (!card.audio) return false;
       const audio = new Audio(card.audio);
+      audio.volume = 1;
       activeAudio = audio;
       let settled = false;
       const fallback = () => {
@@ -510,23 +784,25 @@
 
     function scheduleNext(card) {
       clearTimer();
-      if (!running || paused || card.pause || card.type === "tail") return;
+      if (!running || paused || card.pause || index >= cards.length - 1) return;
       timer = window.setTimeout(nextCard, durationFor(card));
     }
 
     function buildRevealLines(text) {
       return text.split("\n").map((line, i) =>
-        `<span class="reveal-line" style="animation-delay:${i * 0.95}s">${escapeHtml(line)}</span>`
+        `<span class="reveal-line" style="animation-delay:${i * 0.86}s">${escapeHtml(line)}</span>`
       ).join("");
     }
 
     function renderCard(card) {
       stage.classList.add("fade");
       window.setTimeout(() => {
-        setMood(card);
+        setBackground(card);
+        applyAudioState(card);
+
         const cls = [
           "text",
-          card.type === "center" || card.type === "tail" ? "center" : "",
+          card.type === "center" ? "center" : "",
           card.type === "heart" ? "heart" : "",
           card.small ? "small" : ""
         ].filter(Boolean).join(" ");
@@ -535,38 +811,37 @@
 
         if (card.pause) {
           stopActiveAudio();
-          content.innerHTML = `
-            <div class="text small">${escapeHtml(card.title)}</div>
-            <div class="kicker">（点一个）</div>
-            <div class="choices">
-              ${card.choices.map((choice, i) => `<button class="choice" data-choice="${i}">${escapeHtml(choice.label)}</button>`).join("")}
-            </div>
-          `;
-          content.querySelectorAll(".choice").forEach(btn => {
+          if (card.choiceType === "image") {
+            content.innerHTML = `
+              <div class="image-choices">
+                ${card.choices.map((choice, i) => `
+                  <button class="image-choice" data-choice="${i}" data-art="${escapeHtml(choice.art)}">
+                    <span class="choice-art"></span>
+                    <span class="choice-label">${escapeHtml(choice.label)}</span>
+                  </button>
+                `).join("")}
+              </div>
+            `;
+          } else {
+            content.innerHTML = `
+              <div class="text small">${escapeHtml(card.title)}</div>
+              <div class="choices">
+                ${card.choices.map((choice, i) => `<button class="choice" data-choice="${i}">${escapeHtml(choice.label)}</button>`).join("")}
+              </div>
+            `;
+          }
+          content.querySelectorAll("[data-choice]").forEach(btn => {
             btn.addEventListener("click", event => {
               event.stopPropagation();
               const choice = card.choices[Number(btn.dataset.choice)];
               handleChoice(choice);
             });
           });
-        } else if (card.type === "tail") {
-          stopActiveAudio();
-          content.innerHTML = `
-            <div class="${cls}">${escapeHtml(card.text)}</div>
-            <div class="choices">
-              <button class="choice" id="contactBtn">${escapeHtml(card.cta)}</button>
-            </div>
-          `;
-          document.getElementById("contactBtn").addEventListener("click", event => {
-            event.stopPropagation();
-            contactModal.classList.add("show");
-            contactModal.setAttribute("aria-hidden", "false");
-          });
         } else if (card.type === "photo") {
           const [lead, ...rest] = card.text.split("\n");
           content.innerHTML = `
             <img class="card-photo" src="${escapeHtml(card.img)}" alt=""
-                 onerror="this.outerHTML='<div class=&quot;photo-fallback&quot;>〔真容照·落盘后接真实照片〕</div>'">
+                 onerror="this.outerHTML='<div class=&quot;photo-fallback&quot;>〔真容照 / 青蛙画面占位〕</div>'">
             <div class="photo-copy">
               <div class="text">${escapeHtml(lead)}</div>
               <div class="text small">${escapeHtml(rest.join("\n"))}</div>
@@ -578,71 +853,77 @@
               card,
               () => {
                 clearTimer();
-                timer = window.setTimeout(nextCard, 2000);
+                timer = window.setTimeout(nextCard, 1800);
               },
               () => scheduleNext(card)
             );
-          } else {
-            stopActiveAudio();
           }
         } else if (card.reveal === "lines") {
           stopActiveAudio();
           content.innerHTML = `<div class="${cls}">${buildRevealLines(card.text)}</div>`;
+        } else if (!card.text) {
+          stopActiveAudio();
+          content.innerHTML = "";
         } else {
           stopActiveAudio();
           content.innerHTML = `<div class="${cls}">${escapeHtml(card.text)}</div>`;
         }
+
         setProgress();
         stage.classList.remove("fade");
         if (scheduleByDefault) scheduleNext(card);
-      }, 600);
+      }, 500);
     }
 
-    function renderBranch(text, nextIndex) {
+    function renderFeedback(text, nextIndex) {
+      if (!text) {
+        index = nextIndex;
+        renderCard(cards[index]);
+        return;
+      }
       stage.classList.add("fade");
       window.setTimeout(() => {
         stopActiveAudio();
-        content.innerHTML = `<div class="text small">${escapeHtml(text)}</div>`;
+        content.innerHTML = `<div class="text center">${escapeHtml(text)}</div>`;
         stage.classList.remove("fade");
         clearTimer();
         timer = window.setTimeout(() => {
           index = nextIndex;
-          renderCard(mainCards[index]);
-        }, durationFor({ text }));
-      }, 600);
+          renderCard(cards[index]);
+        }, durationFor({ text, fixed: 2600 }));
+      }, 500);
     }
 
     function handleChoice(choice) {
       const nextIndex = index + 1;
-      if (choice.branch) {
-        renderBranch(choice.branch, nextIndex);
-      } else {
-        index = nextIndex;
-        renderCard(mainCards[index]);
-      }
+      renderFeedback(choice.feedback, nextIndex);
     }
 
     function nextCard() {
       if (!running || paused) return;
-      const card = mainCards[index];
-      if (card.pause || card.type === "tail") return;
-      index = Math.min(index + 1, mainCards.length - 1);
-      renderCard(mainCards[index]);
+      const card = cards[index];
+      if (card.pause) return;
+      if (index >= cards.length - 1) return;
+      index += 1;
+      renderCard(cards[index]);
     }
 
     function start() {
+      unlockAudio();
       running = true;
       paused = false;
       index = 0;
       cover.style.display = "none";
-      renderCard(mainCards[index]);
+      renderCard(cards[index]);
     }
 
     function pause() {
       if (!running) return;
       paused = true;
       clearTimer();
-      if (activeAudio) activeAudio.pause();
+      [activeAudio, bedAudio, bgmAudio].forEach(audio => {
+        if (audio) audio.pause();
+      });
       phone.classList.add("paused");
     }
 
@@ -650,15 +931,16 @@
       if (!running) return;
       paused = false;
       phone.classList.remove("paused");
-      if (activeAudio) {
+      [activeAudio, bedAudio, bgmAudio].forEach(audio => {
+        if (!audio) return;
         try {
-          const playResult = activeAudio.play();
+          const playResult = audio.play();
           if (playResult && typeof playResult.catch === "function") {
             playResult.catch(() => {});
           }
         } catch (error) {}
-      }
-      scheduleNext(mainCards[index]);
+      });
+      scheduleNext(cards[index]);
     }
 
     function escapeHtml(value) {
@@ -671,11 +953,6 @@
     }
 
     startBtn.addEventListener("click", start);
-
-    closeModal.addEventListener("click", () => {
-      contactModal.classList.remove("show");
-      contactModal.setAttribute("aria-hidden", "true");
-    });
 
     stage.addEventListener("pointerdown", () => {
       touchMoved = false;
