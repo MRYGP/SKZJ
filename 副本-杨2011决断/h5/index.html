@@ -1,661 +1,708 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>人生馆001号 · 2011，那只水杯 · v1.1</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>人生馆001号｜2011，那只水杯</title>
   <style>
     :root {
-      --bg: #070706;
-      --fg: #f5efe4;
-      --muted: rgba(245, 239, 228, 0.68);
-      --line: rgba(245, 239, 228, 0.18);
-      --accent: #d8b76f;
-      --cold: #6f8aa8;
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      color-scheme: dark;
+      --bg: #080807;
+      --panel: #11110f;
+      --ink: #f2eadb;
+      --muted: #b9ad99;
+      --cold: #6d8aa4;
+      --warm: #d5aa63;
+      --line: rgba(255,255,255,.14);
+      --shadow: 0 24px 70px rgba(0,0,0,.55);
     }
 
     * { box-sizing: border-box; }
-
-    html, body {
-      width: 100%;
-      height: 100%;
+    [hidden] { display: none !important; }
+    html, body { height: 100%; }
+    body {
       margin: 0;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(129,111,76,.22), transparent 36%),
+        linear-gradient(180deg, #171512 0%, #070707 78%);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
       overflow: hidden;
-      background: #000;
-      color: var(--fg);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-      letter-spacing: 0;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
     }
 
     button {
       font: inherit;
       color: inherit;
-      border: 0;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.07);
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
     }
 
-    #app {
-      position: fixed;
-      inset: 0;
+    .app {
+      min-height: 100%;
       display: grid;
       place-items: center;
-      background: #000;
+      padding: 20px;
     }
 
     .phone {
+      width: min(420px, calc(100vw - 28px));
+      height: min(820px, calc(100vh - 28px));
+      min-height: 640px;
       position: relative;
-      width: min(100vw, calc(100vh * 9 / 16));
-      height: min(100vh, calc(100vw * 16 / 9));
       overflow: hidden;
-      background: var(--bg);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 28px;
+      background: #0c0c0b;
+      box-shadow: var(--shadow);
       isolation: isolate;
+      user-select: none;
+      touch-action: manipulation;
     }
 
     .stage {
       position: absolute;
       inset: 0;
-      padding: calc(34px + var(--safe-top)) 24px calc(42px + var(--safe-bottom));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: left;
-      opacity: 1;
-      transition: opacity 0.52s ease;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(11,13,16,.1), rgba(0,0,0,.58)),
+        #111;
     }
 
-    .stage.fade { opacity: 0; }
-
-    .bg-layer {
+    .stage::before {
+      content: "";
       position: absolute;
       inset: 0;
-      z-index: 0;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.025), transparent 28%),
-        radial-gradient(circle at 50% 72%, rgba(216, 183, 111, 0.08), transparent 45%),
-        #070706;
-      transition: background 0.8s ease, filter 0.8s ease;
+      background-image: var(--image);
+      background-size: cover;
+      background-position: center;
+      opacity: var(--image-opacity, .88);
+      transform: scale(1.03);
+      transition: opacity .45s ease, filter .45s ease;
+      filter: saturate(.82) contrast(1.05) brightness(.82);
+      z-index: -2;
     }
 
-    .bg-layer::after {
+    .stage::after {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 50% 48%, transparent 0%, transparent 42%, rgba(0,0,0,0.62) 100%),
-        linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.42));
+        radial-gradient(circle at 50% 58%, transparent 0 28%, rgba(0,0,0,.54) 76%),
+        linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.72));
+      z-index: -1;
+    }
+
+    .stage.cold::after {
+      background:
+        radial-gradient(circle at 50% 60%, transparent 0 22%, rgba(0,0,0,.62) 76%),
+        linear-gradient(180deg, rgba(12,26,43,.22), rgba(0,0,0,.76));
+    }
+
+    .stage.warm::after {
+      background:
+        radial-gradient(circle at 50% 60%, rgba(214,166,84,.08), transparent 34%, rgba(0,0,0,.55) 78%),
+        linear-gradient(180deg, rgba(20,14,7,.14), rgba(0,0,0,.68));
+    }
+
+    .hud {
+      position: absolute;
+      inset: 16px 16px auto;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       pointer-events: none;
     }
 
-    .bg-night-off { background:
-      radial-gradient(circle at 48% 30%, rgba(72, 94, 116, 0.16), transparent 34%),
-      linear-gradient(180deg, #090b0d 0%, #030304 100%); }
-    .bg-blue-room { background:
-      radial-gradient(circle at 52% 46%, rgba(74, 118, 165, 0.2), transparent 38%),
-      linear-gradient(180deg, #0a0d11 0%, #050608 100%); }
-    .bg-screen { background:
-      radial-gradient(circle at 50% 36%, rgba(86, 136, 188, 0.22), transparent 34%),
-      linear-gradient(180deg, #0c1015 0%, #050608 100%); }
-    .bg-desk-dirty { background:
-      radial-gradient(circle at 46% 55%, rgba(92, 86, 72, 0.24), transparent 40%),
-      linear-gradient(180deg, #0a0b0d 0%, #050404 100%); }
-    .bg-cup { background:
-      radial-gradient(circle at 58% 56%, rgba(90, 87, 72, 0.26), transparent 30%),
-      linear-gradient(180deg, #09090a 0%, #050505 100%); }
-    .bg-silence { background:
-      radial-gradient(circle at 50% 52%, rgba(50, 56, 64, 0.12), transparent 34%),
-      linear-gradient(180deg, #050506 0%, #010101 100%); }
-    .bg-abyss { background:
-      radial-gradient(circle at 50% 18%, rgba(55, 72, 92, 0.16), transparent 26%),
-      linear-gradient(180deg, #07080a 0%, #000 78%); }
-    .bg-door { background:
-      radial-gradient(circle at 50% 24%, rgba(230, 210, 158, 0.32), transparent 30%),
-      linear-gradient(180deg, #1a1710 0%, #090806 100%); }
-    .bg-street { background:
-      radial-gradient(circle at 52% 44%, rgba(216, 183, 111, 0.23), transparent 40%),
-      linear-gradient(180deg, #14100a 0%, #070604 100%); }
-    .bg-knife { background:
-      radial-gradient(circle at 50% 42%, rgba(216, 183, 111, 0.32), transparent 34%),
-      linear-gradient(180deg, #100e09 0%, #050403 100%); }
-    .bg-notebook { background:
-      radial-gradient(circle at 48% 52%, rgba(216, 183, 111, 0.2), transparent 36%),
-      linear-gradient(180deg, #11100d 0%, #060504 100%); }
-    .bg-money { background:
-      radial-gradient(circle at 50% 52%, rgba(216, 183, 111, 0.28), transparent 38%),
-      linear-gradient(180deg, #151009 0%, #070504 100%); }
-    .bg-witness { background:
-      radial-gradient(circle at 50% 38%, rgba(245, 239, 228, 0.1), transparent 32%),
-      linear-gradient(180deg, #0b0a08 0%, #030303 100%); }
+    .progress {
+      height: 3px;
+      flex: 1;
+      overflow: hidden;
+      border-radius: 99px;
+      background: rgba(255,255,255,.16);
+    }
 
-    .grain {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-      background-size: 34px 34px;
-      opacity: 0.28;
-      pointer-events: none;
+    .progress span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cold), var(--warm));
+      transition: width .28s ease;
+    }
+
+    .sound-toggle {
+      width: 42px;
+      height: 28px;
+      border-radius: 99px;
+      background: rgba(0,0,0,.28);
+      color: var(--muted);
+      font-size: 12px;
+      pointer-events: auto;
     }
 
     .content {
-      position: relative;
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-content: end;
+      gap: 18px;
+      padding: 70px 26px 38px;
       z-index: 2;
-      width: 100%;
-      max-width: 560px;
+    }
+
+    .content > :not(.micro-scene) {
+      position: relative;
+      z-index: 1;
     }
 
     .kicker {
-      margin-bottom: 16px;
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.4;
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    .title {
+      font-size: 30px;
+      line-height: 1.16;
+      font-weight: 700;
+      text-wrap: balance;
     }
 
     .text {
-      font-size: clamp(25px, 6.3vw, 39px);
-      line-height: 1.46;
-      font-weight: 560;
-      text-wrap: balance;
       white-space: pre-line;
-      text-shadow: 0 2px 18px rgba(0,0,0,0.6);
+      font-size: 24px;
+      line-height: 1.45;
+      font-weight: 650;
+      text-shadow: 0 2px 18px rgba(0,0,0,.72);
+      text-wrap: balance;
     }
 
     .text.small {
-      font-size: clamp(20px, 5.15vw, 29px);
-      line-height: 1.55;
-      font-weight: 500;
-      color: rgba(245, 239, 228, 0.94);
+      font-size: 19px;
+      line-height: 1.62;
+      font-weight: 560;
     }
 
     .text.center {
+      align-self: center;
       text-align: center;
-      font-size: clamp(33px, 9.5vw, 58px);
-      line-height: 1.18;
-      font-weight: 720;
+      font-size: 30px;
+      line-height: 1.35;
     }
 
-    .text.heart {
-      text-align: center;
-      font-size: clamp(29px, 8.2vw, 52px);
-      line-height: 1.28;
-      font-weight: 780;
+    .caption {
+      display: inline-block;
+      width: fit-content;
+      max-width: 100%;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 6px;
+      background: rgba(0,0,0,.38);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
     }
-
-    .reveal-line {
-      display: block;
-      opacity: 0;
-      transform: translateY(8px);
-      animation: lineIn 0.85s ease forwards;
-    }
-
-    @keyframes lineIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .card-photo {
-      display: block;
-      width: min(78%, 360px);
-      max-height: 40vh;
-      margin: 0 auto 24px;
-      object-fit: cover;
-      border-radius: 4px;
-      border: 1px solid rgba(245, 239, 228, 0.22);
-      box-shadow: 0 18px 55px rgba(0,0,0,0.5);
-    }
-
-    .photo-fallback {
-      display: grid;
-      place-items: center;
-      width: min(78%, 360px);
-      height: 30vh;
-      margin: 0 auto 24px;
-      border: 1px solid rgba(245, 239, 228, 0.2);
-      border-radius: 4px;
-      color: rgba(245, 239, 228, 0.5);
-      font-size: 14px;
-      background: rgba(255,255,255,0.04);
-    }
-
-    .photo-copy { display: grid; gap: 14px; }
 
     .choices {
       display: grid;
-      gap: 14px;
-      margin-top: 24px;
+      gap: 10px;
     }
 
     .choice {
       width: 100%;
-      min-height: 58px;
-      padding: 15px 16px;
-      border: 1px solid rgba(245, 239, 228, 0.24);
+      min-height: 56px;
+      padding: 13px 14px;
       border-radius: 8px;
-      background: rgba(245, 239, 228, 0.08);
       text-align: left;
-      font-size: clamp(18px, 4.7vw, 24px);
+      background: rgba(10,10,9,.72);
+      backdrop-filter: blur(10px);
       line-height: 1.35;
-      backdrop-filter: blur(8px);
     }
 
-    .choice:active {
-      background: rgba(216, 183, 111, 0.18);
-      border-color: rgba(216, 183, 111, 0.52);
-    }
+    .choice:active { transform: translateY(1px); }
 
-    .image-choices {
-      display: grid;
-      gap: 14px;
-      margin-top: 22px;
-    }
-
-    .image-choice {
-      position: relative;
-      min-height: 168px;
-      padding: 0;
-      overflow: hidden;
-      border: 1px solid rgba(245, 239, 228, 0.24);
-      border-radius: 8px;
-      background: #111;
-      text-align: left;
-    }
-
-    .image-choice .choice-art {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(60,66,74,0.7), rgba(8,8,8,0.96));
-    }
-
-    .image-choice[data-art="reach"] .choice-art {
-      background:
-        radial-gradient(circle at 68% 58%, rgba(160, 145, 105, 0.38), transparent 20%),
-        linear-gradient(135deg, rgba(86, 92, 96, 0.78), rgba(8,8,8,0.96));
-    }
-
-    .image-choice[data-art="sink"] .choice-art {
-      background:
-        radial-gradient(circle at 28% 36%, rgba(70, 112, 155, 0.34), transparent 24%),
-        linear-gradient(135deg, rgba(16, 18, 23, 0.92), rgba(4,4,4,0.98));
-    }
-
-    .image-choice .choice-label {
-      position: absolute;
-      left: 14px;
-      right: 14px;
-      bottom: 12px;
-      z-index: 1;
-      color: rgba(245, 239, 228, 0.92);
-      font-size: clamp(17px, 4.5vw, 23px);
-      line-height: 1.35;
-      text-shadow: 0 2px 14px rgba(0,0,0,0.85);
-    }
-
-    .progress {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 2px;
-      z-index: 5;
-      background: rgba(245, 239, 228, 0.1);
-    }
-    .progress > span {
-      display: block;
-      width: 0;
-      height: 100%;
-      background: var(--accent);
-      transition: width 0.3s linear;
-    }
-
-    .hint {
-      position: absolute;
-      left: 20px;
-      right: 20px;
-      bottom: calc(18px + var(--safe-bottom));
-      z-index: 4;
-      color: rgba(245, 239, 228, 0.48);
-      font-size: 12px;
-      text-align: center;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-    .paused .hint { opacity: 1; }
-
-    .cover, .landscape {
+    .cover {
       position: absolute;
       inset: 0;
       z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 32px 26px;
+      display: grid;
+      align-content: end;
+      gap: 18px;
+      padding: 40px 28px;
       background:
-        radial-gradient(circle at 50% 34%, rgba(216, 183, 111, 0.16), transparent 34%),
-        linear-gradient(180deg, #11100d, #050504);
-    }
-
-    .cover-inner { width: 100%; text-align: center; }
-
-    .title {
-      margin: 0 0 18px;
-      font-size: clamp(35px, 10vw, 60px);
-      line-height: 1.08;
-      font-weight: 820;
-    }
-
-    .tag {
-      margin: 0 0 14px;
-      color: rgba(245, 239, 228, 0.58);
-      font-size: 14px;
-      letter-spacing: 0.08em;
-    }
-
-    .quote {
-      margin: 0 auto 28px;
-      max-width: 320px;
-      color: rgba(245, 239, 228, 0.78);
-      font-size: clamp(16px, 4.2vw, 22px);
-      line-height: 1.55;
+        linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.7)),
+        url("assets/img/cover.jpg") center / cover;
     }
 
     .primary {
-      min-width: 148px;
+      width: 100%;
       min-height: 54px;
-      padding: 13px 22px;
       border-radius: 8px;
-      background: var(--fg);
-      color: #11100d;
-      font-size: 20px;
-      font-weight: 720;
+      background: #f0d5a6;
+      color: #1b130b;
+      border: 0;
+      font-weight: 700;
+    }
+
+    .secondary {
+      width: 100%;
+      min-height: 46px;
+      border-radius: 8px;
+      background: rgba(0,0,0,.42);
+      color: #efe3cf;
+      font-size: 14px;
     }
 
     .muted-note {
-      margin-top: 18px;
-      color: rgba(245, 239, 228, 0.42);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .cover-hook {
+      margin: 0;
+      color: #f3dfb8;
+      font-size: 20px;
+      line-height: 1.45;
+      font-weight: 650;
+      text-shadow: 0 2px 18px rgba(0,0,0,.72);
+      text-wrap: balance;
+    }
+
+    .paused .hint { opacity: 1; }
+
+    .hint {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 8;
+      transform: translate(-50%, -50%);
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(0,0,0,.72);
+      color: var(--muted);
+      opacity: 0;
+      transition: opacity .2s ease;
+      pointer-events: none;
+    }
+
+    .photo-stack {
+      align-self: center;
+      display: grid;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .photo-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .photo-row img,
+    .photo-main {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.16);
+      filter: saturate(.86) contrast(1.04);
+    }
+
+    .photo-main { max-height: 360px; }
+
+    .truth-note {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px;
+      background: rgba(0,0,0,.45);
+    }
+
+    .micro-scene {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 24%, rgba(32,61,88,.32), transparent 34%),
+        linear-gradient(180deg, #101112 0%, #070707 70%);
+    }
+
+    .micro-scene::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 14%;
+      width: 68%;
+      height: 26%;
+      transform: translateX(-50%);
+      border: 1px solid rgba(121,162,196,.2);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(80,135,188,.58), rgba(20,31,43,.78)),
+        repeating-linear-gradient(0deg, transparent 0 18px, rgba(255,255,255,.06) 18px 19px);
+      box-shadow: 0 0 52px rgba(74,126,180,.28);
+      opacity: .62;
+    }
+
+    .desk {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 56%;
+      background:
+        radial-gradient(ellipse at 56% 18%, rgba(255,255,255,.07), transparent 22%),
+        linear-gradient(150deg, #32281e, #15110d 72%);
+      transform: perspective(520px) rotateX(5deg);
+      transform-origin: bottom;
+      box-shadow: inset 0 26px 60px rgba(0,0,0,.46);
+    }
+
+    .mess {
+      position: absolute;
+      border-radius: 6px;
+      background: rgba(185,169,132,.16);
+      box-shadow: 0 8px 22px rgba(0,0,0,.38);
+    }
+
+    .mess.m1 { width: 86px; height: 54px; left: 12%; bottom: 24%; transform: rotate(-8deg); }
+    .mess.m2 { width: 62px; height: 84px; right: 16%; bottom: 26%; transform: rotate(11deg); }
+    .mess.m3 { width: 96px; height: 18px; left: 30%; bottom: 17%; transform: rotate(4deg); }
+    .ash {
+      position: absolute;
+      left: 20%;
+      bottom: 36%;
+      width: 72px;
+      height: 30px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #5a5146, #171310 72%);
+      box-shadow: inset 0 0 16px rgba(255,255,255,.08), 0 8px 24px rgba(0,0,0,.46);
+    }
+
+    .cup {
+      position: absolute;
+      right: 17%;
+      bottom: 32%;
+      width: 58px;
+      height: 78px;
+      border-radius: 9px 9px 18px 18px;
+      background:
+        radial-gradient(ellipse at 48% 16%, rgba(120,96,65,.9), rgba(25,22,18,.98) 56%),
+        linear-gradient(90deg, #0b0a09, #2a211a 52%, #080706);
+      border: 1px solid rgba(255,255,255,.09);
+      box-shadow: 0 18px 38px rgba(0,0,0,.62);
+    }
+
+    .cup::after {
+      content: "";
+      position: absolute;
+      inset: 10px 10px auto auto;
+      width: 16px;
+      height: 42px;
+      border-radius: 12px;
+      border: 5px solid rgba(59,45,31,.76);
+      border-left: 0;
+      transform: translateX(18px);
+    }
+
+    .hand {
+      position: absolute;
+      left: 21%;
+      bottom: 23%;
+      width: 34%;
+      height: 58px;
+      border-radius: 40px 26px 22px 40px;
+      background: linear-gradient(90deg, #5b3b29, #a97958 76%, #c69471);
+      box-shadow: 0 12px 36px rgba(0,0,0,.55);
+      transform-origin: left center;
+    }
+
+    .hand::after {
+      content: "";
+      position: absolute;
+      right: -20px;
+      top: 10px;
+      width: 48px;
+      height: 14px;
+      border-radius: 99px;
+      background: #c69471;
+      box-shadow:
+        0 12px 0 #b98766,
+        0 24px 0 #a87658;
+    }
+
+    .distance-mark {
+      position: absolute;
+      left: 54%;
+      right: 32%;
+      bottom: 38%;
+      border-top: 1px dashed rgba(244,224,190,.44);
+      opacity: 0;
+    }
+
+    .micro-screen .desk { filter: blur(.6px) brightness(.68); }
+    .micro-desk::before { opacity: .48; }
+    .micro-reach .hand { transform: translateX(22%) rotate(-3deg); }
+    .micro-reach .distance-mark { opacity: 1; }
+    .micro-freeze .hand { transform: translateX(24%) rotate(-3deg); animation: tremble 1.8s infinite; }
+    .micro-freeze .distance-mark { opacity: 1; }
+    .micro-still .hand { transform: translateX(-5%) rotate(1deg); opacity: .84; }
+    .micro-abyss {
+      background: radial-gradient(circle at 50% 30%, rgba(49,76,98,.16), transparent 22%), #010101;
+    }
+    .micro-abyss::before,
+    .micro-abyss .desk,
+    .micro-abyss .mess,
+    .micro-abyss .ash,
+    .micro-abyss .cup,
+    .micro-abyss .hand,
+    .micro-abyss .distance-mark { opacity: 0; }
+
+    @keyframes tremble {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(.88); }
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .visual-choice {
+      min-height: 176px;
+      padding: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      background: rgba(0,0,0,.72);
+      text-align: left;
+    }
+
+    .choice-scene {
+      position: relative;
+      height: 110px;
+      overflow: hidden;
+      background: #090909;
+    }
+
+    .choice-scene .micro-scene {
+      transform: scale(.72);
+      transform-origin: center;
+      inset: -50px -62px;
+    }
+
+    .choice-copy {
+      display: grid;
+      gap: 3px;
+      padding: 10px;
+      font-size: 13px;
+      line-height: 1.28;
+    }
+
+    .choice-copy strong { font-size: 16px; }
+
+    .probe-note {
+      color: var(--muted);
       font-size: 12px;
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
-    .landscape {
-      display: none;
-      z-index: 30;
-      text-align: center;
-      font-size: 22px;
-      line-height: 1.5;
-    }
-
-    @media (orientation: landscape) and (max-height: 640px) {
-      .landscape { display: flex; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .stage { transition: opacity 0.2s ease; }
-      .reveal-line { animation-duration: 0.01s; }
+    @media (max-width: 430px) {
+      .app { padding: 0; }
+      .phone {
+        width: 100vw;
+        height: 100vh;
+        min-height: 100vh;
+        border-radius: 0;
+        border: 0;
+      }
+      .content { padding: 64px 22px 34px; }
+      .title { font-size: 28px; }
+      .text { font-size: 22px; }
+      .text.small { font-size: 18px; }
     }
   </style>
 </head>
 <body>
-  <main id="app">
+  <main class="app">
     <section class="phone" id="phone">
-      <div class="stage" id="stage">
-        <div class="bg-layer" id="bgLayer"></div>
-        <div class="grain"></div>
-        <div class="content" id="content"></div>
+      <div class="stage" id="stage"></div>
+      <div class="hud">
+        <div class="progress"><span id="progressBar"></span></div>
+        <button class="sound-toggle" id="voiceToggle" aria-label="切换旁白声线">A</button>
       </div>
-      <div class="progress"><span id="progressBar"></span></div>
-      <div class="hint">已暂停，松开继续</div>
-
+      <div class="content" id="content"></div>
+      <div class="hint">已暂停</div>
       <div class="cover" id="cover">
-        <div class="cover-inner">
-          <h1 class="title">2011，<br>那只水杯</h1>
-          <p class="tag">2011 · 长沙红花坡</p>
-          <p class="quote">他以为自己活通透了——直到那只水杯，没够着。</p>
-          <button class="primary" id="startBtn">开始</button>
-          <p class="muted-note">戴耳机更好。第一可跑版：卡1-22，图与声音可占位。</p>
-        </div>
+        <div class="kicker">人生馆001号</div>
+        <div class="title">2011，那只水杯</div>
+        <p class="cover-hook">他以为自己活通透了——直到那只水杯，没够着。</p>
+        <p class="muted-note">竖屏有声卡片流 v1.1。点击可加速，长按暂停。</p>
+        <button class="primary" id="startBtn">开始</button>
+        <button class="secondary" id="sampleBtn">直接试水杯段</button>
       </div>
-
-      <div class="landscape">请竖屏观看<br>这段人生</div>
     </section>
   </main>
 
   <script>
-    const BED_TRACKS = {
-      fan: "assets/audio/bed-fan-placeholder.m4a",
-      street: "assets/audio/bed-street-placeholder.m4a"
+    const voiceSets = {
+      A: "assets/audio/narration-A/",
+      B: "assets/audio/narration-B/"
     };
 
-    const BGM_TRACKS = {
-      warm: "assets/audio/bgm-warm-placeholder.m4a"
-    };
+    let voiceSet = "A";
 
     const cards = [
-      {
-        id: "1",
-        bg: "night-off",
-        bed: "fan",
-        fixed: 5200,
-        text: ""
-      },
-      {
-        id: "2",
-        bg: "blue-room",
-        bed: "fan",
-        small: true,
-        text: "又是下午两三点。\n外面夜宵摊开张，\n你的一天，也开张了。"
-      },
-      {
-        id: "3",
-        bg: "screen",
-        bed: "fan",
-        small: true,
-        text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。\n还是昨天那本。"
-      },
-      {
-        id: "4",
-        bg: "screen",
-        bed: "fan",
-        small: true,
-        text: "你最爱看的，是那种到最后才发现——\n原来全错了的片子。"
-      },
-      {
-        id: "5",
-        bg: "screen",
-        bed: "fan",
-        small: true,
-        text: "有一部片子你一直忘不掉。\n一个人，坚信不疑的东西，真相却完全反过来。\n你刚写完它的影评，挂在网上。\n你觉得自己看得比谁都深。"
-      },
-      {
-        id: "6",
-        bg: "blue-room",
-        bed: "fan",
-        small: true,
-        text: "同在这座长沙城里，同学们有房有车，孩子都上小学了。\n你心里咯噔一下——又马上按下去：\n有什么了不起，活得那么累，那么俗。"
-      },
-      {
-        id: "7",
-        bg: "screen",
-        bed: "fan",
-        small: true,
-        text: "这话，你写在影评里，\n也跟自己说了很多遍。\n说到——你自己都信了。"
-      },
-      {
-        id: "8",
-        bg: "desk-dirty",
-        bed: "fan",
-        fixed: 5200,
-        text: ""
-      },
-      {
-        id: "9",
-        bg: "cup",
-        bed: "fan",
-        fixed: 4400,
-        text: ""
-      },
-      {
-        id: "10",
-        bg: "cup",
-        bed: "fan",
-        fixed: 4600,
-        text: "手悬在半空。\n杯子还在二三拳头外。\n要够着，得整个上身离开椅背，往前送一大下。"
-      },
+      { id: "cover", kind: "center", mood: "cold", img: "assets/img/cover.jpg", text: "2011年。\n长沙，红花坡。", fixed: 3600 },
+      { id: "card-01", img: "assets/img/card-01-v11.png", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200 },
+      { id: "card-02", mood: "cold", img: "assets/img/card-02-v11.png", audio: "card-02.mp3", text: "又是下午两三点。\n外面夜宵摊开张，你的一天，也开张了。" },
+      { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", audio: "card-03.mp3", text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
+      { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", audio: "card-04.mp3", text: "你最爱看的，是那种到最后才发现“原来全错了”的片子。" },
+      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", audio: "card-05.mp3", text: "有一部片子你一直忘不掉。\n一个人坚信不疑的东西，真相却完全反过来。\n你刚写完它的影评，挂在网上。" },
+      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", audio: "card-06.mp3", text: "同在这座长沙城里，同学们有房有车，孩子都上小学了。\n你住在白天也拉着帘的老破小里。" },
+      { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", audio: "card-07.mp3", text: "这话，你写在影评里，也跟自己说了很多遍。\n说到，你自己都信了。" },
+
+      { id: "card-08", mood: "cold", img: "assets/img/card-08-v11.png", sound: "fan", caption: "屏外", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 5200 },
+      { id: "card-08b", mood: "cold", img: "assets/img/card-08-v11.png", sound: "fan", caption: "桌面", text: "烟灰、泡面桶、纸巾团。\n蓝光打在这一桌黏腻上。", fixed: 4800 },
+      { id: "card-09", mood: "cold", img: "assets/img/card-09-v11.png", sound: "fan", caption: "口渴", text: "桌角那只黑旧的杯子。\n手，下意识探过去。", fixed: 4600 },
+      { id: "card-10", mood: "cold", img: "assets/img/card-10-v11.png", sound: "thin", caption: "二三拳头", text: "还差一点。\n不是一指头，是二三拳头。\n要够着，得把整个身子送出去。", fixed: 6200 },
       {
         id: "pause-0",
-        bg: "silence",
-        silent: true,
         pause: true,
-        choiceType: "image",
-        title: "",
+        mood: "cold",
+        visual: "freeze",
+        sound: "silence",
+        title: "那一下。",
+        text: "别急着看答案。\n就这一秒，身体自己会选。",
         choices: [
-          {
-            label: "上身前倾，指尖快碰到那只脏杯子",
-            art: "reach",
-            feedback: "可那天，他没有。"
-          },
-          {
-            label: "手收回来，人陷回椅子，视线回到屏幕",
-            art: "sink",
-            feedback: null
-          }
+          { title: "A", detail: "往前送一下身子，去碰那只脏杯子。", view: "reach", feedback: "可那天，他没有。" },
+          { title: "B", detail: "算了。手收回来，人陷回椅子，继续看屏幕。", view: "still" }
         ]
       },
+      { id: "card-11", mood: "cold", img: "assets/img/card-11-v11.png", sound: "silence", audio: "card-11.mp3", text: "手缩回去了。\n\n身子，没有动。", fixed: 4200 },
+      { id: "card-12", mood: "cold", img: "assets/img/card-12-v11.png", sound: "drop", audio: "card-12.mp3", text: "一个画面毫无来由地冒出来。\n那个妇人，丈夫把大饼挂在她脖子上出了远门。\n她饿死了。\n因为懒得把饼转过来。", fixed: 9800 },
+      { id: "card-13", mood: "cold", img: "assets/img/card-13-v11.png", sound: "drop", text: "", fixed: 4800 },
+      { id: "card-14", mood: "cold", img: "assets/img/card-14-v11.png", sound: "silence", audio: "card-14.mp3", text: "就这么停着。\n\n大概，一分钟。", fixed: 5200 },
+      { id: "card-15", kind: "center", mood: "cold", img: "assets/img/card-15-v11.png", sound: "silence", audio: "card-15.mp3", text: "再也不能这样过下去了！\n\n绝对不行！！！", fixed: 6200 },
+
+      { id: "card-16", mood: "warm", img: "assets/img/card-16-v11.png", audio: "card-16.mp3", text: "醒过来，你没急着怪外面没机会。\n你问的是：我到底卡在哪。" },
+      { id: "card-17", mood: "warm", img: "assets/img/card-17-v11.png", audio: "card-17.mp3", text: "那就先把这个根解决了，出去，动起来。\n他能，这条路逻辑上就走得通，那我也能。" },
+      { id: "card-18", kind: "center", mood: "warm", img: "assets/img/card-18-v11.png", audio: "card-18.mp3", text: "前面全是荆棘。\n但你认了：先动，先试了再说。\n要用砍刀，砍出一条路来。" },
+      { id: "card-19", mood: "warm", img: "assets/img/card-19-v11.png", audio: "card-19.mp3", text: "你把百度当老师，一个词一个词地啃。\n出门兜里揣个小本子，生怕哪个词没懂。" },
+      { id: "card-20", mood: "warm", img: "assets/img/card-20-v11.png", audio: "card-20.mp3", text: "第一单，三百万的承兑。\n临走，他甩过来一张一百块，带路费。\n心里只有一个念头：我还成单了。" },
+
       {
-        id: "11",
-        bg: "silence",
-        silent: true,
-        type: "center",
-        text: "身子，\n没有动。",
-        fixed: 3800
+        id: "card-21",
+        mood: "cold",
+        kind: "photo",
+        img: "assets/img/card21-photo.png",
+        frog: "assets/img/card21-frog.png",
+        audioFull: "assets/audio/card21.m4a",
+        fixed: 93653,
+        text: "那个下午，到今天，十五年了。\n现在想起，还是从背脊升起一种没来由的恐惧。\n可怕的是当时一点都不觉得自己有问题。\n那是被自己吓醒的。"
       },
       {
-        id: "12",
-        bg: "silence",
-        silent: true,
-        small: true,
-        text: "一个画面毫无来由地冒出来——\n那个妇人，丈夫把大饼挂在她脖子上出了远门。\n她饿死了。\n因为懒得把饼转过来。"
-      },
-      {
-        id: "13",
-        bg: "abyss",
-        silent: true,
-        fixed: 5000,
-        text: ""
-      },
-      {
-        id: "14",
-        bg: "abyss",
-        silent: true,
-        type: "center",
-        text: "你就那么停着。\n大概，一分钟。",
-        fixed: 4200
-      },
-      {
-        id: "15",
-        bg: "silence",
-        silent: true,
-        type: "center",
-        reveal: "lines",
-        text: "再也不能这样过下去了！\n绝对不行！！！",
-        fixed: 5200
-      },
-      {
-        id: "16",
-        bg: "door",
-        bgm: "warm",
-        small: true,
-        text: "醒过来，你没急着怪外面没机会。\n你问的是：我到底卡在哪。\n想明白了——不是没路，是我把自己关在这屋里，根本没出去。"
-      },
-      {
-        id: "17",
-        bg: "street",
-        bed: "street",
-        bgm: "warm",
-        small: true,
-        text: "那就先把这个根解决了——出去，动起来。\n可往哪动？\n你想起隔壁那个大哥，看着也没什么了不起，照样把钱赚了。\n你想的不是“我要像他”——是：他能，这条路逻辑上就走得通，那我也能。"
-      },
-      {
-        id: "18",
-        bg: "knife",
-        bgm: "warm",
-        type: "heart",
-        reveal: "lines",
-        text: "你没等看清整条路。\n前面全是荆棘——\n但你认了：\n先动，先试了再说。\n要用砍刀，\n砍出一条路来。",
-        fixed: 7200
-      },
-      {
-        id: "19",
-        bg: "notebook",
-        bed: "street",
-        bgm: "warm",
-        small: true,
-        text: "你把百度当老师，一个词一个词地啃。\n出门兜里揣个小本子——\n生怕哪个词没懂，被人看出是新来的。"
-      },
-      {
-        id: "20",
-        bg: "money",
-        bed: "street",
-        bgm: "warm",
-        small: true,
-        text: "第一单，三百万的承兑，你带着资金方做成。\n临走，他甩过来一张一百块，“带路费”。\n你没去算这数对不对——心里只有一个念头，清清楚楚：\n我还成单了。\n路，砍开了第一道口子。"
-      },
-      {
-        id: "21",
-        bg: "witness",
-        silent: true,
-        type: "photo",
-        img: "assets/img/card21-placeholder.png",
-        audio: "assets/audio/card21-mother-20260620.m4a",
-        fixed: 90000,
-        text: "那个下午，到今天，十五年了。\n现在想起，还是从背脊升起一种没来由的恐惧。\n可怕的是当时一点都不觉得自己有问题。\n那时候还觉得自己活得挺明白，看不起那些追名逐利的人，觉得他们俗。\n看看小说、看看电影、写写影评，觉得精神世界比他们丰富，充实。\n现在才明白，那是潜意识在逃避，给自己的懒、自己的颓废，编了一个理由，还那样的合情合理，连自己都信了。\n水已经烫了，不知道；已经快烂了，也不知道。还在那儿觉得，挺好。\n那天，那只水杯就在手边，却懒得动一下身子……那一刻的触动，那个梦醒，有点不寒而栗！也许这辈子都不会发现：其实人生，完全可以有另一种选择。\n那是被自己吓醒的！"
-      },
-      {
-        id: "22",
-        bg: "witness",
-        silent: true,
-        type: "center",
-        text: "我们其实都有过这样的时刻——\n以为自己跟别人不一样，看得更透，活得更不同；\n其实，只是给自己找了一个很完美的理由，\n而且自己完全不觉得哪里不对。",
-        fixed: 9500
+        id: "card-22",
+        kind: "center",
+        mood: "warm",
+        img: "assets/img/tail.jpg",
+        text: "我们其实都有过这样的时刻。\n以为自己跟别人不一样，看得更透，活得更不同。\n其实，只是给自己找了一个很完美的理由，而且自己完全不觉得哪里不对。",
+        fixed: 8600
       }
     ];
 
     const stage = document.getElementById("stage");
-    const bgLayer = document.getElementById("bgLayer");
     const content = document.getElementById("content");
     const cover = document.getElementById("cover");
     const startBtn = document.getElementById("startBtn");
+    const sampleBtn = document.getElementById("sampleBtn");
     const progressBar = document.getElementById("progressBar");
     const phone = document.getElementById("phone");
+    const voiceToggle = document.getElementById("voiceToggle");
 
     let index = 0;
     let timer = null;
-    let pressTimer = null;
-    let paused = false;
-    let running = false;
-    let touchMoved = false;
     let activeAudio = null;
-    let bedAudio = null;
-    let bgmAudio = null;
-    let currentBed = null;
-    let currentBgm = null;
-    let unlocked = false;
+    let running = false;
+    let paused = false;
+    let pressTimer = null;
+    let touchMoved = false;
     let audioContext = null;
+    let soundNodes = [];
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function setImage(card) {
+      stage.classList.toggle("has-visual", !!(card && card.visual));
+      stage.style.setProperty("--image", card && card.img ? `url("${card.img}")` : "none");
+      stage.classList.toggle("cold", card && card.mood === "cold");
+      stage.classList.toggle("warm", card && card.mood === "warm");
+    }
+
+    function stopSoundscape() {
+      soundNodes.forEach(node => {
+        try {
+          if (node.stop) node.stop();
+          if (node.disconnect) node.disconnect();
+        } catch (error) {}
+      });
+      soundNodes = [];
+    }
+
+    function stopAudio() {
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio = null;
+      }
+      stopSoundscape();
+    }
+
+    function startSoundscape(type) {
+      stopSoundscape();
+      if (!type || type === "silence") return;
+      audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioContext.state === "suspended") audioContext.resume().catch(() => {});
+      const gain = audioContext.createGain();
+      gain.gain.value = type === "drop" ? 0.03 : type === "thin" ? 0.018 : 0.026;
+      gain.connect(audioContext.destination);
+
+      const osc = audioContext.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = type === "drop" ? 48 : type === "thin" ? 82 : 66;
+      osc.connect(gain);
+      osc.start();
+      soundNodes.push(osc, gain);
+
+      if (type === "drop") {
+        const lfoGain = audioContext.createGain();
+        const lfo = audioContext.createOscillator();
+        lfo.frequency.value = 0.55;
+        lfoGain.gain.value = 11;
+        lfo.connect(lfoGain);
+        lfoGain.connect(osc.frequency);
+        lfo.start();
+        soundNodes.push(lfo, lfoGain);
+      }
+    }
 
     function durationFor(card) {
       if (card.fixed) return card.fixed;
-      const raw = (card.text || card.title || "").replace(/[\s\n，。——、“”【】（）]/g, "");
-      return Math.max(3400, raw.length * 260 + 1100);
-    }
-
-    function clearTimer() {
-      if (timer) window.clearTimeout(timer);
-      timer = null;
+      const chars = (card.text || "").replace(/\s/g, "").length;
+      return Math.max(3800, Math.min(12000, 2200 + chars * 180));
     }
 
     function progressValue() {
@@ -664,315 +711,224 @@
       return Math.min(100, Math.max(0, (played / playable) * 100));
     }
 
-    function setProgress() {
+    function updateProgress() {
       progressBar.style.width = `${progressValue()}%`;
     }
 
-    function setBackground(card) {
-      bgLayer.className = "bg-layer";
-      if (card && card.bg) bgLayer.classList.add(`bg-${card.bg}`);
-    }
-
-    function unlockAudio() {
-      if (unlocked) return;
-      unlocked = true;
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if (Ctx) {
-        try {
-          audioContext = new Ctx();
-          if (audioContext.state === "suspended") audioContext.resume();
-          const source = audioContext.createBufferSource();
-          source.buffer = audioContext.createBuffer(1, 1, 22050);
-          source.connect(audioContext.destination);
-          source.start(0);
-        } catch (error) {}
+    function playAudio(card, done) {
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio = null;
       }
-    }
-
-    function stopAudio(audio) {
-      if (!audio) return;
-      audio.pause();
-      audio.currentTime = 0;
-    }
-
-    function stopActiveAudio() {
-      if (!activeAudio) return;
-      stopAudio(activeAudio);
-      activeAudio = null;
-    }
-
-    function stopBed() {
-      stopAudio(bedAudio);
-      bedAudio = null;
-      currentBed = null;
-    }
-
-    function stopBgm() {
-      stopAudio(bgmAudio);
-      bgmAudio = null;
-      currentBgm = null;
-    }
-
-    function playLoop(kind, key, volume) {
-      const map = kind === "bed" ? BED_TRACKS : BGM_TRACKS;
-      const current = kind === "bed" ? currentBed : currentBgm;
-      if (!key || !map[key]) {
-        if (kind === "bed") stopBed();
-        if (kind === "bgm") stopBgm();
-        return;
-      }
-      if (current === key) return;
-      if (kind === "bed") stopBed();
-      if (kind === "bgm") stopBgm();
-      const audio = new Audio(map[key]);
-      audio.loop = true;
-      audio.volume = volume;
-      const playResult = audio.play();
-      if (playResult && typeof playResult.catch === "function") {
-        playResult.catch(() => {});
-      }
-      if (kind === "bed") {
-        bedAudio = audio;
-        currentBed = key;
-      } else {
-        bgmAudio = audio;
-        currentBgm = key;
-      }
-    }
-
-    function applyAudioState(card) {
-      if (card.silent) {
-        stopBed();
-        stopBgm();
-        return;
-      }
-      playLoop("bed", card.bed, 0.2);
-      playLoop("bgm", card.bgm, 0.16);
-    }
-
-    function playCardAudio(card, onEnded, onFallback) {
-      stopActiveAudio();
-      if (!card.audio) return false;
-      const audio = new Audio(card.audio);
-      audio.volume = 1;
+      const src = card.audioFull || (card.audio ? `${voiceSets[voiceSet]}${card.audio}` : "");
+      if (!src) return false;
+      const audio = new Audio(src);
       activeAudio = audio;
       let settled = false;
       const fallback = () => {
         if (settled || audio !== activeAudio) return;
         settled = true;
-        stopActiveAudio();
-        if (typeof onFallback === "function") onFallback();
+        done(false);
       };
       audio.addEventListener("ended", () => {
         if (settled || audio !== activeAudio) return;
         settled = true;
-        activeAudio = null;
-        if (typeof onEnded === "function") onEnded();
-      }, { once: true });
+        done(true);
+      });
       audio.addEventListener("error", fallback, { once: true });
-      try {
-        const playResult = audio.play();
-        if (playResult && typeof playResult.catch === "function") {
-          playResult.catch(fallback);
-        }
-        return true;
-      } catch (error) {
-        fallback();
-        return false;
-      }
+      audio.play().catch(fallback);
+      return true;
     }
 
-    function scheduleNext(card) {
-      clearTimer();
+    function schedule(card) {
+      clearTimeout(timer);
       if (!running || paused || card.pause || index >= cards.length - 1) return;
-      timer = window.setTimeout(nextCard, durationFor(card));
+      timer = window.setTimeout(next, durationFor(card));
     }
 
-    function buildRevealLines(text) {
-      return text.split("\n").map((line, i) =>
-        `<span class="reveal-line" style="animation-delay:${i * 0.86}s">${escapeHtml(line)}</span>`
-      ).join("");
+    function visualMarkup(name) {
+      if (name === "black") return "";
+      const cls = {
+        screen: "micro-screen",
+        desk: "micro-desk",
+        cup: "micro-cup",
+        reach: "micro-reach",
+        freeze: "micro-freeze",
+        still: "micro-still",
+        abyss: "micro-abyss"
+      }[name] || "micro-desk";
+      return `
+        <div class="micro-scene ${cls}" aria-hidden="true">
+          <div class="desk"></div>
+          <div class="mess m1"></div>
+          <div class="mess m2"></div>
+          <div class="mess m3"></div>
+          <div class="ash"></div>
+          <div class="cup"></div>
+          <div class="hand"></div>
+          <div class="distance-mark"></div>
+        </div>
+      `;
     }
 
-    function renderCard(card) {
-      stage.classList.add("fade");
-      window.setTimeout(() => {
-        setBackground(card);
-        applyAudioState(card);
+    function renderVisual(card) {
+      content.innerHTML = `
+        ${visualMarkup(card.visual)}
+        ${card.caption ? `<div class="caption">${escapeHtml(card.caption)}</div>` : ""}
+        <div class="text ${card.kind === "center" ? "center" : "small"}">${escapeHtml(card.text)}</div>
+      `;
+    }
 
-        const cls = [
-          "text",
-          card.type === "center" ? "center" : "",
-          card.type === "heart" ? "heart" : "",
-          card.small ? "small" : ""
-        ].filter(Boolean).join(" ");
-
-        let scheduleByDefault = true;
-
-        if (card.pause) {
-          stopActiveAudio();
-          if (card.choiceType === "image") {
-            content.innerHTML = `
-              <div class="image-choices">
-                ${card.choices.map((choice, i) => `
-                  <button class="image-choice" data-choice="${i}" data-art="${escapeHtml(choice.art)}">
-                    <span class="choice-art"></span>
-                    <span class="choice-label">${escapeHtml(choice.label)}</span>
-                  </button>
-                `).join("")}
-              </div>
-            `;
-          } else {
-            content.innerHTML = `
-              <div class="text small">${escapeHtml(card.title)}</div>
-              <div class="choices">
-                ${card.choices.map((choice, i) => `<button class="choice" data-choice="${i}">${escapeHtml(choice.label)}</button>`).join("")}
-              </div>
-            `;
-          }
-          content.querySelectorAll("[data-choice]").forEach(btn => {
-            btn.addEventListener("click", event => {
-              event.stopPropagation();
-              const choice = card.choices[Number(btn.dataset.choice)];
-              handleChoice(choice);
-            });
-          });
-        } else if (card.type === "photo") {
-          const [lead, ...rest] = card.text.split("\n");
-          content.innerHTML = `
-            <img class="card-photo" src="${escapeHtml(card.img)}" alt=""
-                 onerror="this.outerHTML='<div class=&quot;photo-fallback&quot;>〔真容照 / 青蛙画面占位〕</div>'">
-            <div class="photo-copy">
-              <div class="text">${escapeHtml(lead)}</div>
-              <div class="text small">${escapeHtml(rest.join("\n"))}</div>
+    function renderPhoto(card) {
+      content.innerHTML = `
+        <div class="photo-stack">
+          <img class="photo-main" src="${escapeHtml(card.img)}" alt="">
+          <div class="photo-row">
+            <img src="${escapeHtml(card.frog)}" alt="">
+            <div class="truth-note">
+              <div class="kicker">真人真声</div>
+              <div class="caption">无 AI 克隆。保留停顿、不顺和口语节奏。</div>
             </div>
-          `;
-          if (card.audio) {
-            scheduleByDefault = false;
-            playCardAudio(
-              card,
-              () => {
-                clearTimer();
-                timer = window.setTimeout(nextCard, 1800);
-              },
-              () => scheduleNext(card)
-            );
-          }
-        } else if (card.reveal === "lines") {
-          stopActiveAudio();
-          content.innerHTML = `<div class="${cls}">${buildRevealLines(card.text)}</div>`;
-        } else if (!card.text) {
-          stopActiveAudio();
-          content.innerHTML = "";
-        } else {
-          stopActiveAudio();
-          content.innerHTML = `<div class="${cls}">${escapeHtml(card.text)}</div>`;
-        }
-
-        setProgress();
-        stage.classList.remove("fade");
-        if (scheduleByDefault) scheduleNext(card);
-      }, 500);
+          </div>
+        </div>
+        <div class="text small">${escapeHtml(card.text)}</div>
+      `;
     }
+    function render(card) {
+      clearTimeout(timer);
+      stopAudio();
+      updateProgress();
+      setImage(card);
 
-    function renderFeedback(text, nextIndex) {
-      if (!text) {
-        index = nextIndex;
-        renderCard(cards[index]);
+      if (card.pause) {
+        content.innerHTML = `
+          ${visualMarkup(card.visual)}
+          <div class="kicker">${escapeHtml(card.title)}</div>
+          <div class="text small">${escapeHtml(card.text)}</div>
+          <div class="choice-grid">
+            ${card.choices.map((choice, i) => `
+              <button class="visual-choice" data-choice="${i}">
+                <div class="choice-scene">${visualMarkup(choice.view)}</div>
+                <div class="choice-copy">
+                  <strong>${escapeHtml(choice.title)}</strong>
+                  <span>${escapeHtml(choice.detail)}</span>
+                </div>
+              </button>
+            `).join("")}
+          </div>
+          <div class="probe-note">选哪一个都不判对错。选完，回到他当年真正发生的那一下。</div>
+        `;
+        content.querySelectorAll(".visual-choice").forEach((button, choiceIndex) => {
+          button.addEventListener("click", () => handlePauseChoice(card.choices[choiceIndex]));
+        });
         return;
       }
-      stage.classList.add("fade");
-      window.setTimeout(() => {
-        stopActiveAudio();
-        content.innerHTML = `<div class="text center">${escapeHtml(text)}</div>`;
-        stage.classList.remove("fade");
-        clearTimer();
-        timer = window.setTimeout(() => {
-          index = nextIndex;
-          renderCard(cards[index]);
-        }, durationFor({ text, fixed: 2600 }));
-      }, 500);
+
+      if (card.kind === "photo") {
+        renderPhoto(card);
+      } else if (card.visual) {
+        renderVisual(card);
+      } else {
+        const cls = `text ${card.kind === "center" ? "center" : "small"}`;
+        content.innerHTML = `
+          ${card.caption ? `<div class="caption">${escapeHtml(card.caption)}</div>` : ""}
+          <div class="${cls}">${escapeHtml(card.text)}</div>
+        `;
+      }
+
+      startSoundscape(card.sound);
+      const hasAudio = playAudio(card, ok => {
+        if (ok) {
+          timer = window.setTimeout(next, 900);
+        } else {
+          schedule(card);
+        }
+      });
+      if (!hasAudio) schedule(card);
     }
 
-    function handleChoice(choice) {
-      const nextIndex = index + 1;
-      renderFeedback(choice.feedback, nextIndex);
-    }
-
-    function nextCard() {
-      if (!running || paused) return;
-      const card = cards[index];
-      if (card.pause) return;
+    function next() {
+      if (!running) return;
       if (index >= cards.length - 1) return;
-      index += 1;
-      renderCard(cards[index]);
+      index = Math.min(index + 1, cards.length - 1);
+      render(cards[index]);
+    }
+
+    function handlePauseChoice(choice) {
+      if (choice && choice.feedback) {
+        content.innerHTML = `
+          <div class="text center">${escapeHtml(choice.feedback)}</div>
+        `;
+        timer = window.setTimeout(() => jumpTo("card-11"), 1700);
+        return;
+      }
+      jumpTo("card-11");
+    }
+
+    function jumpTo(id) {
+      const nextIndex = cards.findIndex(card => card.id === id);
+      index = nextIndex >= 0 ? nextIndex : 0;
+      running = true;
+      paused = false;
+      cover.style.display = "none";
+      render(cards[index]);
     }
 
     function start() {
-      unlockAudio();
       running = true;
       paused = false;
-      index = 0;
       cover.style.display = "none";
-      renderCard(cards[index]);
+      index = 0;
+      render(cards[index]);
     }
 
     function pause() {
-      if (!running) return;
+      if (!running || paused) return;
       paused = true;
-      clearTimer();
-      [activeAudio, bedAudio, bgmAudio].forEach(audio => {
-        if (audio) audio.pause();
-      });
+      clearTimeout(timer);
+      if (activeAudio) activeAudio.pause();
       phone.classList.add("paused");
     }
 
     function resume() {
-      if (!running) return;
+      if (!running || !paused) return;
       paused = false;
       phone.classList.remove("paused");
-      [activeAudio, bedAudio, bgmAudio].forEach(audio => {
-        if (!audio) return;
-        try {
-          const playResult = audio.play();
-          if (playResult && typeof playResult.catch === "function") {
-            playResult.catch(() => {});
-          }
-        } catch (error) {}
-      });
-      scheduleNext(cards[index]);
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      if (activeAudio) {
+        activeAudio.play().catch(() => {});
+      } else {
+        schedule(cards[index]);
+      }
     }
 
     startBtn.addEventListener("click", start);
+    sampleBtn.addEventListener("click", () => jumpTo("card-08"));
 
-    stage.addEventListener("pointerdown", () => {
+    voiceToggle.addEventListener("click", event => {
+      event.stopPropagation();
+      voiceSet = voiceSet === "A" ? "B" : "A";
+      voiceToggle.textContent = voiceSet;
+    });
+
+    phone.addEventListener("pointerdown", () => {
       touchMoved = false;
       pressTimer = window.setTimeout(pause, 520);
     });
-
-    stage.addEventListener("pointermove", () => {
+    phone.addEventListener("pointermove", () => {
       touchMoved = true;
+      clearTimeout(pressTimer);
     });
-
-    stage.addEventListener("pointerup", () => {
-      if (pressTimer) window.clearTimeout(pressTimer);
-      if (paused) { resume(); return; }
-      if (!touchMoved) nextCard();
+    phone.addEventListener("pointerup", () => {
+      clearTimeout(pressTimer);
+      if (!running || touchMoved) return;
+      if (paused) {
+        resume();
+        return;
+      }
+      const card = cards[index];
+      if (!card.pause) next();
     });
-
-    stage.addEventListener("pointercancel", () => {
-      if (pressTimer) window.clearTimeout(pressTimer);
-      if (paused) resume();
-    });
+    phone.addEventListener("pointerleave", () => clearTimeout(pressTimer));
   </script>
 </body>
 </html>
