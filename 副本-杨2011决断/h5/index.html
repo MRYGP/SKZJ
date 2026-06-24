@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
@@ -560,20 +560,41 @@
 
     let voiceSet = "A";
 
+    // ─── sfx 路径 ───────────────────────────────────────────────
+    const SFX = {
+      "pack-up":    "assets/audio/sfx/pack-up.mp3",
+      "open-up":    "assets/audio/sfx/open-up.mp3",
+      "qq":         "assets/audio/sfx/qq.mp3",
+      "drop-tone":  "assets/audio/sfx/drop-tone.mp3",
+      "single-tone":"assets/audio/sfx/single-tone.mp3",
+      "pen":        "assets/audio/sfx/pen.mp3",
+      "money":      "assets/audio/sfx/money.mp3",
+    };
+
+    // ─── bed / bgm 路径 ──────────────────────────────────────────
+    const BED_FILES = {
+      fan:    "assets/audio/bed-fan.mp3",
+      street: "assets/audio/bed-street.mp3",
+    };
+    const BGM_FILE = "assets/audio/bgm-warm.mp3";
+
     const cards = [
-      { id: "cover", kind: "center", mood: "cold", img: "assets/img/cover.jpg", text: "2011年。\n长沙，红花坡。", fixed: 3600 },
-      { id: "card-01", img: "assets/img/card-01-v11.png", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200 },
-      { id: "card-02", mood: "cold", img: "assets/img/card-02-v11.png", audio: "card-02.mp3", text: "又是下午两三点。\n外面夜宵摊开张，你的一天，也开张了。" },
+      { id: "cover",   kind: "center", mood: "cold", img: "assets/img/cover.jpg", text: "2011年。\n长沙，红花坡。", fixed: 3600 },
+      { id: "card-01", img: "assets/img/card-01-v11.png", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200,
+        sfx: ["pack-up"] },
+      { id: "card-02", mood: "cold", img: "assets/img/card-02-v11.png", audio: "card-02.mp3", text: "又是下午两三点。\n外面夜宵摊开张，你的一天，也开张了。",
+        sfx: ["open-up"] },
       { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", audio: "card-03.mp3", text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
-      { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", audio: "card-04.mp3", text: "你最爱看的，是那种到最后才发现“原来全错了”的片子。" },
+      { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", audio: "card-04.mp3", text: "你最爱看的，是那种到最后才发现"原来全错了"的片子。" },
       { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", audio: "card-05.mp3", text: "有一部片子你一直忘不掉。\n一个人坚信不疑的东西，真相却完全反过来。\n你刚写完它的影评，挂在网上。" },
-      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", audio: "card-06.mp3", text: "同在这座长沙城里，同学们有房有车，孩子都上小学了。\n你住在白天也拉着帘的老破小里。" },
+      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", audio: "card-06.mp3", text: "同在这座长沙城里，同学们有房有车，孩子都上小学了。\n你住在白天也拉着帘的老破小里。",
+        sfx: ["qq"] },
       { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", audio: "card-07.mp3", text: "这话，你写在影评里，也跟自己说了很多遍。\n说到，你自己都信了。" },
 
-      { id: "card-08", mood: "cold", img: "assets/img/card-08-v11.png", sound: "fan", caption: "屏外", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 5200 },
-      { id: "card-08b", mood: "cold", img: "assets/img/card-08-v11.png", sound: "fan", caption: "桌面", text: "烟灰、泡面桶、纸巾团。\n蓝光打在这一桌黏腻上。", fixed: 4800 },
-      { id: "card-09", mood: "cold", img: "assets/img/card-09-v11.png", sound: "fan", caption: "口渴", text: "桌角那只黑旧的杯子。\n手，下意识探过去。", fixed: 4600 },
-      { id: "card-10", mood: "cold", img: "assets/img/card-10-v11.png", sound: "thin", caption: "二三拳头", text: "还差一点。\n不是一指头，是二三拳头。\n要够着，得把整个身子送出去。", fixed: 6200 },
+      { id: "card-08",  mood: "cold", img: "assets/img/card-08-v11.png",  sound: "fan", caption: "屏外", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 5200 },
+      { id: "card-08b", mood: "cold", img: "assets/img/card-08-v11.png",  sound: "fan", caption: "桌面", text: "烟灰、泡面桶、纸巾团。\n蓝光打在这一桌黏腻上。", fixed: 4800 },
+      { id: "card-09",  mood: "cold", img: "assets/img/card-09-v11.png",  sound: "fan", caption: "口渴", text: "桌角那只黑旧的杯子。\n手，下意识探过去。", fixed: 4600 },
+      { id: "card-10",  mood: "cold", img: "assets/img/card-10-v11.png",  sound: "thin", caption: "二三拳头", text: "还差一点。\n不是一指头，是二三拳头。\n要够着，得把整个身子送出去。", fixed: 6200 },
       {
         id: "pause-0",
         pause: true,
@@ -588,16 +609,20 @@
         ]
       },
       { id: "card-11", mood: "cold", img: "assets/img/card-11-v11.png", sound: "silence", audio: "card-11.mp3", text: "手缩回去了。\n\n身子，没有动。", fixed: 4200 },
-      { id: "card-12", mood: "cold", img: "assets/img/card-12-v11.png", sound: "drop", audio: "card-12.mp3", text: "一个画面毫无来由地冒出来。\n那个妇人，丈夫把大饼挂在她脖子上出了远门。\n她饿死了。\n因为懒得把饼转过来。", fixed: 9800 },
-      { id: "card-13", mood: "cold", img: "assets/img/card-13-v11.png", sound: "drop", text: "", fixed: 4800 },
+      { id: "card-12", mood: "cold", img: "assets/img/card-12-v11.png", sound: "drop",    audio: "card-12.mp3", text: "一个画面毫无来由地冒出来。\n那个妇人，丈夫把大饼挂在她脖子上出了远门。\n她饿死了。\n因为懒得把饼转过来。", fixed: 9800,
+        sfx: ["drop-tone"] },
+      { id: "card-13", mood: "cold", img: "assets/img/card-13-v11.png", sound: "drop",    text: "", fixed: 4800 },
       { id: "card-14", mood: "cold", img: "assets/img/card-14-v11.png", sound: "silence", audio: "card-14.mp3", text: "就这么停着。\n\n大概，一分钟。", fixed: 5200 },
       { id: "card-15", kind: "center", mood: "cold", img: "assets/img/card-15-v11.png", sound: "silence", audio: "card-15.mp3", text: "再也不能这样过下去了！\n\n绝对不行！！！", fixed: 6200 },
 
       { id: "card-16", mood: "warm", img: "assets/img/card-16-v11.png", audio: "card-16.mp3", text: "醒过来，你没急着怪外面没机会。\n你问的是：我到底卡在哪。" },
       { id: "card-17", mood: "warm", img: "assets/img/card-17-v11.png", audio: "card-17.mp3", text: "那就先把这个根解决了，出去，动起来。\n他能，这条路逻辑上就走得通，那我也能。" },
-      { id: "card-18", kind: "center", mood: "warm", img: "assets/img/card-18-v11.png", audio: "card-18.mp3", text: "前面全是荆棘。\n但你认了：先动，先试了再说。\n要用砍刀，砍出一条路来。" },
-      { id: "card-19", mood: "warm", img: "assets/img/card-19-v11.png", audio: "card-19.mp3", text: "你把百度当老师，一个词一个词地啃。\n出门兜里揣个小本子，生怕哪个词没懂。" },
-      { id: "card-20", mood: "warm", img: "assets/img/card-20-v11.png", audio: "card-20.mp3", text: "第一单，三百万的承兑。\n临走，他甩过来一张一百块，带路费。\n心里只有一个念头：我还成单了。" },
+      { id: "card-18", kind: "center", mood: "warm", img: "assets/img/card-18-v11.png", audio: "card-18.mp3", text: "前面全是荆棘。\n但你认了：先动，先试了再说。\n要用砍刀，砍出一条路来。",
+        sfx: ["single-tone"] },
+      { id: "card-19", mood: "warm", img: "assets/img/card-19-v11.png", audio: "card-19.mp3", text: "你把百度当老师，一个词一个词地啃。\n出门兜里揣个小本子，生怕哪个词没懂。",
+        sfx: ["pen"] },
+      { id: "card-20", mood: "warm", img: "assets/img/card-20-v11.png", audio: "card-20.mp3", text: "第一单，三百万的承兑。\n临走，他甩过来一张一百块，带路费。\n心里只有一个念头：我还成单了。",
+        sfx: ["money"] },
 
       {
         id: "card-21",
@@ -619,31 +644,34 @@
       }
     ];
 
-    const stage = document.getElementById("stage");
-    const content = document.getElementById("content");
-    const cover = document.getElementById("cover");
-    const startBtn = document.getElementById("startBtn");
-    const sampleBtn = document.getElementById("sampleBtn");
-    const progressBar = document.getElementById("progressBar");
-    const phone = document.getElementById("phone");
-    const voiceToggle = document.getElementById("voiceToggle");
+    const stage      = document.getElementById("stage");
+    const content    = document.getElementById("content");
+    const cover      = document.getElementById("cover");
+    const startBtn   = document.getElementById("startBtn");
+    const sampleBtn  = document.getElementById("sampleBtn");
+    const progressBar= document.getElementById("progressBar");
+    const phone      = document.getElementById("phone");
+    const voiceToggle= document.getElementById("voiceToggle");
 
-    let index = 0;
-    let timer = null;
+    let index       = 0;
+    let timer       = null;
     let activeAudio = null;
-    let running = false;
-    let paused = false;
-    let pressTimer = null;
-    let touchMoved = false;
-    let audioContext = null;
-    let soundNodes = [];
+    let running     = false;
+    let paused      = false;
+    let pressTimer  = null;
+    let touchMoved  = false;
+    let audioContext= null;
+    let soundNodes  = [];
 
-    function escapeHtml(value) {
-      return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+    // ─── Bed / BGM state ────────────────────────────────────────
+    let bedAudio       = null;
+    let bgmAudio       = null;
+    let currentBedType = null;   // tracks running bed type to avoid restarts
+    let bgmRunning     = false;
+
+    // ─── Helpers ────────────────────────────────────────────────
+    function escapeHtml(v) {
+      return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     }
 
     function setImage(card) {
@@ -653,61 +681,110 @@
       stage.classList.toggle("warm", card && card.mood === "warm");
     }
 
+    // ─── Oscillator soundscape (unchanged, for drop / thin) ─────
     function stopSoundscape() {
-      soundNodes.forEach(node => {
-        try {
-          if (node.stop) node.stop();
-          if (node.disconnect) node.disconnect();
-        } catch (error) {}
-      });
+      soundNodes.forEach(n => { try { if(n.stop) n.stop(); if(n.disconnect) n.disconnect(); } catch(e){} });
       soundNodes = [];
-    }
-
-    function stopAudio() {
-      if (activeAudio) {
-        activeAudio.pause();
-        activeAudio = null;
-      }
-      stopSoundscape();
     }
 
     function startSoundscape(type) {
       stopSoundscape();
-      if (!type || type === "silence") return;
+      // fan / street are handled by file-based bed; silence = nothing
+      if (!type || type === "silence" || type === "fan" || type === "street") return;
       audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
-      if (audioContext.state === "suspended") audioContext.resume().catch(() => {});
+      if (audioContext.state === "suspended") audioContext.resume().catch(()=>{});
       const gain = audioContext.createGain();
       gain.gain.value = type === "drop" ? 0.03 : type === "thin" ? 0.018 : 0.026;
       gain.connect(audioContext.destination);
-
       const osc = audioContext.createOscillator();
       osc.type = "sine";
       osc.frequency.value = type === "drop" ? 48 : type === "thin" ? 82 : 66;
-      osc.connect(gain);
-      osc.start();
+      osc.connect(gain); osc.start();
       soundNodes.push(osc, gain);
-
       if (type === "drop") {
         const lfoGain = audioContext.createGain();
         const lfo = audioContext.createOscillator();
-        lfo.frequency.value = 0.55;
-        lfoGain.gain.value = 11;
-        lfo.connect(lfoGain);
-        lfoGain.connect(osc.frequency);
-        lfo.start();
+        lfo.frequency.value = 0.55; lfoGain.gain.value = 11;
+        lfo.connect(lfoGain); lfoGain.connect(osc.frequency); lfo.start();
         soundNodes.push(lfo, lfoGain);
       }
     }
 
+    // ─── File-based bed ─────────────────────────────────────────
+    function startBed(type) {
+      if (type === currentBedType) return;   // already playing this bed
+      currentBedType = type;
+
+      if (bedAudio) { bedAudio.pause(); bedAudio = null; }
+
+      const src = BED_FILES[type];
+      if (!src) return;
+
+      const a = new Audio(src);
+      a.loop   = true;
+      a.volume = 0.14;
+      bedAudio = a;
+      a.play().catch(() => {
+        // fallback: oscillator hum
+        startSoundscape(type);
+      });
+    }
+
+    function stopBed() {
+      currentBedType = null;
+      if (bedAudio) { bedAudio.pause(); bedAudio = null; }
+    }
+
+    // ─── BGM ────────────────────────────────────────────────────
+    function startBgm() {
+      if (bgmRunning) return;
+      bgmRunning = true;
+      const a = new Audio(BGM_FILE);
+      a.loop   = true;
+      a.volume = 0.09;
+      bgmAudio = a;
+      a.play().catch(() => {});
+    }
+
+    function stopBgm() {
+      bgmRunning = false;
+      if (bgmAudio) { bgmAudio.pause(); bgmAudio = null; }
+    }
+
+    // ─── SFX one-shot ───────────────────────────────────────────
+    function playSfx(keys) {
+      if (!keys || !keys.length) return;
+      keys.forEach(key => {
+        const src = SFX[key];
+        if (!src) return;
+        const a = new Audio(src);
+        a.volume = 0.68;
+        a.play().catch(() => {});
+      });
+    }
+
+    // ─── Audio lifecycle ────────────────────────────────────────
+    function stopAudio() {
+      if (activeAudio) { activeAudio.pause(); activeAudio = null; }
+      stopSoundscape();
+      // NOTE: bed and bgm are NOT stopped here; they persist across cards
+    }
+
+    function stopAllAudio() {
+      stopAudio();
+      stopBed();
+      stopBgm();
+    }
+
     function durationFor(card) {
       if (card.fixed) return card.fixed;
-      const chars = (card.text || "").replace(/\s/g, "").length;
+      const chars = (card.text||"").replace(/\s/g,"").length;
       return Math.max(3800, Math.min(12000, 2200 + chars * 180));
     }
 
     function progressValue() {
-      const playable = cards.filter(card => !card.pause).length;
-      const played = cards.slice(0, index + 1).filter(card => !card.pause).length;
+      const playable = cards.filter(c => !c.pause).length;
+      const played   = cards.slice(0, index + 1).filter(c => !c.pause).length;
       return Math.min(100, Math.max(0, (played / playable) * 100));
     }
 
@@ -716,25 +793,14 @@
     }
 
     function playAudio(card, done) {
-      if (activeAudio) {
-        activeAudio.pause();
-        activeAudio = null;
-      }
+      if (activeAudio) { activeAudio.pause(); activeAudio = null; }
       const src = card.audioFull || (card.audio ? `${voiceSets[voiceSet]}${card.audio}` : "");
       if (!src) return false;
       const audio = new Audio(src);
       activeAudio = audio;
       let settled = false;
-      const fallback = () => {
-        if (settled || audio !== activeAudio) return;
-        settled = true;
-        done(false);
-      };
-      audio.addEventListener("ended", () => {
-        if (settled || audio !== activeAudio) return;
-        settled = true;
-        done(true);
-      });
+      const fallback = () => { if (settled || audio !== activeAudio) return; settled=true; done(false); };
+      audio.addEventListener("ended", () => { if (settled || audio !== activeAudio) return; settled=true; done(true); });
       audio.addEventListener("error", fallback, { once: true });
       audio.play().catch(fallback);
       return true;
@@ -748,35 +814,19 @@
 
     function visualMarkup(name) {
       if (name === "black") return "";
-      const cls = {
-        screen: "micro-screen",
-        desk: "micro-desk",
-        cup: "micro-cup",
-        reach: "micro-reach",
-        freeze: "micro-freeze",
-        still: "micro-still",
-        abyss: "micro-abyss"
-      }[name] || "micro-desk";
-      return `
-        <div class="micro-scene ${cls}" aria-hidden="true">
-          <div class="desk"></div>
-          <div class="mess m1"></div>
-          <div class="mess m2"></div>
-          <div class="mess m3"></div>
-          <div class="ash"></div>
-          <div class="cup"></div>
-          <div class="hand"></div>
-          <div class="distance-mark"></div>
-        </div>
-      `;
+      const cls = { screen:"micro-screen", desk:"micro-desk", cup:"micro-cup",
+        reach:"micro-reach", freeze:"micro-freeze", still:"micro-still", abyss:"micro-abyss" }[name] || "micro-desk";
+      return `<div class="micro-scene ${cls}" aria-hidden="true">
+        <div class="desk"></div><div class="mess m1"></div><div class="mess m2"></div>
+        <div class="mess m3"></div><div class="ash"></div><div class="cup"></div>
+        <div class="hand"></div><div class="distance-mark"></div></div>`;
     }
 
     function renderVisual(card) {
       content.innerHTML = `
         ${visualMarkup(card.visual)}
         ${card.caption ? `<div class="caption">${escapeHtml(card.caption)}</div>` : ""}
-        <div class="text ${card.kind === "center" ? "center" : "small"}">${escapeHtml(card.text)}</div>
-      `;
+        <div class="text ${card.kind==="center"?"center":"small"}">${escapeHtml(card.text)}</div>`;
     }
 
     function renderPhoto(card) {
@@ -791,14 +841,37 @@
             </div>
           </div>
         </div>
-        <div class="text small">${escapeHtml(card.text)}</div>
-      `;
+        <div class="text small">${escapeHtml(card.text)}</div>`;
     }
+
     function render(card) {
       clearTimeout(timer);
-      stopAudio();
+      stopAudio();   // stops narration + oscillators; bed & bgm persist
       updateProgress();
       setImage(card);
+
+      // ── 声音路由 ──────────────────────────────────────────────
+      const soundType = card.sound;
+      if (soundType === "fan" || soundType === "street") {
+        startBed(soundType);
+      } else if (soundType === "silence") {
+        stopBed();
+        stopSoundscape();
+      } else if (soundType === undefined) {
+        // no change to bed
+      } else {
+        stopBed();
+        startSoundscape(soundType);    // oscillator for drop / thin
+      }
+
+      if (card.mood === "warm") {
+        startBgm();
+      } else if (card.mood === "cold") {
+        stopBgm();
+      }
+
+      // ── sfx 一次性音效 ────────────────────────────────────────
+      playSfx(card.sfx);
 
       if (card.pause) {
         content.innerHTML = `
@@ -806,20 +879,15 @@
           <div class="kicker">${escapeHtml(card.title)}</div>
           <div class="text small">${escapeHtml(card.text)}</div>
           <div class="choice-grid">
-            ${card.choices.map((choice, i) => `
+            ${card.choices.map((ch,i)=>`
               <button class="visual-choice" data-choice="${i}">
-                <div class="choice-scene">${visualMarkup(choice.view)}</div>
-                <div class="choice-copy">
-                  <strong>${escapeHtml(choice.title)}</strong>
-                  <span>${escapeHtml(choice.detail)}</span>
-                </div>
-              </button>
-            `).join("")}
+                <div class="choice-scene">${visualMarkup(ch.view)}</div>
+                <div class="choice-copy"><strong>${escapeHtml(ch.title)}</strong><span>${escapeHtml(ch.detail)}</span></div>
+              </button>`).join("")}
           </div>
-          <div class="probe-note">选哪一个都不判对错。选完，回到他当年真正发生的那一下。</div>
-        `;
-        content.querySelectorAll(".visual-choice").forEach((button, choiceIndex) => {
-          button.addEventListener("click", () => handlePauseChoice(card.choices[choiceIndex]));
+          <div class="probe-note">选哪一个都不判对错。选完，回到他当年真正发生的那一下。</div>`;
+        content.querySelectorAll(".visual-choice").forEach((btn, i) => {
+          btn.addEventListener("click", () => handlePauseChoice(card.choices[i]));
         });
         return;
       }
@@ -829,20 +897,15 @@
       } else if (card.visual) {
         renderVisual(card);
       } else {
-        const cls = `text ${card.kind === "center" ? "center" : "small"}`;
+        const cls = `text ${card.kind==="center"?"center":"small"}`;
         content.innerHTML = `
           ${card.caption ? `<div class="caption">${escapeHtml(card.caption)}</div>` : ""}
-          <div class="${cls}">${escapeHtml(card.text)}</div>
-        `;
+          <div class="${cls}">${escapeHtml(card.text)}</div>`;
       }
 
-      startSoundscape(card.sound);
       const hasAudio = playAudio(card, ok => {
-        if (ok) {
-          timer = window.setTimeout(next, 900);
-        } else {
-          schedule(card);
-        }
+        if (ok) { timer = window.setTimeout(next, 900); }
+        else     { schedule(card); }
       });
       if (!hasAudio) schedule(card);
     }
@@ -856,9 +919,7 @@
 
     function handlePauseChoice(choice) {
       if (choice && choice.feedback) {
-        content.innerHTML = `
-          <div class="text center">${escapeHtml(choice.feedback)}</div>
-        `;
+        content.innerHTML = `<div class="text center">${escapeHtml(choice.feedback)}</div>`;
         timer = window.setTimeout(() => jumpTo("card-11"), 1700);
         return;
       }
@@ -866,19 +927,19 @@
     }
 
     function jumpTo(id) {
-      const nextIndex = cards.findIndex(card => card.id === id);
-      index = nextIndex >= 0 ? nextIndex : 0;
+      const nextIndex = cards.findIndex(c => c.id === id);
+      index   = nextIndex >= 0 ? nextIndex : 0;
       running = true;
-      paused = false;
+      paused  = false;
       cover.style.display = "none";
       render(cards[index]);
     }
 
     function start() {
       running = true;
-      paused = false;
+      paused  = false;
       cover.style.display = "none";
-      index = 0;
+      index   = 0;
       render(cards[index]);
     }
 
@@ -887,6 +948,8 @@
       paused = true;
       clearTimeout(timer);
       if (activeAudio) activeAudio.pause();
+      if (bedAudio)    bedAudio.pause();
+      if (bgmAudio)    bgmAudio.pause();
       phone.classList.add("paused");
     }
 
@@ -894,37 +957,27 @@
       if (!running || !paused) return;
       paused = false;
       phone.classList.remove("paused");
-      if (activeAudio) {
-        activeAudio.play().catch(() => {});
-      } else {
-        schedule(cards[index]);
-      }
+      if (activeAudio) activeAudio.play().catch(()=>{});
+      if (bedAudio)    bedAudio.play().catch(()=>{});
+      if (bgmAudio)    bgmAudio.play().catch(()=>{});
+      if (!activeAudio) schedule(cards[index]);
     }
 
     startBtn.addEventListener("click", start);
     sampleBtn.addEventListener("click", () => jumpTo("card-08"));
 
-    voiceToggle.addEventListener("click", event => {
-      event.stopPropagation();
+    voiceToggle.addEventListener("click", e => {
+      e.stopPropagation();
       voiceSet = voiceSet === "A" ? "B" : "A";
       voiceToggle.textContent = voiceSet;
     });
 
-    phone.addEventListener("pointerdown", () => {
-      touchMoved = false;
-      pressTimer = window.setTimeout(pause, 520);
-    });
-    phone.addEventListener("pointermove", () => {
-      touchMoved = true;
-      clearTimeout(pressTimer);
-    });
-    phone.addEventListener("pointerup", () => {
+    phone.addEventListener("pointerdown", () => { touchMoved=false; pressTimer=window.setTimeout(pause,520); });
+    phone.addEventListener("pointermove", () => { touchMoved=true; clearTimeout(pressTimer); });
+    phone.addEventListener("pointerup",   () => {
       clearTimeout(pressTimer);
       if (!running || touchMoved) return;
-      if (paused) {
-        resume();
-        return;
-      }
+      if (paused) { resume(); return; }
       const card = cards[index];
       if (!card.pause) next();
     });
