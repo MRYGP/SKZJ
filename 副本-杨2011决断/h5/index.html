@@ -933,7 +933,7 @@
         const view = sequence[frame];
         content.innerHTML = `
           <div class="kicker">${escapeHtml(card.title)}</div>
-          <div class="text small">${escapeHtml(frame < sequence.length - 1 ? card.text : "卡住了。")}</div>
+          <div class="text small">${escapeHtml(frame < sequence.length - 1 ? card.text : "")}</div>
           <div class="pause-animation">${visualMarkup(view)}</div>`;
         if (frame < sequence.length - 1) {
           frame += 1;
