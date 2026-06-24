@@ -206,11 +206,6 @@
       line-height: 1.4;
     }
 
-    .choices {
-      display: grid;
-      gap: 10px;
-    }
-
     .choice {
       width: 100%;
       min-height: 56px;
@@ -477,6 +472,7 @@
       gap: 10px;
     }
 
+    /* 停顿〇触发器：沿用按钮类名，语义是身体声音，不是剧情分支。 */
     .visual-choice {
       min-height: 176px;
       padding: 0;
@@ -484,6 +480,11 @@
       border-radius: 8px;
       background: rgba(0,0,0,.72);
       text-align: left;
+    }
+
+    .visual-choice:disabled {
+      opacity: .64;
+      cursor: default;
     }
 
     .choice-scene {
@@ -509,10 +510,13 @@
 
     .choice-copy strong { font-size: 16px; }
 
-    .probe-note {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
+    .pause-animation {
+      position: relative;
+      min-height: 220px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px;
+      background: #050505;
     }
 
     @media (max-width: 430px) {
@@ -602,10 +606,11 @@
         visual: "freeze",
         sound: "silence",
         title: "那一下。",
-        text: "别急着看答案。\n就这一秒，身体自己会选。",
-        choices: [
-          { title: "A", detail: "往前送一下身子，去碰那只脏杯子。", view: "reach", feedback: "可那天，他没有。" },
-          { title: "B", detail: "算了。手收回来，人陷回椅子，继续看屏幕。", view: "still" }
+        text: "身体里，两个声音。",
+        // 停顿〇=两个身体声音的触发器，非真假分支。点任一键只触发"交替二次→卡住"，结局由事实锁定：身子没有动(card-11)。顺序锁：card-11→card-12(饼女人)不得前置。
+        voices: [
+          { label: "把身子送出去", view: "reach" },
+          { label: "真的不想动", view: "still" }
         ]
       },
       { id: "card-11", mood: "cold", img: "assets/img/card-11-v11.png", sound: "silence", audio: "card-11.mp3", text: "手缩回去了。\n\n身子，没有动。", fixed: 4200 },
@@ -874,20 +879,20 @@
       playSfx(card.sfx);
 
       if (card.pause) {
+        const voices = card.voices || [];
         content.innerHTML = `
           ${visualMarkup(card.visual)}
           <div class="kicker">${escapeHtml(card.title)}</div>
           <div class="text small">${escapeHtml(card.text)}</div>
-          <div class="choice-grid">
-            ${card.choices.map((ch,i)=>`
-              <button class="visual-choice" data-choice="${i}">
-                <div class="choice-scene">${visualMarkup(ch.view)}</div>
-                <div class="choice-copy"><strong>${escapeHtml(ch.title)}</strong><span>${escapeHtml(ch.detail)}</span></div>
+          <div class="choice-grid" aria-label="两个身体声音触发器">
+            ${voices.map((voice,i)=>`
+              <button class="visual-choice" data-trigger="${i}">
+                <div class="choice-scene">${visualMarkup(voice.view)}</div>
+                <div class="choice-copy"><strong>${escapeHtml(voice.label)}</strong></div>
               </button>`).join("")}
-          </div>
-          <div class="probe-note">选哪一个都不判对错。选完，回到他当年真正发生的那一下。</div>`;
+          </div>`;
         content.querySelectorAll(".visual-choice").forEach((btn, i) => {
-          btn.addEventListener("click", () => handlePauseChoice(card.choices[i]));
+          btn.addEventListener("click", () => handlePauseTrigger(card));
         });
         return;
       }
@@ -917,13 +922,27 @@
       render(cards[index]);
     }
 
-    function handlePauseChoice(choice) {
-      if (choice && choice.feedback) {
-        content.innerHTML = `<div class="text center">${escapeHtml(choice.feedback)}</div>`;
-        timer = window.setTimeout(() => jumpTo("card-11"), 1700);
-        return;
-      }
-      jumpTo("card-11");
+    function handlePauseTrigger(card) {
+      content.querySelectorAll(".visual-choice").forEach(btn => {
+        btn.disabled = true;
+      });
+
+      const sequence = ["reach", "still", "reach", "still", "freeze"];
+      let frame = 0;
+      const renderFrame = () => {
+        const view = sequence[frame];
+        content.innerHTML = `
+          <div class="kicker">${escapeHtml(card.title)}</div>
+          <div class="text small">${escapeHtml(frame < sequence.length - 1 ? card.text : "卡住了。")}</div>
+          <div class="pause-animation">${visualMarkup(view)}</div>`;
+        if (frame < sequence.length - 1) {
+          frame += 1;
+          timer = window.setTimeout(renderFrame, 400);
+        } else {
+          timer = window.setTimeout(() => jumpTo("card-11"), 600);
+        }
+      };
+      renderFrame();
     }
 
     function jumpTo(id) {
