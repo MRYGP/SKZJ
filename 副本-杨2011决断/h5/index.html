@@ -64,6 +64,7 @@
       position: absolute;
       inset: 0;
       overflow: hidden;
+      isolation: isolate;
       background:
         linear-gradient(180deg, rgba(11,13,16,.1), rgba(0,0,0,.58)),
         #111;
@@ -510,6 +511,28 @@
 
     .choice-copy strong { font-size: 16px; }
 
+    .body-triggers {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .body-btn {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 8px;
+      background: rgba(10,10,9,.72);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.16);
+      color: var(--ink);
+      font-size: 15px;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+
+    .body-btn:active { transform: translateY(1px); }
+    .body-btn:disabled { opacity: .35; pointer-events: none; }
+
     .pause-animation {
       position: relative;
       min-height: 220px;
@@ -551,7 +574,6 @@
         <p class="cover-hook">他一直觉得这样挺好——直到那只水杯，让他看见自己一动没动。</p>
         <p class="muted-note">竖屏有声卡片流 v1.1。点击可加速，长按暂停。</p>
         <button class="primary" id="startBtn">开始</button>
-        <button class="secondary" id="sampleBtn">直接试水杯段</button>
       </div>
     </section>
   </main>
@@ -590,8 +612,8 @@
         sfx: ["open-up"] },
       { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", audio: "card-03.mp3", text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
       { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", audio: "card-04.mp3", text: "你最爱看的，是那种到最后才发现“原来全错了”的片子。" },
-      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", audio: "card-05.mp3", text: "有一部片子你一直忘不掉。\n一个人坚信不疑的东西，真相却完全反过来。\n你刚写完它的影评，挂在网上。" },
-      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", audio: "card-06.mp3", text: "同在这座长沙城里，同学们有房有车，孩子都上小学了。\n你住在白天也拉着帘的老破小里。",
+      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", audio: "card-05.mp3", text: "有一部片子你一直忘不掉——一个人，坚信不疑的东西，真相却完全反过来。\n你刚写完它的影评，挂在网上。\n你觉得自己看得比谁都深。" },
+      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", audio: "card-06.mp3", text: "同在这座长沙城里，同学们有房有车，孩子都上小学了。\n你住在白天也拉着帘的老破小里。\n你心里咯噔一下——又马上按下去：有什么了不起，活得那么累，那么俗。",
         sfx: ["qq"] },
       { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", audio: "card-07.mp3", text: "这话，你写在影评里，也跟自己说了很多遍。\n说到，你自己都信了。" },
 
@@ -605,13 +627,6 @@
         mood: "cold",
         visual: "freeze",
         sound: "silence",
-        title: "那一下。",
-        text: "身体里，两个声音。",
-        // 停顿〇=两个身体声音的触发器，非真假分支。点任一键只触发"交替二次→卡住"，结局由事实锁定：身子没有动(card-11)。顺序锁：card-11→card-12(饼女人)不得前置。
-        voices: [
-          { label: "把身子送出去", view: "reach" },
-          { label: "真的不想动", view: "still" }
-        ]
       },
       { id: "card-11", mood: "cold", img: "assets/img/card-11-v11.png", sound: "silence", audio: "card-11.mp3", text: "手缩回去了。\n\n身子，没有动。", fixed: 4200 },
       { id: "card-12", mood: "cold", img: "assets/img/card-12-v11.png", sound: "drop",    audio: "card-12.mp3", text: "一个画面毫无来由地冒出来。\n那个妇人，丈夫把大饼挂在她脖子上出了远门。\n她饿死了。\n因为懒得把饼转过来。", fixed: 9800,
@@ -620,13 +635,13 @@
       { id: "card-14", mood: "cold", img: "assets/img/card-14-v11.png", sound: "silence", audio: "card-14.mp3", text: "就这么停着。\n\n大概，一分钟。", fixed: 5200 },
       { id: "card-15", kind: "center", mood: "cold", img: "assets/img/card-15-v11.png", sound: "silence", audio: "card-15.mp3", text: "再也不能这样过下去了！\n\n绝对不行！！！", fixed: 6200 },
 
-      { id: "card-16", mood: "warm", img: "assets/img/card-16-v11.png", audio: "card-16.mp3", text: "醒过来，你没急着怪外面没机会。\n你问的是：我到底卡在哪。" },
-      { id: "card-17", mood: "warm", img: "assets/img/card-17-v11.png", audio: "card-17.mp3", text: "那就先把这个根解决了，出去，动起来。\n他能，这条路逻辑上就走得通，那我也能。" },
-      { id: "card-18", kind: "center", mood: "warm", img: "assets/img/card-18-v11.png", audio: "card-18.mp3", text: "前面全是荆棘。\n但你认了：先动，先试了再说。\n要用砍刀，砍出一条路来。",
+      { id: "card-16", mood: "warm", img: "assets/img/card-16-v11.png", audio: "card-16.mp3", text: "醒过来，你没急着怪外面没机会。\n你问的是：我到底卡在哪。\n想明白了——不是没路，是我把自己关在这屋里，根本没出去。" },
+      { id: "card-17", mood: "warm", img: "assets/img/card-17-v11.png", audio: "card-17.mp3", text: "那就先把这个根解决了——出去，动起来。\n可往哪动？你想起隔壁那个大哥，看着也没什么了不起，照样把钱赚了。\n你想的不是“我要像他”——是：他能，这条路逻辑上就走得通，那我也能。" },
+      { id: "card-18", kind: "center", mood: "warm", img: "assets/img/card-18-v11.png", audio: "card-18.mp3", text: "你没等看清整条路。前面全是荆棘，你也看不清——但你认了：先动，先试了再说。\n手里有把刀，你就冲眼前这一茬砍了下去。\n砍开一点，往前挪一点；又挡住了，再砍。",
         sfx: ["single-tone"] },
       { id: "card-19", mood: "warm", img: "assets/img/card-19-v11.png", audio: "card-19.mp3", text: "你把百度当老师，一个词一个词地啃。\n出门兜里揣个小本子，生怕哪个词没懂。",
         sfx: ["pen"] },
-      { id: "card-20", mood: "warm", img: "assets/img/card-20-v11.png", audio: "card-20.mp3", text: "第一单，三百万的承兑。\n临走，他甩过来一张一百块，带路费。\n心里只有一个念头：我还成单了。",
+      { id: "card-20", mood: "warm", img: "assets/img/card-20-v11.png", audio: "card-20.mp3", text: "第一单，三百万的承兑，你带着资金方做成。\n临走，他甩过来一张一百块，“带路费”。\n你没去算这数对不对——心里只有一个念头，清清楚楚：我还成单了。\n路，砍开了第一道口子。",
         sfx: ["money"] },
 
       {
@@ -634,7 +649,6 @@
         mood: "cold",
         kind: "photo",
         img: "assets/img/card21-photo.png",
-        frog: "assets/img/card21-frog.png",
         audioFull: "assets/audio/card21.m4a",
         fixed: 93653,
         text: "那个下午，到今天，十五年了。\n现在想起，还是从背脊升起一种没来由的恐惧。\n可怕的是当时一点都不觉得自己有问题。\n那是被自己吓醒的。"
@@ -653,7 +667,6 @@
     const content    = document.getElementById("content");
     const cover      = document.getElementById("cover");
     const startBtn   = document.getElementById("startBtn");
-    const sampleBtn  = document.getElementById("sampleBtn");
     const progressBar= document.getElementById("progressBar");
     const phone      = document.getElementById("phone");
     const voiceToggle= document.getElementById("voiceToggle");
@@ -838,12 +851,9 @@
       content.innerHTML = `
         <div class="photo-stack">
           <img class="photo-main" src="${escapeHtml(card.img)}" alt="">
-          <div class="photo-row">
-            <img src="${escapeHtml(card.frog)}" alt="">
-            <div class="truth-note">
-              <div class="kicker">真人真声</div>
-              <div class="caption">无 AI 克隆。保留停顿、不顺和口语节奏。</div>
-            </div>
+          <div class="truth-note">
+            <div class="kicker">真人真声</div>
+            <div class="caption">无 AI 克隆。保留停顿、不顺和口语节奏。</div>
           </div>
         </div>
         <div class="text small">${escapeHtml(card.text)}</div>`;
@@ -879,21 +889,14 @@
       playSfx(card.sfx);
 
       if (card.pause) {
-        const voices = card.voices || [];
         content.innerHTML = `
           ${visualMarkup(card.visual)}
-          <div class="kicker">${escapeHtml(card.title)}</div>
-          <div class="text small">${escapeHtml(card.text)}</div>
-          <div class="choice-grid" aria-label="两个身体声音触发器">
-            ${voices.map((voice,i)=>`
-              <button class="visual-choice" data-trigger="${i}">
-                <div class="choice-scene">${visualMarkup(voice.view)}</div>
-                <div class="choice-copy"><strong>${escapeHtml(voice.label)}</strong></div>
-              </button>`).join("")}
+          <div class="body-triggers">
+            <button class="body-btn" id="btn-reach">把身子送出去</button>
+            <button class="body-btn" id="btn-still">真的不想动</button>
           </div>`;
-        content.querySelectorAll(".visual-choice").forEach((btn, i) => {
-          btn.addEventListener("click", () => handlePauseTrigger(card));
-        });
+        document.getElementById("btn-reach").addEventListener("click", handlePauseTrigger);
+        document.getElementById("btn-still").addEventListener("click", handlePauseTrigger);
         return;
       }
 
@@ -922,27 +925,23 @@
       render(cards[index]);
     }
 
-    function handlePauseTrigger(card) {
-      content.querySelectorAll(".visual-choice").forEach(btn => {
-        btn.disabled = true;
+    function handlePauseTrigger() {
+      ["btn-reach","btn-still"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.disabled = true;
       });
 
-      const sequence = ["reach", "still", "reach", "still", "freeze"];
-      let frame = 0;
-      const renderFrame = () => {
-        const view = sequence[frame];
-        content.innerHTML = `
-          <div class="kicker">${escapeHtml(card.title)}</div>
-          <div class="text small">${escapeHtml(frame < sequence.length - 1 ? card.text : "")}</div>
-          <div class="pause-animation">${visualMarkup(view)}</div>`;
-        if (frame < sequence.length - 1) {
-          frame += 1;
-          timer = window.setTimeout(renderFrame, 400);
-        } else {
-          timer = window.setTimeout(() => jumpTo("card-11"), 600);
-        }
-      };
-      renderFrame();
+      const seq = ["reach","still","reach","still","freeze"];
+      const delays = [0, 600, 1200, 1800, 2600];
+      seq.forEach((view, i) => {
+        window.setTimeout(() => {
+          const sceneEl = content.querySelector(".micro-scene");
+          if (sceneEl) {
+            sceneEl.className = "micro-scene micro-" + view;
+          }
+        }, delays[i]);
+      });
+      window.setTimeout(() => jumpTo("card-11"), 3800);
     }
 
     function jumpTo(id) {
@@ -983,7 +982,6 @@
     }
 
     startBtn.addEventListener("click", start);
-    sampleBtn.addEventListener("click", () => jumpTo("card-08"));
 
     voiceToggle.addEventListener("click", e => {
       e.stopPropagation();
