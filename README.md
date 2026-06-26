@@ -28,7 +28,7 @@
 
 `decisions/流程-AI辅助制作经理-v0.md` —— AI辅助制作经理端到端流程骨架（探针）。
 
-`Project系统指令/` —— 三个Claude.ai子Project（中心思想对撞/写手/观众）的系统指令+产线使用说明（见该目录README.md）。
+`Project系统指令/` —— 运行时指令资产目录：Claude.ai 三个子 Project（中心思想对撞/写手/观众）+ ChatGPT 主控运行版，见该目录 README.md。
 
 ## 成品
 
