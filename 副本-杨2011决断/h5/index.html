@@ -298,6 +298,8 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
+      position: relative;
+      z-index: 2;
     }
 
     .photo-row img,
@@ -311,6 +313,30 @@
     }
 
     .photo-main { max-height: 360px; }
+
+    .frog-drift {
+      height: 170px;
+      margin-top: -18px;
+      border-radius: 16px;
+      overflow: hidden;
+      opacity: .42;
+      filter: saturate(.62) contrast(1.06) brightness(.64);
+      position: relative;
+      z-index: 1;
+    }
+
+    .frog-drift img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.08);
+      animation: frogDrift 42s ease-in-out infinite alternate;
+    }
+
+    @keyframes frogDrift {
+      from { transform: scale(1.08) translate3d(-1.5%, 1%, 0); }
+      to   { transform: scale(1.16) translate3d(1.5%, -2%, 0); }
+    }
 
     .truth-note {
       display: grid;
@@ -584,29 +610,30 @@
 
     const cards = [
       { id: "cover",   kind: "center", mood: "cold", img: "assets/img/cover.jpg", text: "2011年。\n长沙，红花坡。", fixed: 3600 },
-      { id: "card-01", img: "assets/img/card-01-v11.png", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200,
+      { id: "card-01", img: "assets/img/card-01-v11.png", bed: "fan", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200,
         sfx: ["pack-up"] },
-      { id: "card-02", mood: "cold", img: "assets/img/card-02-v11.png", audio: "card-02.mp3", text: "又是下午两三点。\n外面夜宵摊开张，你的一天，也开张了。",
+      { id: "card-02", mood: "cold", img: "assets/img/card-02-v12.png", bed: "fan", audio: "card-02.mp3", text: "又是下午两三点。\n外面夜宵摊开张，你的一天，也开张了。",
         sfx: ["open-up"] },
-      { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", audio: "card-03.mp3", text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
-      { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", audio: "card-04.mp3", text: "你最爱看的，是那种到最后才发现“原来全错了”的片子。" },
-      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", audio: "card-05.mp3", text: "有一部片子你一直忘不掉。\n一个人坚信不疑的东西，真相却完全反过来。\n你刚写完它的影评，挂在网上。" },
-      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", audio: "card-06.mp3", text: "同在这座长沙城里，同学们有房有车，孩子都上小学了。\n你住在白天也拉着帘的老破小里。",
+      { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", bed: "fan", audio: "card-03.mp3", text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
+      { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", bed: "fan", audio: "card-04.mp3", text: "你最爱看的，是那种到最后才发现“原来全错了”的片子。" },
+      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", bed: "fan", audio: "card-05.mp3", text: "有一部片子你一直忘不掉。\n一个人坚信不疑的东西，真相却完全反过来。\n你刚写完它的影评，挂在网上。" },
+      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", bed: "fan", audio: "card-06.mp3", text: "同在这座长沙城里，同学们有房有车，孩子都上小学了。\n你住在白天也拉着帘的老破小里。",
         sfx: ["qq"] },
-      { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", audio: "card-07.mp3", text: "这话，你写在影评里，也跟自己说了很多遍。\n说到，你自己都信了。" },
+      { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", bed: "fan", audio: "card-07.mp3", text: "这话，你写在影评里，也跟自己说了很多遍。\n说到，你自己都信了。" },
 
-      { id: "card-08",  mood: "cold", img: "assets/img/card-08-v11.png",  sound: "fan", caption: "屏外", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 3600, imgOpacity: .72 },
-      { id: "card-08b", mood: "cold", img: "assets/img/card-08-v11.png",  sound: "fan", caption: "桌面", text: "烟灰、泡面桶、纸巾团。\n蓝光打在这一桌黏腻上。", fixed: 5600, imgOpacity: .94, imgFilter: "saturate(.72) contrast(1.12) brightness(.7)" },
-      { id: "card-09",  mood: "cold", img: "assets/img/card-09-v11.png",  sound: "fan", caption: "口渴", text: "桌角那只黑旧的杯子。\n手，下意识探过去。", fixed: 3800, imgOpacity: .96, imgFilter: "saturate(.68) contrast(1.12) brightness(.74)" },
-      { id: "card-10",  mood: "cold", img: "assets/img/card-10-v11.png",  sound: "thin", caption: "二三拳头", text: "杯子在那儿。\n不是一伸手，是二三拳头外。\n要够着，得把整个身子送出去。", fixed: 7600, imgOpacity: .72, imgFilter: "saturate(.42) contrast(1.16) brightness(.55) blur(.4px)" },
+      { id: "card-08",  mood: "cold", img: "assets/img/card-08-v12.png",  bed: "fan", caption: "屏外", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 3600, imgOpacity: .72 },
+      { id: "card-08b", mood: "cold", img: "assets/img/card-08-v12.png",  bed: "fan", caption: "桌面", text: "烟灰、泡面桶、纸巾团。\n蓝光打在这一桌黏腻上。", fixed: 5600, imgOpacity: .94, imgFilter: "saturate(.72) contrast(1.12) brightness(.7)" },
+      { id: "card-09",  mood: "cold", img: "assets/img/card-09-v12.png",  bed: "fan", caption: "口渴", text: "桌角那只黑旧的杯子。\n手，下意识探过去。", fixed: 3800, imgOpacity: .96, imgFilter: "saturate(.68) contrast(1.12) brightness(.74)" },
+      { id: "card-10",  mood: "cold", img: "assets/img/card-10-v12.png",  bed: "fan", sound: "thin", caption: "二三拳头", text: "杯子在那儿。\n不是一伸手，是二三拳头外。\n要够着，得把整个身子送出去。", fixed: 7600, imgOpacity: .72, imgFilter: "saturate(.42) contrast(1.16) brightness(.55) blur(.4px)" },
       {
         id: "pause-0",
         pause: true,
         mood: "cold",
         visual: "freeze",
+        bed: "silence",
         sound: "silence",
       },
-      { id: "card-11", mood: "cold", img: "assets/img/card-11-v11.png", sound: "silence", audio: "card-11.mp3", text: "手缩回去了。\n\n身子，没有动。", fixed: 5600, imgOpacity: .38, imgFilter: "saturate(.32) contrast(1.08) brightness(.44)", afterAudio: 1600 },
+      { id: "card-11", mood: "cold", img: "assets/img/card-11-v12.png", bed: "silence", sound: "silence", audio: "card-11.mp3", text: "手缩回去了。\n\n身子，没有动。", fixed: 5600, imgOpacity: .38, imgFilter: "saturate(.32) contrast(1.08) brightness(.44)", afterAudio: 1600 },
       { id: "card-12", mood: "cold", img: "assets/img/card-12-v11.png", sound: "drop",    audio: "card-12.mp3", text: "一个画面毫无来由地冒出来。\n那个妇人，丈夫把大饼挂在她脖子上出了远门。\n她饿死了。\n因为懒得把饼转过来。", fixed: 9000, imgOpacity: .82, imgFilter: "saturate(.58) contrast(1.08) brightness(.62)", afterAudio: 300,
         sfx: ["drop-tone"] },
       { id: "card-13", mood: "cold", img: "assets/img/card-13-v11.png", sound: "drop", visual: "abyss", text: "", fixed: 5600, imgOpacity: .14, imgFilter: "saturate(.2) contrast(1.12) brightness(.28)" },
@@ -629,6 +656,7 @@
         mood: "cold",
         kind: "photo",
         img: "assets/img/card21-photo.png",
+        frog: "assets/img/card21-frog-warmwater-v12.png",
         audioFull: "assets/audio/card21.m4a",
         fixed: 93653,
         text: "那个下午，到今天，十五年了。\n现在想起，还是从背脊升起一种没来由的恐惧。\n可怕的是当时一点都不觉得自己有问题。\n那是被自己吓醒的。"
@@ -833,6 +861,7 @@
       content.innerHTML = `
         <div class="photo-stack">
           <img class="photo-main" src="${escapeHtml(card.img)}" alt="">
+          ${card.frog ? `<div class="frog-drift" aria-hidden="true"><img src="${escapeHtml(card.frog)}" alt=""></div>` : ""}
           <div class="photo-row">
             <div class="truth-note">
               <div class="kicker">真人真声</div>
@@ -850,16 +879,21 @@
       setImage(card);
 
       // ── 声音路由 ──────────────────────────────────────────────
-      const soundType = card.sound;
-      if (soundType === "fan" || soundType === "street") {
-        startBed(soundType);
-      } else if (soundType === "silence") {
+      const bedType = card.bed;
+      if (bedType === "fan" || bedType === "street") {
+        startBed(bedType);
+      } else if (bedType === "silence") {
         stopBed();
-        stopSoundscape();
-      } else if (soundType === undefined) {
+      } else if (bedType === undefined) {
         // no change to bed
       } else {
         stopBed();
+      }
+
+      const soundType = card.sound;
+      if (soundType === "silence" || soundType === undefined) {
+        stopSoundscape();
+      } else {
         startSoundscape(soundType);    // oscillator for drop / thin
       }
 
