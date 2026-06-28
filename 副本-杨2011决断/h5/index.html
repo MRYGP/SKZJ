@@ -206,6 +206,127 @@
       line-height: 1.4;
     }
 
+    .review-excerpt {
+      width: min(100%, 330px);
+      padding: 12px 14px 13px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 6px;
+      background: rgba(232,237,240,.9);
+      color: #131a20;
+      box-shadow: 0 18px 44px rgba(0,0,0,.42);
+      font-family: "SimSun", "Microsoft YaHei", serif;
+      transform: rotate(-.25deg);
+    }
+
+    .review-site {
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(27,51,70,.22);
+      color: #31506b;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .review-title {
+      margin-top: 8px;
+      font-size: 18px;
+      line-height: 1.25;
+      font-weight: 700;
+      color: #0f1720;
+    }
+
+    .review-body {
+      margin-top: 8px;
+      white-space: pre-line;
+      font-size: 12px;
+      line-height: 1.56;
+      color: #2c3740;
+    }
+
+    .review-cursor {
+      display: inline-block;
+      width: 7px;
+      height: 14px;
+      margin-left: 3px;
+      background: #26333d;
+      vertical-align: -2px;
+      animation: blink 1s steps(1) infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .qq-panel {
+      width: min(100%, 330px);
+      padding: 11px 12px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 6px;
+      background: rgba(232,237,242,.92);
+      color: #111b24;
+      box-shadow: 0 18px 44px rgba(0,0,0,.44);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    }
+
+    .qq-title {
+      padding-bottom: 7px;
+      border-bottom: 1px solid rgba(20,44,64,.2);
+      color: #1d4d76;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .qq-msg {
+      margin-top: 8px;
+      padding: 7px 8px;
+      border-radius: 5px;
+      background: rgba(255,255,255,.72);
+      font-size: 12px;
+      line-height: 1.42;
+      color: #26333d;
+    }
+
+    .novel-panel {
+      width: min(100%, 330px);
+      padding: 11px 12px 12px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 6px;
+      background: rgba(236,232,218,.9);
+      color: #151914;
+      box-shadow: 0 18px 44px rgba(0,0,0,.44);
+      font-family: "SimSun", "Microsoft YaHei", serif;
+    }
+
+    .novel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid rgba(38,45,33,.2);
+      color: #39452f;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .novel-list {
+      margin-top: 8px;
+      display: grid;
+      gap: 6px;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #26301f;
+    }
+
+    .novel-next {
+      margin-top: 9px;
+      width: fit-content;
+      padding: 5px 9px;
+      border: 1px solid rgba(57,69,47,.24);
+      border-radius: 5px;
+      background: rgba(255,255,255,.56);
+      color: #2c3825;
+      font-size: 12px;
+    }
+
     .choice {
       width: 100%;
       min-height: 56px;
@@ -586,14 +707,14 @@
       { id: "cover",   kind: "center", mood: "cold", img: "assets/img/cover.jpg", text: "2011年。\n长沙，红花坡。", fixed: 3600 },
       { id: "card-01", img: "assets/img/card-01-v11.png", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200,
         sfx: ["pack-up"] },
-      { id: "card-02", mood: "cold", img: "assets/img/card-02-v11.png", audio: "card-02.mp3", text: "又是下午两三点。\n外面夜宵摊开张。\n你的一天，也开张了。",
+      { id: "card-02", mood: "cold", img: "assets/img/card-02-v11.png", text: "又是下午两三点。\n外面夜宵摊开张。\n你的一天，也开始了。",
         sfx: ["open-up"] },
-      { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", audio: "card-03.mp3", text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
+      { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", audio: "card-03.mp3", novel: { head: ["玄幻小说排行榜", "2011"], rows: ["第九百三十七章  结丹", "退婚 / 斗气 / 逆袭", "笔名栏一闪而过，不可读"], next: "下一章" }, text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
       { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", text: "你爱看那种片子。\n看到最后，才知道——\n原来全错了。" },
-      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", caption: "《强殖入侵》影评页", artNote: "v1.5: MTIME影评页标题处短暂露出《强殖入侵》；旁白不念片名、不解释剧情。", text: "有一部片子，你一直忘不掉。\n一个人坚信不疑。\n到最后，真相完全反过来。\n你写完影评，发了上去。\n光标还在闪。" },
-      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", text: "群里又有人晒新房钥匙。\n又有人晒孩子上学。\n你看了一眼，点掉。\n心里咯噔一下。\n又按回去：\n有什么了不起。\n活得那么累，那么俗。",
+      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", caption: "《强殖入侵》影评页", artNote: "v1.5: MTIME影评页标题处清楚露出《强殖入侵》，下面两三行影评正文可读；旁白不念片名、不解释剧情。", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "一个人对一件事坚信不疑。\n到最后，真相完全反过来。\n原来从一开始就错了。", cursor: true }, text: "有一部片子，你一直忘不掉。\n一个人坚信不疑。\n到最后，真相完全反过来。\n你写完影评，发上去。\n光标还在闪。" },
+      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", qq: { title: "92级初中同学", messages: ["恭喜刘同学喜提新车！", "恭喜王同学买了新房！"] }, text: "92级初中同学群，又亮了。\n有人恭喜同学喜提新车。\n有人恭喜同学买了新房。\n你看了一眼，点掉。\n心里咯噔一下。\n又把它按回去：\n有什么了不起。\n活得那么累，那么俗。",
         sfx: ["qq"] },
-      { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", text: "这句话，你写在影评里，也在心里说过很多遍。\n那不是装的——\n那时候，你是真的觉得，\n自己过得很充实。" },
+      { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "名和利，本来就不值得追求。\n到头来，皆是虚幻。\n精神上不空，也就够了。", cursor: false }, text: "这套话，你写在影评里，\n也在心里说过很多遍。\n那不是装的。\n那时候，你是真的信。" },
 
       { id: "card-08",  mood: "cold", img: "assets/img/card-08-v11.png",  sound: "fan", caption: "屏外", artNote: "v1.5: 重出图时补椅子里瘫坐、裸上身或背心掀起、大肚子明显；身体证据只进画面，不进旁白。", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 5200 },
       { id: "card-08b", mood: "cold", img: "assets/img/card-08-v11.png",  sound: "fan", caption: "桌面", text: "烟灰、泡面桶、纸巾团。\n蓝光打在这一桌黏腻上。", fixed: 4800 },
@@ -831,10 +952,40 @@
         <div class="hand"></div><div class="distance-mark"></div></div>`;
     }
 
+    function reviewMarkup(card) {
+      if (!card.review) return "";
+      return `<div class="review-excerpt">
+        <div class="review-site">${escapeHtml(card.review.site)}</div>
+        <div class="review-title">${escapeHtml(card.review.title)}</div>
+        <div class="review-body">${escapeHtml(card.review.body)}${card.review.cursor ? `<span class="review-cursor"></span>` : ""}</div>
+      </div>`;
+    }
+
+    function qqMarkup(card) {
+      if (!card.qq) return "";
+      return `<div class="qq-panel">
+        <div class="qq-title">${escapeHtml(card.qq.title)}</div>
+        ${(card.qq.messages || []).map(msg => `<div class="qq-msg">${escapeHtml(msg)}</div>`).join("")}
+      </div>`;
+    }
+
+    function novelMarkup(card) {
+      if (!card.novel) return "";
+      const head = card.novel.head || [];
+      return `<div class="novel-panel">
+        <div class="novel-head"><span>${escapeHtml(head[0] || "玄幻小说")}</span><span>${escapeHtml(head[1] || "")}</span></div>
+        <div class="novel-list">${(card.novel.rows || []).map(row => `<div>${escapeHtml(row)}</div>`).join("")}</div>
+        ${card.novel.next ? `<div class="novel-next">${escapeHtml(card.novel.next)}</div>` : ""}
+      </div>`;
+    }
+
     function renderVisual(card) {
       content.innerHTML = `
         ${visualMarkup(card.visual)}
         ${card.caption ? `<div class="caption">${escapeHtml(card.caption)}</div>` : ""}
+        ${reviewMarkup(card)}
+        ${qqMarkup(card)}
+        ${novelMarkup(card)}
         <div class="text ${card.kind==="center"?"center":"small"}">${escapeHtml(card.text)}</div>`;
     }
 
@@ -909,6 +1060,9 @@
         const cls = `text ${card.kind==="center"?"center":"small"}`;
         content.innerHTML = `
           ${card.caption ? `<div class="caption">${escapeHtml(card.caption)}</div>` : ""}
+          ${reviewMarkup(card)}
+          ${qqMarkup(card)}
+          ${novelMarkup(card)}
           <div class="${cls}">${escapeHtml(card.text)}</div>`;
       }
 
