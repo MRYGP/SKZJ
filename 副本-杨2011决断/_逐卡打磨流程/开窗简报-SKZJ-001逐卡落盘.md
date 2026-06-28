@@ -8,7 +8,7 @@
 - **读盘才断言**：落盘前先读现行文件，禁凭记忆或路径名脑补。
 
 ## 当前态（commit 14f5501 第一可跑版已落；2026-06-25 已同步停顿〇 v1.3 + 第三幕 v1.4）
-- `副本-杨2011决断\h5\index.html` ＝ v1.1 第一可跑版骨架：卡1-22；停顿〇已改为两身体声音触发键（点任一键→交替二次→卡住→卡11；无反馈、不判对错）；第三幕卡16-20已同步为 v1.4 七卡决策链；音频引擎 `bedAudio/bgmAudio/activeAudio(旁白)/silent` + `unlockAudio()` 微信解锁 + pause/resume 同步全层；每卡 `bg` 走 CSS 渐变 class；卡22 止（无第二阶段）。
+- `副本-杨2011决断\h5\index.html` ＝ v1.1 第一可跑版骨架：卡1-22 + card-15b；停顿〇已改为两身体声音触发键（点任一键→交替二次→卡住→卡11；无反馈、不判对错）；第三幕卡16-20已同步为 v1.5 七卡决策链；音频引擎 `bedAudio/bgmAudio/activeAudio(旁白)/silent` + `unlockAudio()` 微信解锁 + pause/resume 同步全层；每卡 `bg` 走 CSS 渐变 class；卡22 止（无第二阶段）。
 - 卡21：`type:photo` + `audio: assets/audio/card21-mother-20260620.m4a`（未剪母本占位）+ `img: assets/img/card21-placeholder.png`，`fixed:90000`（降级时长占位）。
 - 占位资产路径：`assets/audio/bed-fan-placeholder.m4a`、`bed-street-placeholder.m4a`、`bgm-warm-placeholder.m4a`、`card21-mother-20260620.m4a`；`assets/img/card21-placeholder.png`。
 - 旧版备份 `h5\index-v0.9.html`；spec 在仓：`H5-v1.1技术员指导与CODEX工单.md`（顶有覆盖横幅）、`H5-v1.1实现补充工单.md`。
