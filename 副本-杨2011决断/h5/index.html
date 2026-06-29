@@ -412,7 +412,13 @@
       align-self: center;
       display: grid;
       gap: 12px;
+      width: 100%;
+      max-width: 360px;
       margin-bottom: 12px;
+    }
+
+    .photo-stack.has-memory {
+      gap: 9px;
     }
 
     .photo-row {
@@ -435,15 +441,24 @@
 
     .photo-main { max-height: 360px; }
 
+    .photo-stack.has-memory .photo-main {
+      max-height: 230px;
+    }
+
     .frog-drift {
       height: 190px;
-      margin-top: 10px;
-      border-radius: 16px;
+      margin-top: 8px;
+      border-radius: 12px;
       overflow: hidden;
-      opacity: .74;
-      filter: saturate(.78) contrast(1.06) brightness(.92);
+      opacity: .86;
+      filter: saturate(.98) contrast(1.08) brightness(1.08);
       position: relative;
       z-index: 1;
+    }
+
+    .photo-stack.has-memory .frog-drift {
+      height: 158px;
+      margin-top: 0;
     }
 
     .frog-drift img {
@@ -459,6 +474,28 @@
       to   { transform: scale(1.16) translate3d(1.5%, -2%, 0); }
     }
 
+    .memory-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      opacity: .56;
+      animation: memoryPulse 18s ease-in-out infinite alternate;
+    }
+
+    .memory-strip img {
+      width: 100%;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.12);
+      filter: saturate(.7) contrast(1.05) brightness(.78);
+    }
+
+    @keyframes memoryPulse {
+      from { opacity: .38; transform: translateY(1px); }
+      to   { opacity: .66; transform: translateY(-1px); }
+    }
+
     .truth-note {
       display: grid;
       gap: 12px;
@@ -466,6 +503,11 @@
       border: 1px solid rgba(255,255,255,.15);
       border-radius: 8px;
       background: rgba(0,0,0,.45);
+    }
+
+    .photo-transcript {
+      font-size: 17px;
+      line-height: 1.48;
     }
 
     .micro-scene {
@@ -728,24 +770,28 @@
       street: "assets/audio/bed-street.mp3",
     };
     const BGM_FILE = "assets/audio/bgm-warm.mp3";
+    const BED_VOLUMES = {
+      fan: 0.45,
+      street: 0.16,
+    };
 
     const cards = [
       { id: "cover",   kind: "center", mood: "cold", img: "assets/img/cover.jpg", text: "2011年。\n长沙，红花坡。", fixed: 3600 },
-      { id: "card-01", img: "assets/img/card-01-v11.png", bed: "fan", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200,
+      { id: "card-01", img: "assets/img/card-01-v11.png", bed: "fan", audio: "card-01.mp3", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200,
         sfx: ["pack-up"] },
-      { id: "card-02", mood: "cold", img: "assets/img/card-02-v15.png", bed: "fan", text: "又是下午两三点。\n外面夜宵摊开张。\n你的一天，也开始了。",
+      { id: "card-02", mood: "cold", img: "assets/img/card-02-v15.png", bed: "fan", audio: "card-02.mp3", text: "又是下午两三点。\n外面夜宵摊开张。\n你的一天，也开始了。",
         sfx: ["open-up"] },
       { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", bed: "fan", audio: "card-03.mp3", novel: { head: ["玄幻小说排行榜", "2011"], rows: ["第九百三十七章  结丹", "退婚 / 斗气 / 逆袭", "笔名栏一闪而过，不可读"], next: "下一章" }, text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
-      { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", bed: "fan", text: "你爱看那种片子。\n看到最后，才知道——\n原来全错了。" },
-      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", bed: "fan", caption: "《强殖入侵》影评页", artNote: "v1.5: MTIME影评页标题处清楚露出《强殖入侵》，下面两三行影评正文可读；旁白不念片名、不解释剧情。", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "一个人对一件事坚信不疑。\n到最后，真相完全反过来。\n原来从一开始就错了。", cursor: true }, text: "有一部片子，你一直忘不掉。\n一个人坚信不疑。\n到最后，真相完全反过来。\n你写完影评，发上去。\n光标还在闪。" },
-      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", bed: "fan", qq: { title: "92级初中同学", messages: ["恭喜刘同学喜提新车！", "恭喜王同学买了新房！"] }, text: "92级初中同学群，又亮了。\n有人恭喜同学喜提新车。\n有人恭喜同学买了新房。\n你看了一眼，点掉。\n心里咯噔一下。\n又把它按回去：\n有什么了不起。\n活得那么累，那么俗。",
+      { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", bed: "fan", audio: "card-04.mp3", text: "你爱看那种片子。\n看到最后，才知道——\n原来全错了。" },
+      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", bed: "fan", audio: "card-05.mp3", caption: "《强殖入侵》影评页", artNote: "v1.5: MTIME影评页标题处清楚露出《强殖入侵》，下面两三行影评正文可读；旁白不念片名、不解释剧情。", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "一个人对一件事坚信不疑。\n到最后，真相完全反过来。\n原来从一开始就错了。", cursor: true }, text: "有一部片子，你一直忘不掉。\n一个人坚信不疑。\n到最后，真相完全反过来。\n你写完影评，发上去。\n光标还在闪。" },
+      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", bed: "fan", audio: "card-06.mp3", qq: { title: "92级初中同学", messages: ["恭喜刘同学喜提新车！", "恭喜王同学买了新房！"] }, text: "92级初中同学群，又亮了。\n有人恭喜同学喜提新车。\n有人恭喜同学买了新房。\n你看了一眼，点掉。\n心里咯噔一下。\n又把它按回去：\n有什么了不起。\n活得那么累，那么俗。",
         sfx: ["qq"] },
-      { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", bed: "fan", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "名和利，本来就不值得追求。\n到头来，皆是虚幻。\n精神上不空，也就够了。", cursor: false }, text: "这套话，你写在影评里，\n也在心里说过很多遍。\n那不是装的。\n那时候，你是真的信。" },
+      { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", bed: "fan", audio: "card-07.mp3", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "名和利，本来就不值得追求。\n到头来，皆是虚幻。\n精神上不空，也就够了。", cursor: false }, text: "这套话，你写在影评里，\n也在心里说过很多遍。\n那不是装的。\n那时候，你是真的信。" },
 
-      { id: "card-08",  mood: "cold", img: "assets/img/card-08-v15.png",  bed: "fan", caption: "屏外", artNote: "v1.5: 重出图时补椅子里瘫坐、裸上身或背心掀起、大肚子明显；身体证据只进画面，不进旁白。", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 5200 },
-      { id: "card-08b", mood: "cold", img: "assets/img/card-08-v15.png",  bed: "fan", caption: "桌面", text: "烟灰、泡面桶、纸巾团。\n蓝光打在这一桌黏腻上。", fixed: 4800 },
-      { id: "card-09",  mood: "cold", img: "assets/img/card-09-v15.png",  bed: "fan", caption: "口渴", text: "桌角那只黑旧的杯子。\n手，下意识探过去。", fixed: 4600 },
-      { id: "card-10",  mood: "cold", img: "assets/img/card-10-v15.png",  bed: "fan", sound: "thin", caption: "二三拳头", artNote: "v1.5: 侧面够杯，肚子先顶出来，身子没离开椅背，手伸一点又停住。", text: "够得到。\n只是，要动一下身子。", fixed: 6200 },
+      { id: "card-08",  mood: "cold", img: "assets/img/card-08-v15.png",  bed: "fan", audio: "card-08.mp3", caption: "屏外", artNote: "v1.5: 重出图时补椅子里瘫坐、裸上身或背心掀起、大肚子明显；身体证据只进画面，不进旁白。", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 5200 },
+      { id: "card-08b", mood: "cold", img: "assets/img/card-08-v15.png",  bed: "fan", audio: "card-08b.mp3", caption: "桌面", text: "烟灰、泡面桶、纸巾团。\n蓝光打在这一桌黏腻上。", fixed: 4800 },
+      { id: "card-09",  mood: "cold", img: "assets/img/card-09-v15.png",  bed: "fan", audio: "card-09.mp3", caption: "口渴", text: "桌角那只黑旧的杯子。\n手，下意识探过去。", fixed: 4600 },
+      { id: "card-10",  mood: "cold", img: "assets/img/card-10-v15.png",  bed: "fan", audio: "card-10.mp3", sound: "thin", caption: "二三拳头", artNote: "v1.5: 侧面够杯，肚子先顶出来，身子没离开椅背，手伸一点又停住。", text: "够得到。\n只是，要动一下身子。", fixed: 6200 },
       {
         id: "pause-0",
         pause: true,
@@ -755,24 +801,24 @@
         sound: "silence",
       },
       { id: "card-11", mood: "cold", img: "assets/img/card-11-v15.png", bed: "silence", sound: "silence", audio: "card-11.mp3", text: "手缩回去了。\n\n身子，没有动。", fixed: 4200 },
-      { id: "card-12", mood: "cold", img: "assets/img/card-12-v11.png", sound: "drop",    text: "一个画面闪出来。\n一个妇人，脖子上挂着饼。\n低一下头就能吃。\n可她没动。\n后来，她饿死了。", fixed: 9800,
+      { id: "card-12", mood: "cold", img: "assets/img/card-12-v11.png", sound: "drop", audio: "card-12.mp3", text: "一个画面闪出来。\n一个妇人，脖子上挂着饼。\n低一下头就能吃。\n可她没动。\n后来，她饿死了。", fixed: 9800,
         sfx: ["drop-tone"] },
       { id: "card-13", mood: "cold", img: "assets/img/card-13-v11.png", sound: "drop",    text: "", fixed: 4800 },
-      { id: "card-14", mood: "cold", img: "assets/img/card-14-v11.png", sound: "silence", text: "你就那么停着。\n\n大概一分钟。", fixed: 5200 },
+      { id: "card-14", mood: "cold", img: "assets/img/card-14-v11.png", sound: "silence", audio: "card-14.mp3", text: "你就那么停着。\n\n大概一分钟。", fixed: 5200 },
       { id: "card-15", kind: "center", mood: "cold", img: "assets/img/card-15-v11.png", sound: "silence", audio: "card-15.mp3", text: "再也不能这样过下去了！\n\n绝对不行！！！", fixed: 6200 },
 
-      { id: "card-15b", mood: "cold", img: "assets/img/card-15-v11.png", text: "你忽然想：怎么会成这样？\n再这样下去，这一辈子，会变成什么样？\n那一下，身上发冷。\n你开始反复想，根到底在哪。\n网上有朋友，也有客户，热热闹闹。\n可屏幕一黑，现实里，几乎没人认识你。\n你不是没路。你是太久没有出去。", fixed: 12800 },
+      { id: "card-15b", mood: "cold", img: "assets/img/card-15-v11.png", audio: "card-15b.mp3", text: "你忽然想：怎么会成这样？\n再这样下去，这一辈子，会变成什么样？\n那一下，身上发冷。\n你开始反复想，根到底在哪。\n网上有朋友，也有客户，热热闹闹。\n可屏幕一黑，现实里，几乎没人认识你。\n你不是没路。你是太久没有出去。", fixed: 12800 },
 
-      { id: "card-16", mood: "warm", img: "assets/img/card-16-v11.png", text: "那就先出去。\n不是为了马上赚钱。\n是不能再这样待下去。\n再待下去，动一下身子，都会越来越难。\n你得先从这把椅子里出来。\n走出门，抬头——高楼一幢接一幢，路上车水马龙。\n不知道多少个亿，就在这座城里流动。\n你忽然觉得：这个世界不是空的。\n路、人、钱，都在动。\n你要的，其实也没那么大——\n在长沙，有辆车，有套房，能站住脚。\n理论上，好像也不是天上的事。", fixed: 17800 },
-      { id: "card-16b", mood: "warm", img: "assets/img/card-16-v11.png", text: "可问题是——出来以后，靠什么活？\n去上班？啥也不会，没人请。\n去下力气？心里那点清高，又过不去。\n继续倒腾那点软件？还是那点钱，养不活自己。", fixed: 11200 },
-      { id: "card-17a", mood: "warm", img: "assets/img/card-17-v11.png", text: "可往哪动？\n你想起村里那个大哥。\n没读过几年书，伙着三四个人，把一笔信托对接给房地产，募了六千万。\n分一个点，六十万到手。\n你真正看见的，不是那六十万。\n是这件事，原来走得通。", fixed: 13200 },
-      { id: "card-17b", mood: "warm", img: "assets/img/card-17-v11.png", text: "你心里那笔账，算得清清楚楚：\n他没读过几年书，都能做成。\n你呢——上过学，会电脑，会上网，当年在方圆十几里，还是出了名的学生偶像。\n他能，说明这条路就走得通。\n那你，凭什么不行？", fixed: 11800 },
-      { id: "card-18", kind: "center", mood: "warm", img: "assets/img/card-18-v11.png", text: "你没等看清整条路。\n前面全是荆棘，看不清。\n但那时候，你只认一件事：\n先动。\n先试。\n手里有把刀，就先砍眼前这一茬。\n砍开一点，往前挪一点。\n又挡住了，再砍。",
+      { id: "card-16", mood: "warm", img: "assets/img/card-16-v11.png", audio: "card-16.mp3", text: "那就先出去。\n不是为了马上赚钱。\n是不能再这样待下去。\n再待下去，动一下身子，都会越来越难。\n你得先从这把椅子里出来。\n走出门，抬头——高楼一幢接一幢，路上车水马龙。\n不知道多少个亿，就在这座城里流动。\n你忽然觉得：这个世界不是空的。\n路、人、钱，都在动。\n你要的，其实也没那么大——\n在长沙，有辆车，有套房，能站住脚。\n理论上，好像也不是天上的事。", fixed: 17800 },
+      { id: "card-16b", mood: "warm", img: "assets/img/card-16-v11.png", audio: "card-16b.mp3", text: "可问题是——出来以后，靠什么活？\n去上班？啥也不会，没人请。\n去下力气？心里那点清高，又过不去。\n继续倒腾那点软件？还是那点钱，养不活自己。", fixed: 11200 },
+      { id: "card-17a", mood: "warm", img: "assets/img/card-17-v11.png", audio: "card-17a.mp3", text: "可往哪动？\n你想起村里那个大哥。\n没读过几年书，伙着三四个人，把一笔信托对接给房地产，募了六千万。\n分一个点，六十万到手。\n你真正看见的，不是那六十万。\n是这件事，原来走得通。", fixed: 13200 },
+      { id: "card-17b", mood: "warm", img: "assets/img/card-17-v11.png", audio: "card-17b.mp3", text: "你心里那笔账，算得清清楚楚：\n他没读过几年书，都能做成。\n你呢——上过学，会电脑，会上网，当年在方圆十几里，还是出了名的学生偶像。\n他能，说明这条路就走得通。\n那你，凭什么不行？", fixed: 11800 },
+      { id: "card-18", kind: "center", mood: "warm", img: "assets/img/card-18-v11.png", audio: "card-18.mp3", text: "你没等看清整条路。\n前面全是荆棘，看不清。\n但那时候，你只认一件事：\n先动。\n先试。\n手里有把刀，就先砍眼前这一茬。\n砍开一点，往前挪一点。\n又挡住了，再砍。",
         sfx: ["single-tone"], fixed: 10800 },
-      { id: "card-18b", mood: "warm", img: "assets/img/card-18-v11.png", text: "刀往哪砍？\n你把百度当老师，一个词一个词地啃：承兑、信托、资金方。\n然后线上线下，一家家对接。\n头两单，真成了，挣了五六万。", fixed: 11200 },
-      { id: "card-19", mood: "warm", img: "assets/img/card-19-v11.png", text: "你兜里揣个小本子，前几页抄满要点。\n生怕哪个词没懂，被人看出是新来的。\n沿街一家家，仰头把招牌上的电话抄进手机。\n回去一条条群发：老板，我做承兑业务的。",
+      { id: "card-18b", mood: "warm", img: "assets/img/card-18-v11.png", audio: "card-18b.mp3", text: "刀往哪砍？\n你把百度当老师，一个词一个词地啃：承兑、信托、资金方。\n然后线上线下，一家家对接。\n头两单，真成了，挣了五六万。", fixed: 11200 },
+      { id: "card-19", mood: "warm", img: "assets/img/card-19-v11.png", audio: "card-19.mp3", text: "你兜里揣个小本子，前几页抄满要点。\n生怕哪个词没懂，被人看出是新来的。\n沿街一家家，仰头把招牌上的电话抄进手机。\n回去一条条群发：老板，我做承兑业务的。",
         sfx: ["pen"], fixed: 11600 },
-      { id: "card-20", mood: "warm", img: "assets/img/card-20-v11.png", text: "跑了不知多少家，第一单来了。\n三百万的承兑，你带着资金方做成。\n资金方赚了万把块，临走甩给你一张一百块：带路费。\n那时候你还穷，也还清高。\n这钱对不对，你没算。\n你只记住一件事：我还成单了。\n路，砍开了第一道口子。",
+      { id: "card-20", mood: "warm", img: "assets/img/card-20-v11.png", audio: "card-20.mp3", text: "跑了不知多少家，第一单来了。\n三百万的承兑，你带着资金方做成。\n资金方赚了万把块，临走甩给你一张一百块：带路费。\n那时候你还穷，也还清高。\n这钱对不对，你没算。\n你只记住一件事：我还成单了。\n路，砍开了第一道口子。",
         sfx: ["money"], fixed: 11800 },
 
       {
@@ -780,7 +826,8 @@
         mood: "cold",
         kind: "photo",
         img: "assets/img/card21-photo.png",
-        frog: "assets/img/card21-frog-warmwater-v15.png",
+        frog: "assets/img/card21-frog-warmwater-v16.png",
+        memoryImgs: ["assets/img/card-02-v15.png", "assets/img/card-08-v15.png", "assets/img/card-10-v15.png", "assets/img/card-11-v15.png"],
         audioFull: "assets/audio/card21.m4a",
         fixed: 109500,
         text: "那个下午，到今天，十五年了。\n背脊还是会发凉。\n那时候一点都不觉得有问题。\n是真的感觉挺充实的。\n屏幕一关，现实里，其实就剩一个人。\n不是想通了。\n是被自己吓醒了。\n人生其实还有另一种走法。"
@@ -874,7 +921,7 @@
 
       const a = new Audio(src);
       a.loop   = true;
-      a.volume = 0.14;
+      a.volume = BED_VOLUMES[type] ?? 0.18;
       bedAudio = a;
       a.play().catch(() => {
         // fallback: oscillator hum
@@ -1011,11 +1058,19 @@
         <div class="text ${card.kind==="center"?"center":"small"}">${escapeHtml(card.text)}</div>`;
     }
 
+    function memoryMarkup(card) {
+      if (!card.memoryImgs || !card.memoryImgs.length) return "";
+      return `<div class="memory-strip" aria-hidden="true">${
+        card.memoryImgs.map(src => `<img src="${escapeHtml(src)}" alt="">`).join("")
+      }</div>`;
+    }
+
     function renderPhoto(card) {
       content.innerHTML = `
-        <div class="photo-stack">
+        <div class="photo-stack ${card.memoryImgs ? "has-memory" : ""}">
           <img class="photo-main" src="${escapeHtml(card.img)}" alt="">
           ${card.frog ? `<div class="frog-drift" aria-hidden="true"><img src="${escapeHtml(card.frog)}" alt=""></div>` : ""}
+          ${memoryMarkup(card)}
           <div class="photo-row">
             <div class="truth-note">
               <div class="kicker">真人真声</div>
@@ -1023,7 +1078,7 @@
             </div>
           </div>
         </div>
-        <div class="text small">${escapeHtml(card.text)}</div>`;
+        <div class="text small photo-transcript">${escapeHtml(card.text)}</div>`;
     }
 
     function render(card) {
