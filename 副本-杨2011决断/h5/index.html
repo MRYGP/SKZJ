@@ -575,6 +575,49 @@
       100% { opacity: .84; }
     }
 
+    .content > .day-start {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .day-start::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: #000;
+      animation: dayStartBlack 5.2s ease-out forwards;
+    }
+
+    .day-start::after {
+      content: "";
+      position: absolute;
+      left: 29%;
+      top: 39%;
+      width: 43%;
+      height: 21%;
+      border-radius: 5px;
+      background: radial-gradient(circle at 50% 50%, rgba(90,180,255,.78), rgba(33,91,164,.22) 64%, transparent 72%);
+      filter: blur(2px);
+      opacity: 0;
+      animation: blueWake 5.2s ease-out forwards;
+    }
+
+    @keyframes dayStartBlack {
+      0%, 18% { opacity: .96; }
+      32% { opacity: .42; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes blueWake {
+      0%, 18% { opacity: 0; transform: scale(.92); }
+      24% { opacity: .88; transform: scale(1.04); }
+      46% { opacity: .46; transform: scale(1); }
+      100% { opacity: .16; transform: scale(1.02); }
+    }
+
     .micro-scene {
       position: absolute;
       inset: 0;
@@ -822,6 +865,8 @@
     const SFX = {
       "pack-up":    "assets/audio/sfx/pack-up.mp3",
       "open-up":    "assets/audio/sfx/open-up.mp3",
+      "night-tail-v16": "assets/audio/sfx/card01-night-tail-v16.mp3",
+      "day-start-v16":  "assets/audio/sfx/card02-startup-v16.mp3",
       "qq":         "assets/audio/sfx/qq.mp3",
       "drop-tone":  "assets/audio/sfx/drop-tone.mp3",
       "single-tone":"assets/audio/sfx/single-tone.mp3",
@@ -843,9 +888,9 @@
     const cards = [
       { id: "cover",   kind: "center", mood: "cold", img: "assets/img/cover.jpg", text: "2011年。\n长沙，红花坡。", fixed: 3600 },
       { id: "card-01", kind: "night-tail", mood: "cold", img: "assets/img/card-01-v11.png", imgOpacity: .94, imgFilter: "saturate(.72) contrast(1.08) brightness(.66)", bed: "fan", text: "", fixed: 6800,
-        sfx: ["pack-up"] },
-      { id: "card-02", mood: "cold", img: "assets/img/card-02-v15.png", bed: "fan", audio: "card-02.mp3", text: "又是下午两三点。\n外面夜宵摊开张。\n你的一天，也开始了。",
-        sfx: ["open-up"] },
+        sfx: ["night-tail-v16"] },
+      { id: "card-02", kind: "day-start", mood: "cold", img: "assets/img/card-02-v16.png", imgOpacity: .94, imgFilter: "saturate(.82) contrast(1.06) brightness(.74)", bed: "fan", audio: "card-02.mp3", text: "又是下午两三点。\n外面夜宵摊开张。\n你的一天，也开始了。",
+        sfx: ["day-start-v16"] },
       { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", bed: "fan", audio: "card-03.mp3", novel: { head: ["玄幻小说排行榜", "2011"], rows: ["第九百三十七章  结丹", "退婚 / 斗气 / 逆袭", "笔名栏一闪而过，不可读"], next: "下一章" }, text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
       { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", bed: "fan", audio: "card-04.mp3", text: "你爱看那种片子。\n看到最后，才知道——\n原来全错了。" },
       { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", bed: "fan", audio: "card-05.mp3", caption: "《强殖入侵》影评页", artNote: "v1.5: MTIME影评页标题处清楚露出《强殖入侵》，下面两三行影评正文可读；旁白不念片名、不解释剧情。", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "一个人对一件事坚信不疑。\n到最后，真相完全反过来。\n原来从一开始就错了。", cursor: true }, text: "有一部片子，你一直忘不掉。\n一个人坚信不疑。\n到最后，真相完全反过来。\n你写完影评，发上去。\n光标还在闪。" },
@@ -1125,6 +1170,12 @@
       content.innerHTML = `<div class="night-tail" aria-hidden="true"></div>`;
     }
 
+    function renderDayStart(card) {
+      content.innerHTML = `
+        <div class="day-start" aria-hidden="true"></div>
+        <div class="text small">${escapeHtml(card.text)}</div>`;
+    }
+
     function memoryMarkup(card) {
       if (!card.memoryImgs || !card.memoryImgs.length) return "";
       return `<div class="memory-strip" aria-hidden="true">${
@@ -1205,6 +1256,8 @@
         renderPhoto(card);
       } else if (card.kind === "night-tail") {
         renderNightTail(card);
+      } else if (card.kind === "day-start") {
+        renderDayStart(card);
       } else if (card.visual) {
         renderVisual(card);
       } else {
