@@ -415,6 +415,7 @@
       width: 100%;
       max-width: 360px;
       margin-bottom: 12px;
+      position: relative;
     }
 
     .photo-stack.has-memory {
@@ -442,7 +443,7 @@
     .photo-main { max-height: 360px; }
 
     .photo-stack.has-memory .photo-main {
-      max-height: 176px;
+      max-height: 304px;
     }
 
     .frog-drift {
@@ -457,12 +458,18 @@
     }
 
     .photo-stack.has-memory .frog-drift {
-      width: min(40vw, 140px);
-      max-width: 140px;
+      position: absolute;
+      right: 10px;
+      bottom: 74px;
+      width: min(22vw, 78px);
+      max-width: 78px;
       aspect-ratio: 9 / 16;
       height: auto;
       margin-top: 0;
       justify-self: center;
+      opacity: .72;
+      z-index: 4;
+      box-shadow: 0 18px 40px rgba(0,0,0,.5);
       background:
         radial-gradient(circle at 50% 64%, rgba(217,137,45,.28), transparent 52%),
         rgba(0,0,0,.38);
@@ -491,7 +498,7 @@
 
     .memory-strip img {
       width: 100%;
-      height: 40px;
+      height: 36px;
       object-fit: cover;
       border-radius: 6px;
       border: 1px solid rgba(255,255,255,.12);
@@ -520,6 +527,52 @@
     .photo-transcript {
       font-size: 15.5px;
       line-height: 1.42;
+    }
+
+    .night-tail {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .night-tail::before {
+      content: "";
+      position: absolute;
+      left: 28%;
+      top: 43%;
+      width: 45%;
+      height: 15%;
+      border-radius: 4px;
+      border: 1px solid rgba(91,139,178,.22);
+      background:
+        linear-gradient(180deg, rgba(78,133,184,.52), rgba(16,27,38,.76)),
+        repeating-linear-gradient(0deg, transparent 0 12px, rgba(255,255,255,.05) 12px 13px);
+      box-shadow: 0 0 46px rgba(53,111,169,.3);
+      animation: screenSleep 6.8s ease-in forwards;
+    }
+
+    .night-tail::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      animation: nightBlack 6.8s ease-in forwards;
+    }
+
+    @keyframes screenSleep {
+      0%, 42% { opacity: .72; filter: brightness(1); }
+      62% { opacity: .36; filter: brightness(.58); }
+      78% { opacity: .08; filter: brightness(.22); }
+      100% { opacity: 0; filter: brightness(0); }
+    }
+
+    @keyframes nightBlack {
+      0%, 76% { opacity: 0; }
+      90% { opacity: .38; }
+      100% { opacity: .84; }
     }
 
     .micro-scene {
@@ -789,7 +842,7 @@
 
     const cards = [
       { id: "cover",   kind: "center", mood: "cold", img: "assets/img/cover.jpg", text: "2011年。\n长沙，红花坡。", fixed: 3600 },
-      { id: "card-01", img: "assets/img/card-01-v11.png", bed: "fan", audio: "card-01.mp3", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200,
+      { id: "card-01", kind: "night-tail", mood: "cold", img: "assets/img/card-01-v11.png", imgOpacity: .94, imgFilter: "saturate(.72) contrast(1.08) brightness(.66)", bed: "fan", text: "", fixed: 6800,
         sfx: ["pack-up"] },
       { id: "card-02", mood: "cold", img: "assets/img/card-02-v15.png", bed: "fan", audio: "card-02.mp3", text: "又是下午两三点。\n外面夜宵摊开张。\n你的一天，也开始了。",
         sfx: ["open-up"] },
@@ -1070,6 +1123,10 @@
         <div class="text ${card.kind==="center"?"center":"small"}">${escapeHtml(card.text)}</div>`;
     }
 
+    function renderNightTail() {
+      content.innerHTML = `<div class="night-tail" aria-hidden="true"></div>`;
+    }
+
     function memoryMarkup(card) {
       if (!card.memoryImgs || !card.memoryImgs.length) return "";
       return `<div class="memory-strip" aria-hidden="true">${
@@ -1148,6 +1205,8 @@
 
       if (card.kind === "photo") {
         renderPhoto(card);
+      } else if (card.kind === "night-tail") {
+        renderNightTail(card);
       } else if (card.visual) {
         renderVisual(card);
       } else {
