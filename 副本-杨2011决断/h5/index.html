@@ -64,6 +64,7 @@
       position: absolute;
       inset: 0;
       overflow: hidden;
+      isolation: isolate;
       background:
         linear-gradient(180deg, rgba(11,13,16,.1), rgba(0,0,0,.58)),
         #111;
@@ -79,7 +80,7 @@
       opacity: var(--image-opacity, .88);
       transform: scale(1.03);
       transition: opacity .45s ease, filter .45s ease;
-      filter: saturate(.82) contrast(1.05) brightness(.82);
+      filter: var(--image-filter, saturate(.82) contrast(1.05) brightness(.82));
       z-index: -2;
     }
 
@@ -416,8 +417,10 @@
 
     .photo-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 10px;
+      position: relative;
+      z-index: 2;
     }
 
     .photo-row img,
@@ -431,6 +434,30 @@
     }
 
     .photo-main { max-height: 360px; }
+
+    .frog-drift {
+      height: 170px;
+      margin-top: -18px;
+      border-radius: 16px;
+      overflow: hidden;
+      opacity: .42;
+      filter: saturate(.62) contrast(1.06) brightness(.64);
+      position: relative;
+      z-index: 1;
+    }
+
+    .frog-drift img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.08);
+      animation: frogDrift 42s ease-in-out infinite alternate;
+    }
+
+    @keyframes frogDrift {
+      from { transform: scale(1.08) translate3d(-1.5%, 1%, 0); }
+      to   { transform: scale(1.16) translate3d(1.5%, -2%, 0); }
+    }
 
     .truth-note {
       display: grid;
@@ -672,7 +699,6 @@
         <p class="cover-hook">他一直觉得这样挺好——直到那只水杯，让他看见自己一动没动。</p>
         <p class="muted-note">戴上耳机，约 5 分钟。</p>
         <button class="primary" id="startBtn">开始</button>
-        <button class="secondary" id="sampleBtn">直接试水杯段</button>
       </div>
     </section>
   </main>
@@ -705,36 +731,30 @@
 
     const cards = [
       { id: "cover",   kind: "center", mood: "cold", img: "assets/img/cover.jpg", text: "2011年。\n长沙，红花坡。", fixed: 3600 },
-      { id: "card-01", img: "assets/img/card-01-v11.png", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200,
+      { id: "card-01", img: "assets/img/card-01-v11.png", bed: "fan", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200,
         sfx: ["pack-up"] },
-      { id: "card-02", mood: "cold", img: "assets/img/card-02-v11.png", text: "又是下午两三点。\n外面夜宵摊开张。\n你的一天，也开始了。",
+      { id: "card-02", mood: "cold", img: "assets/img/card-02-v15.png", bed: "fan", text: "又是下午两三点。\n外面夜宵摊开张。\n你的一天，也开始了。",
         sfx: ["open-up"] },
-      { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", audio: "card-03.mp3", novel: { head: ["玄幻小说排行榜", "2011"], rows: ["第九百三十七章  结丹", "退婚 / 斗气 / 逆袭", "笔名栏一闪而过，不可读"], next: "下一章" }, text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
-      { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", text: "你爱看那种片子。\n看到最后，才知道——\n原来全错了。" },
-      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", caption: "《强殖入侵》影评页", artNote: "v1.5: MTIME影评页标题处清楚露出《强殖入侵》，下面两三行影评正文可读；旁白不念片名、不解释剧情。", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "一个人对一件事坚信不疑。\n到最后，真相完全反过来。\n原来从一开始就错了。", cursor: true }, text: "有一部片子，你一直忘不掉。\n一个人坚信不疑。\n到最后，真相完全反过来。\n你写完影评，发上去。\n光标还在闪。" },
-      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", qq: { title: "92级初中同学", messages: ["恭喜刘同学喜提新车！", "恭喜王同学买了新房！"] }, text: "92级初中同学群，又亮了。\n有人恭喜同学喜提新车。\n有人恭喜同学买了新房。\n你看了一眼，点掉。\n心里咯噔一下。\n又把它按回去：\n有什么了不起。\n活得那么累，那么俗。",
+      { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", bed: "fan", audio: "card-03.mp3", novel: { head: ["玄幻小说排行榜", "2011"], rows: ["第九百三十七章  结丹", "退婚 / 斗气 / 逆袭", "笔名栏一闪而过，不可读"], next: "下一章" }, text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
+      { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", bed: "fan", text: "你爱看那种片子。\n看到最后，才知道——\n原来全错了。" },
+      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", bed: "fan", caption: "《强殖入侵》影评页", artNote: "v1.5: MTIME影评页标题处清楚露出《强殖入侵》，下面两三行影评正文可读；旁白不念片名、不解释剧情。", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "一个人对一件事坚信不疑。\n到最后，真相完全反过来。\n原来从一开始就错了。", cursor: true }, text: "有一部片子，你一直忘不掉。\n一个人坚信不疑。\n到最后，真相完全反过来。\n你写完影评，发上去。\n光标还在闪。" },
+      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", bed: "fan", qq: { title: "92级初中同学", messages: ["恭喜刘同学喜提新车！", "恭喜王同学买了新房！"] }, text: "92级初中同学群，又亮了。\n有人恭喜同学喜提新车。\n有人恭喜同学买了新房。\n你看了一眼，点掉。\n心里咯噔一下。\n又把它按回去：\n有什么了不起。\n活得那么累，那么俗。",
         sfx: ["qq"] },
-      { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "名和利，本来就不值得追求。\n到头来，皆是虚幻。\n精神上不空，也就够了。", cursor: false }, text: "这套话，你写在影评里，\n也在心里说过很多遍。\n那不是装的。\n那时候，你是真的信。" },
+      { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", bed: "fan", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "名和利，本来就不值得追求。\n到头来，皆是虚幻。\n精神上不空，也就够了。", cursor: false }, text: "这套话，你写在影评里，\n也在心里说过很多遍。\n那不是装的。\n那时候，你是真的信。" },
 
-      { id: "card-08",  mood: "cold", img: "assets/img/card-08-v11.png",  sound: "fan", caption: "屏外", artNote: "v1.5: 重出图时补椅子里瘫坐、裸上身或背心掀起、大肚子明显；身体证据只进画面，不进旁白。", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 5200 },
-      { id: "card-08b", mood: "cold", img: "assets/img/card-08-v11.png",  sound: "fan", caption: "桌面", text: "烟灰、泡面桶、纸巾团。\n蓝光打在这一桌黏腻上。", fixed: 4800 },
-      { id: "card-09",  mood: "cold", img: "assets/img/card-09-v11.png",  sound: "fan", caption: "口渴", text: "桌角那只黑旧的杯子。\n手，下意识探过去。", fixed: 4600 },
-      { id: "card-10",  mood: "cold", img: "assets/img/card-10-v11.png",  sound: "thin", caption: "二三拳头", artNote: "v1.5: 侧面够杯，肚子先顶出来，身子没离开椅背，手伸一点又停住。", text: "够得到。\n只是，要动一下身子。", fixed: 6200 },
+      { id: "card-08",  mood: "cold", img: "assets/img/card-08-v15.png",  bed: "fan", caption: "屏外", artNote: "v1.5: 重出图时补椅子里瘫坐、裸上身或背心掀起、大肚子明显；身体证据只进画面，不进旁白。", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 5200 },
+      { id: "card-08b", mood: "cold", img: "assets/img/card-08-v15.png",  bed: "fan", caption: "桌面", text: "烟灰、泡面桶、纸巾团。\n蓝光打在这一桌黏腻上。", fixed: 4800 },
+      { id: "card-09",  mood: "cold", img: "assets/img/card-09-v15.png",  bed: "fan", caption: "口渴", text: "桌角那只黑旧的杯子。\n手，下意识探过去。", fixed: 4600 },
+      { id: "card-10",  mood: "cold", img: "assets/img/card-10-v15.png",  bed: "fan", sound: "thin", caption: "二三拳头", artNote: "v1.5: 侧面够杯，肚子先顶出来，身子没离开椅背，手伸一点又停住。", text: "够得到。\n只是，要动一下身子。", fixed: 6200 },
       {
         id: "pause-0",
         pause: true,
         mood: "cold",
         visual: "freeze",
+        bed: "silence",
         sound: "silence",
-        title: "那一下。",
-        text: "身体里，两个声音。",
-        // 停顿〇=两个身体声音的触发器，非真假分支。点任一键只触发"交替二次→卡住"，结局由事实锁定：身子没有动(card-11)。顺序锁：card-11→card-12(饼女人)不得前置。
-        voices: [
-          { label: "把身子送出去", view: "reach" },
-          { label: "真的不想动", view: "still" }
-        ]
       },
-      { id: "card-11", mood: "cold", img: "assets/img/card-11-v11.png", sound: "silence", audio: "card-11.mp3", text: "手缩回去了。\n\n身子，没有动。", fixed: 4200 },
+      { id: "card-11", mood: "cold", img: "assets/img/card-11-v15.png", bed: "silence", sound: "silence", audio: "card-11.mp3", text: "手缩回去了。\n\n身子，没有动。", fixed: 4200 },
       { id: "card-12", mood: "cold", img: "assets/img/card-12-v11.png", sound: "drop",    text: "一个画面闪出来。\n一个妇人，脖子上挂着饼。\n低一下头就能吃。\n可她没动。\n后来，她饿死了。", fixed: 9800,
         sfx: ["drop-tone"] },
       { id: "card-13", mood: "cold", img: "assets/img/card-13-v11.png", sound: "drop",    text: "", fixed: 4800 },
@@ -760,7 +780,7 @@
         mood: "cold",
         kind: "photo",
         img: "assets/img/card21-photo.png",
-        frog: "assets/img/card21-frog.png",
+        frog: "assets/img/card21-frog-warmwater-v15.png",
         audioFull: "assets/audio/card21.m4a",
         fixed: 109500,
         text: "那个下午，到今天，十五年了。\n背脊还是会发凉。\n那时候一点都不觉得有问题。\n是真的感觉挺充实的。\n屏幕一关，现实里，其实就剩一个人。\n不是想通了。\n是被自己吓醒了。\n人生其实还有另一种走法。"
@@ -779,7 +799,6 @@
     const content    = document.getElementById("content");
     const cover      = document.getElementById("cover");
     const startBtn   = document.getElementById("startBtn");
-    const sampleBtn  = document.getElementById("sampleBtn");
     const progressBar= document.getElementById("progressBar");
     const phone      = document.getElementById("phone");
     const voiceToggle= document.getElementById("voiceToggle");
@@ -808,6 +827,8 @@
     function setImage(card) {
       stage.classList.toggle("has-visual", !!(card && card.visual));
       stage.style.setProperty("--image", card && card.img ? `url("${card.img}")` : "none");
+      stage.style.setProperty("--image-opacity", card && card.imgOpacity !== undefined ? card.imgOpacity : ".88");
+      stage.style.setProperty("--image-filter", card && card.imgFilter ? card.imgFilter : "saturate(.82) contrast(1.05) brightness(.82)");
       stage.classList.toggle("cold", card && card.mood === "cold");
       stage.classList.toggle("warm", card && card.mood === "warm");
     }
@@ -994,8 +1015,8 @@
       content.innerHTML = `
         <div class="photo-stack">
           <img class="photo-main" src="${escapeHtml(card.img)}" alt="">
+          ${card.frog ? `<div class="frog-drift" aria-hidden="true"><img src="${escapeHtml(card.frog)}" alt=""></div>` : ""}
           <div class="photo-row">
-            <img src="${escapeHtml(card.frog)}" alt="">
             <div class="truth-note">
               <div class="kicker">真人真声</div>
               <div class="caption">无 AI 克隆。保留停顿、不顺和口语节奏。</div>
@@ -1012,16 +1033,21 @@
       setImage(card);
 
       // ── 声音路由 ──────────────────────────────────────────────
-      const soundType = card.sound;
-      if (soundType === "fan" || soundType === "street") {
-        startBed(soundType);
-      } else if (soundType === "silence") {
+      const bedType = card.bed;
+      if (bedType === "fan" || bedType === "street") {
+        startBed(bedType);
+      } else if (bedType === "silence") {
         stopBed();
-        stopSoundscape();
-      } else if (soundType === undefined) {
+      } else if (bedType === undefined) {
         // no change to bed
       } else {
         stopBed();
+      }
+
+      const soundType = card.sound;
+      if (soundType === "silence" || soundType === undefined) {
+        stopSoundscape();
+      } else {
         startSoundscape(soundType);    // oscillator for drop / thin
       }
 
@@ -1035,19 +1061,19 @@
       playSfx(card.sfx);
 
       if (card.pause) {
-        const voices = card.voices || [];
         content.innerHTML = `
           ${visualMarkup(card.visual)}
-          <div class="kicker">${escapeHtml(card.title)}</div>
-          <div class="text small">${escapeHtml(card.text)}</div>
           <div class="choice-grid" aria-label="两个身体声音触发器">
-            ${voices.map((voice,i)=>`
-              <button class="visual-choice" data-trigger="${i}">
-                <div class="choice-scene">${visualMarkup(voice.view)}</div>
-                <div class="choice-copy"><strong>${escapeHtml(voice.label)}</strong></div>
-              </button>`).join("")}
+            <button class="visual-choice" id="btn-reach">
+              <div class="choice-scene">${visualMarkup("reach")}</div>
+              <div class="choice-copy"><strong>把身子送出去</strong></div>
+            </button>
+            <button class="visual-choice" id="btn-still">
+              <div class="choice-scene">${visualMarkup("still")}</div>
+              <div class="choice-copy"><strong>真的不想动</strong></div>
+            </button>
           </div>`;
-        content.querySelectorAll(".visual-choice").forEach((btn, i) => {
+        content.querySelectorAll(".visual-choice").forEach(btn => {
           btn.addEventListener("click", () => handlePauseTrigger(card));
         });
         return;
@@ -1091,14 +1117,12 @@
       const renderFrame = () => {
         const view = sequence[frame];
         content.innerHTML = `
-          <div class="kicker">${escapeHtml(card.title)}</div>
-          <div class="text small">${escapeHtml(frame < sequence.length - 1 ? card.text : "")}</div>
           <div class="pause-animation">${visualMarkup(view)}</div>`;
         if (frame < sequence.length - 1) {
           frame += 1;
-          timer = window.setTimeout(renderFrame, 400);
+          timer = window.setTimeout(renderFrame, 600);
         } else {
-          timer = window.setTimeout(() => jumpTo("card-11"), 600);
+          timer = window.setTimeout(() => jumpTo("card-11"), 1200);
         }
       };
       renderFrame();
@@ -1142,7 +1166,6 @@
     }
 
     startBtn.addEventListener("click", start);
-    sampleBtn.addEventListener("click", () => jumpTo("card-08"));
 
     voiceToggle.addEventListener("click", e => {
       e.stopPropagation();
