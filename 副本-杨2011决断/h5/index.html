@@ -418,7 +418,7 @@
     }
 
     .photo-stack.has-memory {
-      gap: 9px;
+      gap: 8px;
     }
 
     .photo-row {
@@ -442,7 +442,7 @@
     .photo-main { max-height: 360px; }
 
     .photo-stack.has-memory .photo-main {
-      max-height: 230px;
+      max-height: 176px;
     }
 
     .frog-drift {
@@ -457,21 +457,28 @@
     }
 
     .photo-stack.has-memory .frog-drift {
-      height: 158px;
+      width: min(40vw, 140px);
+      max-width: 140px;
+      aspect-ratio: 9 / 16;
+      height: auto;
       margin-top: 0;
+      justify-self: center;
+      background:
+        radial-gradient(circle at 50% 64%, rgba(217,137,45,.28), transparent 52%),
+        rgba(0,0,0,.38);
     }
 
     .frog-drift img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      transform: scale(1.08);
-      animation: frogDrift 42s ease-in-out infinite alternate;
+      object-fit: contain;
+      transform: none;
+      animation: frogBreath 36s ease-in-out infinite alternate;
     }
 
-    @keyframes frogDrift {
-      from { transform: scale(1.08) translate3d(-1.5%, 1%, 0); }
-      to   { transform: scale(1.16) translate3d(1.5%, -2%, 0); }
+    @keyframes frogBreath {
+      from { filter: brightness(.96) saturate(.94); opacity: .9; }
+      to   { filter: brightness(1.08) saturate(1.04); opacity: 1; }
     }
 
     .memory-strip {
@@ -484,7 +491,7 @@
 
     .memory-strip img {
       width: 100%;
-      height: 50px;
+      height: 40px;
       object-fit: cover;
       border-radius: 6px;
       border: 1px solid rgba(255,255,255,.12);
@@ -505,9 +512,14 @@
       background: rgba(0,0,0,.45);
     }
 
+    .photo-stack.has-memory .truth-note {
+      gap: 6px;
+      padding: 10px 12px;
+    }
+
     .photo-transcript {
-      font-size: 17px;
-      line-height: 1.48;
+      font-size: 15.5px;
+      line-height: 1.42;
     }
 
     .micro-scene {
