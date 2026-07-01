@@ -1,12 +1,12 @@
 # KAIROS Project 系统指令目录 · 使用说明
 
-> 配套：`SKZJ\Project系统指令\` 下四份运行时指令资产：Claude.ai 子 Project 三份（中心思想对撞 / 写手 / 观众）+ ChatGPT 主控运行版一份。主控 Claude 备份仍是仓根 `KAIROS系统指令-现行备份-v2.5.md`；本目录中的 `ChatGPT主控Project系统指令-v2.4.md` 是 ChatGPT Project 的运行版，不替代主控 Claude 备份。 本说明含：①产线全景 ②各 Project 何时用/喂什么/产出什么 ③知识库怎么挂 ④修订记录 ⑤维护。
+> 配套：`SKZJ\Project系统指令\` 下四份运行时指令资产：Claude.ai 子 Project 三份（中心思想对撞 / 写手 / 观众）+ ChatGPT 主控运行版一份。主控 Claude 备份仍是仓根 `KAIROS系统指令-现行备份-v2.5.md`；本目录中的 `ChatGPT主控Project系统指令-v2.5.md` 是 ChatGPT Project 的运行版，不替代主控 Claude 备份。 本说明含：①产线全景 ②各 Project 何时用/喂什么/产出什么 ③知识库怎么挂 ④修订记录 ⑤维护。
 
 ## 零、目录内文件
 
 | 文件 | 用途 | 粘贴位置 |
 | --- | --- | --- |
-| `ChatGPT主控Project系统指令-v2.4.md` | ChatGPT 环境的 SKZJ 主控运行版；处理默认读不到本地 D 盘、需读 GitHub / 远程看板镜像的场景 | ChatGPT Project 自定义指令 |
+| `ChatGPT主控Project系统指令-v2.5.md` | ChatGPT 环境的 SKZJ 主控运行版；处理默认读不到本地 D 盘、需读 GitHub / 远程看板镜像的场景 | ChatGPT Project 自定义指令 |
 | `中心思想对撞Project系统指令-v0.2.md` | 中心思想候选发生器 + 自挑破绽器 | Claude.ai 独立 Project |
 | `写手Project系统指令-v0.3.md` | 剧本润色写手，只动表达层 | Claude.ai 独立 Project |
 | `观众Project系统指令-v0.3.md` | 被试型 persona harness，只报体感 | Claude.ai 独立 Project |
@@ -71,19 +71,25 @@ Claude 子 Project 不一定配 Filesystem MCP，读不到 D 盘仓库。所以�
 
   （不常变、是方法论底座）：
 
-  - 对撞 Project：`SKILL-金句蒸馏.md`(§〇)、`产品哲学-需求与宪法-v0.2.md`(§三)、`副本制作SOP.md`(§〇)、`素材-收割-DeepSeek五步对撞提示词.md`
-  - 写手 Project：`materials/工具-LLM润色挑刺-v2.md`、`手法族谱.md`、`副本情节模板库.md`、`SKILL-金句蒸馏.md`、`副本制作SOP.md`(§四/§五.15/.21/.22)、`分支-代入感与默化引擎.md`
-  - 观众 Project：`产品哲学-需求与宪法-v0.2.md`、`副本制作SOP.md`(§〇/§五.9/.11/.22)
+  - 对撞 Project：`SKILL-金句蒸馏.md`(§〇)、`产品哲学-需求与宪法-*.md`(§三)、`副本制作SOP-*.md`(§〇)、`素材-收割-DeepSeek五步对撞提示词-*.md`
+  - 写手 Project：`materials/工具-LLM润色挑刺-*.md`、`手法族谱-*.md`、`副本情节模板库-*.md`、`SKILL-金句蒸馏.md`、`副本制作SOP-*.md`(§四/§五.15/.21/.22)、`分支-代入感与默化引擎-*.md`
+  - 观众 Project：`产品哲学-需求与宪法-*.md`、`副本制作SOP-*.md`(§〇/§五.9/.11/.22)
 
 - **绝不上传进知识库的——"易变现行件"**：现行剧本（如当前副本的生产稿，之后还会继续升版）、前情提要、看板、语料建档现行版、点位清单现行版。这些**由主控在对话里喂给子 Project**（粘当前稿/当前中心思想/同版点位清单），用完即弃，不沉淀成知识库副本。
 
 - 理由：上传的副本会过期，撞主控零号"唯一事实源、不维护上传副本"。把"稳定纪律"和"易变现行"分开挂，副本就不会骗人。
 
-> 若日后给子 Project 也配 Filesystem MCP（能直读 D 盘），则知识库挂载可全部改回"读仓内路径"，本节作废。当前默认按"上传稳定件 + 主控喂易变件"。
+> 若日后给子 Project 也配 Filesystem MCP（能直读 D 盘），则知识库挂载可全部改回"读仓内路径"，本节作废。当前默认按"上传稳定件 + 主控喂易变件"。（文件名 -* ＝占位，上传/读取时按 README/看板确认现行版。）
+
+> 文档目录决策（杨 2026-06-30）：不在系统指令写完整知识库文档 manifest。理由——①恒定/易变分离（文件清单易变、进恒定指令必腐）②唯一事实源（现有文档活源＝仓库本体+README/看板，指令内再列＝第二 drift 源）③已有 §三高频路由（功能→主名）+ 子Project 挂载（稳定/易变分）已是对的 scoped 目录。要“现有哪些文档”的活索引归 README/看板，不进恒定指令。
 
 ------
 
 ## 四、修订记录
+
+### v2.5 · 2026-06-30 已落实（ChatGPT主控）
+
+补 CODEX 非盲执行+联动复查+SK波及第一责任/CODEX第二道兜底，同步主控 v2.5 / AGENTS 第1、11条；ChatGPT版改名 v2.5、旧版归档。挂载去版本号防腐（四份内修）。
 
 ### v0.3 · 2026-06-25 已落实（观众/写手；主控同步 v2.4）
 
