@@ -38,5 +38,5 @@
 
 ## 协作分工
 
-杨=拍板/push/定节奏 ｜ Claude=判断层/内容层，写入走工单（直写例外仅 `灵感与待办捕获.md`）｜ CODEX=落盘与git，规则见 `AGENTS.md`
+杨=拍板/push/定节奏 ｜ Claude=判断层/内容层，写入走工单；捕获给一行文本，由 CODEX 落入 `灵感与待办捕获.md` 并提交 ｜ CODEX=落盘与git，规则见 `AGENTS.md`
 
