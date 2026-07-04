@@ -1,12 +1,12 @@
 # KAIROS Project 系统指令目录 · 使用说明
 
-> 配套：`SKZJ\Project系统指令\` 下四份运行时指令资产：Claude.ai 子 Project 三份（中心思想对撞 / 写手 / 观众）+ ChatGPT 主控运行版一份。主控 Claude 备份仍是仓根 `KAIROS系统指令-现行备份-v2.5.md`；本目录中的 `ChatGPT主控Project系统指令-v2.5.md` 是 ChatGPT Project 的运行版，不替代主控 Claude 备份。 本说明含：①产线全景 ②各 Project 何时用/喂什么/产出什么 ③知识库怎么挂 ④修订记录 ⑤维护。
+> 配套：`SKZJ\Project系统指令\` 下四份运行时指令资产：Claude.ai 子 Project 三份（中心思想对撞 / 写手 / 观众）+ ChatGPT 主控运行版一份。主控 Claude 备份仍是仓根 `KAIROS系统指令-现行备份-v2.5.md`（文件名暂保 v2.5；H1/横幅现行 v2.6）；本目录中的 `ChatGPT主控Project系统指令-v2.5.md` 是 ChatGPT Project 的运行版（文件名暂保 v2.5；H1/横幅现行 v2.6），不替代主控 Claude 备份。 本说明含：①产线全景 ②各 Project 何时用/喂什么/产出什么 ③知识库怎么挂 ④修订记录 ⑤维护。
 
 ## 零、目录内文件
 
 | 文件 | 用途 | 粘贴位置 |
 | --- | --- | --- |
-| `ChatGPT主控Project系统指令-v2.5.md` | ChatGPT 环境的 SKZJ 主控运行版；处理默认读不到本地 D 盘、需读 GitHub / 远程看板镜像的场景 | ChatGPT Project 自定义指令 |
+| `ChatGPT主控Project系统指令-v2.5.md` | ChatGPT 环境的 SKZJ 主控运行版（内容现行 v2.6，文件名暂保 v2.5）；处理默认读不到本地 D 盘、需读 GitHub / 远程看板镜像的场景 | ChatGPT Project 自定义指令 |
 | `中心思想对撞Project系统指令-v0.2.md` | 中心思想候选发生器 + 自挑破绽器 | Claude.ai 独立 Project |
 | `写手Project系统指令-v0.3.md` | 剧本润色写手，只动表达层 | Claude.ai 独立 Project |
 | `观众Project系统指令-v0.3.md` | 被试型 persona harness，只报体感 | Claude.ai 独立 Project |
@@ -87,6 +87,10 @@ Claude 子 Project 不一定配 Filesystem MCP，读不到 D 盘仓库。所以�
 
 ## 四、修订记录
 
+### v2.6 · 2026-07-04 已落实（主控/ChatGPT主控）
+
+两段式工单协议落地：必评估类先 CODEX《评估单·不写盘》，杨拍板后再《执行单·按修订版落盘》；并入 AGENTS §1，主控 Claude 备份与 ChatGPT 主控运行版各加 v2.6 小条。文件名暂保 v2.5，是否 rename 另议。
+
 ### v2.5 · 2026-06-30 已落实（ChatGPT主控）
 
 补 CODEX 非盲执行+联动复查+SK波及第一责任/CODEX第二道兜底，同步主控 v2.5 / AGENTS 第1、11条；ChatGPT版改名 v2.5、旧版归档。挂载去版本号防腐（四份内修）。
@@ -162,6 +166,6 @@ Claude 子 Project 不一定配 Filesystem MCP，读不到 D 盘仓库。所以�
 - 性质：**运行时 Project 系统指令资产**，不是主 KAIROS 系统指令备份本体。Claude 三份是产线工序定义；ChatGPT 一份是主控运行版，服务 ChatGPT 环境。
 - 当前目录只放现行可粘贴版本；旧版统一归档到 `archive\系统指令迭代\Project系统指令\`，不留在本目录并列混放。
 - 改 Claude 三份＝改子 Project 工序，杨拍板；改 ChatGPT 运行版＝改 ChatGPT 主控工作方式，仍需杨拍板。二者与仓根主控 Claude 备份分线管理，别混。
-- 与主指令的关系：本目录四份的纪律都服从仓根 `KAIROS系统指令-现行备份-v2.5.md` 的恒定内核；主指令变，回头扫一遍四份是否需同步。
+- 与主指令的关系：本目录四份的纪律都服从仓根 `KAIROS系统指令-现行备份-v2.5.md` 的恒定内核（内容现行 v2.6，文件名暂保 v2.5）；主指令变，回头扫一遍四份是否需同步。
 - 启用顺序建议：**观众 Project 先上**(单独就能给主控每轮粘贴的现行剧本报体感，不依赖其他两个)→ 再上写手 → 中心思想对撞等下一个新时刻(如#5笔记本)再用。
 
