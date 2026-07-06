@@ -64,6 +64,7 @@
       position: absolute;
       inset: 0;
       overflow: hidden;
+      isolation: isolate;
       background:
         linear-gradient(180deg, rgba(11,13,16,.1), rgba(0,0,0,.58)),
         #111;
@@ -79,7 +80,7 @@
       opacity: var(--image-opacity, .88);
       transform: scale(1.03);
       transition: opacity .45s ease, filter .45s ease;
-      filter: saturate(.82) contrast(1.05) brightness(.82);
+      filter: var(--image-filter, saturate(.82) contrast(1.05) brightness(.82));
       z-index: -2;
     }
 
@@ -191,6 +192,17 @@
       text-align: center;
       font-size: 30px;
       line-height: 1.35;
+    }
+
+    .narration-subtitle {
+      width: 100%;
+      max-height: 34vh;
+      overflow: hidden;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(0,0,0,.44), rgba(0,0,0,.62));
+      text-shadow: 0 2px 14px rgba(0,0,0,.78);
     }
 
     .caption {
@@ -327,6 +339,99 @@
       font-size: 12px;
     }
 
+    .content.screen-card {
+      display: block;
+      padding: 0;
+    }
+
+    .screen-page {
+      position: absolute;
+      left: var(--screen-left);
+      top: var(--screen-top);
+      width: var(--screen-width);
+      height: var(--screen-height);
+      z-index: 1;
+      overflow: hidden;
+      border-radius: 3px;
+      opacity: .88;
+      filter: saturate(.82) contrast(.94) blur(.08px);
+      transform: rotate(var(--screen-rotate, 0deg));
+      transform-origin: center;
+      box-shadow:
+        inset 0 0 0 1px rgba(35,73,117,.24),
+        inset 0 0 36px rgba(45,103,172,.18);
+    }
+
+    .content.screen-card > .screen-page {
+      position: absolute;
+    }
+
+    .screen-page::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(180deg, rgba(255,255,255,.08) 0 1px, transparent 1px 4px),
+        linear-gradient(90deg, rgba(0,58,140,.12), transparent 22%, rgba(0,47,110,.16));
+      mix-blend-mode: multiply;
+    }
+
+    .screen-page.novel {
+      background: rgba(236,232,218,.72);
+    }
+
+    .screen-page.review {
+      background: rgba(232,239,247,.64);
+    }
+
+    .screen-page .review-excerpt,
+    .screen-page .novel-panel {
+      width: auto;
+      height: 100%;
+      max-width: none;
+      padding: 9px 11px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .screen-page .review-site,
+    .screen-page .novel-head {
+      font-size: 9px;
+      line-height: 1.2;
+      opacity: .72;
+    }
+
+    .screen-page .review-title {
+      margin-top: 6px;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .screen-page .review-body {
+      margin-top: 6px;
+      font-size: 9px;
+      line-height: 1.5;
+      color: rgba(26,35,43,.82);
+    }
+
+    .screen-page .novel-list {
+      gap: 4px;
+      font-size: 10px;
+      line-height: 1.38;
+      color: rgba(38,48,31,.82);
+    }
+
+    .screen-page .novel-next {
+      margin-top: 6px;
+      padding: 4px 7px;
+      font-size: 10px;
+      background: rgba(255,255,255,.42);
+    }
+
     .choice {
       width: 100%;
       min-height: 56px;
@@ -350,7 +455,7 @@
       padding: 40px 28px;
       background:
         linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.7)),
-        url("assets/img/cover.jpg") center / cover;
+      url("assets/img/cover-v17-clean-desk-standard-20260706.jpg") center / cover;
     }
 
     .primary {
@@ -411,13 +516,22 @@
       align-self: center;
       display: grid;
       gap: 12px;
+      width: 100%;
+      max-width: 360px;
       margin-bottom: 12px;
+      position: relative;
+    }
+
+    .photo-stack.has-memory {
+      gap: 8px;
     }
 
     .photo-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 10px;
+      position: relative;
+      z-index: 2;
     }
 
     .photo-row img,
@@ -432,13 +546,242 @@
 
     .photo-main { max-height: 360px; }
 
-    .truth-note {
+    .photo-stack.has-memory .photo-main {
+      max-height: 304px;
+    }
+
+    .frog-drift {
+      height: 190px;
+      margin-top: 8px;
+      border-radius: 12px;
+      overflow: hidden;
+      opacity: .86;
+      filter: saturate(.98) contrast(1.08) brightness(1.08);
+      position: relative;
+      z-index: 1;
+    }
+
+    .photo-stack.has-memory .frog-drift {
+      position: absolute;
+      right: 10px;
+      bottom: 74px;
+      width: min(22vw, 78px);
+      max-width: 78px;
+      aspect-ratio: 9 / 16;
+      height: auto;
+      margin-top: 0;
+      justify-self: center;
+      opacity: .72;
+      z-index: 4;
+      box-shadow: 0 18px 40px rgba(0,0,0,.5);
+      background:
+        radial-gradient(circle at 50% 64%, rgba(217,137,45,.28), transparent 52%),
+        rgba(0,0,0,.38);
+    }
+
+    .frog-drift img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform: none;
+      animation: frogBreath 36s ease-in-out infinite alternate;
+    }
+
+    @keyframes frogBreath {
+      from { filter: brightness(.96) saturate(.94); opacity: .9; }
+      to   { filter: brightness(1.08) saturate(1.04); opacity: 1; }
+    }
+
+    .memory-strip {
       display: grid;
-      gap: 12px;
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,.15);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      opacity: .56;
+      animation: memoryPulse 18s ease-in-out infinite alternate;
+    }
+
+    .memory-strip img {
+      width: 100%;
+      height: 36px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.12);
+      filter: saturate(.7) contrast(1.05) brightness(.78);
+    }
+
+    @keyframes memoryPulse {
+      from { opacity: .38; transform: translateY(1px); }
+      to   { opacity: .66; transform: translateY(-1px); }
+    }
+
+    .content.photo-card {
+      display: block;
+      padding: 0;
+    }
+
+    .photo-visual {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .photo-visual .frog-drift {
+      position: absolute;
+      left: 18px;
+      bottom: calc(50% + 22px);
+      width: 58px;
+      height: 104px;
+      margin: 0;
+      opacity: .34;
+      box-shadow: 0 16px 34px rgba(0,0,0,.46);
+      background: rgba(0,0,0,.18);
+    }
+
+    .rolling-caption {
+      position: absolute;
+      left: 50%;
+      right: auto;
+      bottom: 28px;
+      width: calc(100% - 36px);
+      height: min(24%, 180px);
+      transform: translateX(-50%);
+      z-index: 3;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.14);
       border-radius: 8px;
-      background: rgba(0,0,0,.45);
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.46), rgba(0,0,0,.64)),
+        rgba(0,0,0,.42);
+      box-shadow: 0 18px 48px rgba(0,0,0,.38);
+    }
+
+    .rolling-caption::before,
+    .rolling-caption::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      height: 34px;
+      pointer-events: none;
+    }
+
+    .rolling-caption::before {
+      top: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,.82), transparent);
+    }
+
+    .rolling-caption::after {
+      bottom: 0;
+      background: linear-gradient(0deg, rgba(0,0,0,.86), transparent);
+    }
+
+    .rolling-caption-text {
+      padding: 22px 18px 26px;
+      white-space: pre-line;
+      color: #fff2d8;
+      font-size: 18px;
+      line-height: 1.68;
+      font-weight: 650;
+      text-shadow: 0 2px 12px rgba(0,0,0,.72);
+      will-change: transform;
+    }
+
+    .rolling-caption-text.is-scrolling {
+      animation: captionScroll var(--scroll-duration, 109500ms) linear forwards;
+    }
+
+    @keyframes captionScroll {
+      to { transform: translateY(calc(-1 * var(--scroll-distance, 0px))); }
+    }
+
+    .night-tail {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .night-tail::before {
+      content: "";
+      position: absolute;
+      left: 28%;
+      top: 43%;
+      width: 45%;
+      height: 15%;
+      border-radius: 4px;
+      border: 1px solid rgba(91,139,178,.22);
+      background:
+        linear-gradient(180deg, rgba(78,133,184,.52), rgba(16,27,38,.76)),
+        repeating-linear-gradient(0deg, transparent 0 12px, rgba(255,255,255,.05) 12px 13px);
+      box-shadow: 0 0 46px rgba(53,111,169,.3);
+      animation: screenSleep 6.8s ease-in forwards;
+    }
+
+    .night-tail::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      animation: nightBlack 6.8s ease-in forwards;
+    }
+
+    @keyframes screenSleep {
+      0%, 42% { opacity: .72; filter: brightness(1); }
+      62% { opacity: .36; filter: brightness(.58); }
+      78% { opacity: .08; filter: brightness(.22); }
+      100% { opacity: 0; filter: brightness(0); }
+    }
+
+    @keyframes nightBlack {
+      0%, 76% { opacity: 0; }
+      90% { opacity: .38; }
+      100% { opacity: .84; }
+    }
+
+    .content > .day-start {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .day-start::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: #000;
+      animation: dayStartBlack 5.2s ease-out forwards;
+    }
+
+    .day-start::after {
+      content: "";
+      position: absolute;
+      left: 29%;
+      top: 39%;
+      width: 43%;
+      height: 21%;
+      border-radius: 5px;
+      background: radial-gradient(circle at 50% 50%, rgba(90,180,255,.78), rgba(33,91,164,.22) 64%, transparent 72%);
+      filter: blur(2px);
+      opacity: 0;
+      animation: blueWake 5.2s ease-out forwards;
+    }
+
+    @keyframes dayStartBlack {
+      0%, 18% { opacity: .96; }
+      32% { opacity: .42; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes blueWake {
+      0%, 18% { opacity: 0; transform: scale(.92); }
+      24% { opacity: .88; transform: scale(1.04); }
+      46% { opacity: .46; transform: scale(1); }
+      100% { opacity: .16; transform: scale(1.02); }
     }
 
     .micro-scene {
@@ -511,9 +854,9 @@
       height: 78px;
       border-radius: 9px 9px 18px 18px;
       background:
-        radial-gradient(ellipse at 48% 16%, rgba(120,96,65,.9), rgba(25,22,18,.98) 56%),
-        linear-gradient(90deg, #0b0a09, #2a211a 52%, #080706);
-      border: 1px solid rgba(255,255,255,.09);
+        radial-gradient(ellipse at 48% 16%, rgba(110,75,42,.58), rgba(221,208,169,.86) 56%),
+        linear-gradient(90deg, #c8b88b, #eee5ca 48%, #a89667);
+      border: 1px solid rgba(255,255,255,.22);
       box-shadow: 0 18px 38px rgba(0,0,0,.62);
     }
 
@@ -615,6 +958,14 @@
       background: #090909;
     }
 
+    .choice-scene img,
+    .pause-animation img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
     .choice-scene .micro-scene {
       transform: scale(.72);
       transform-origin: center;
@@ -669,10 +1020,9 @@
       <div class="cover" id="cover">
         <div class="kicker">人生馆001号</div>
         <div class="title">2011，那只水杯</div>
-        <p class="cover-hook">他一直觉得这样挺好——直到那只水杯，让他看见自己一动没动。</p>
+        <p class="cover-hook">他一直觉得这样挺好——直到那只水杯，让他看见三十五岁的自己，一动没动。</p>
         <p class="muted-note">戴上耳机，约 5 分钟。</p>
         <button class="primary" id="startBtn">开始</button>
-        <button class="secondary" id="sampleBtn">直接试水杯段</button>
       </div>
     </section>
   </main>
@@ -687,100 +1037,410 @@
 
     // ─── sfx 路径 ───────────────────────────────────────────────
     const SFX = {
-      "pack-up":    "assets/audio/sfx/pack-up.mp3",
-      "open-up":    "assets/audio/sfx/open-up.mp3",
-      "qq":         "assets/audio/sfx/qq.mp3",
-      "drop-tone":  "assets/audio/sfx/drop-tone.mp3",
-      "single-tone":"assets/audio/sfx/single-tone.mp3",
-      "pen":        "assets/audio/sfx/pen.mp3",
-      "money":      "assets/audio/sfx/money.mp3",
+      "night-market-close-v17": "assets/audio/sfx/night-market-close-v17.mp3?v=20260703-v17",
+      "night-market-open-v17":  "assets/audio/sfx/night-market-open-v17.mp3?v=20260703-v17",
+      "keyboard-plastic-v17":   "assets/audio/sfx/keyboard-plastic-v17.mp3?v=20260703-v17",
+      "movie-muffle-v17":       "assets/audio/sfx/movie-muffle-v17.mp3?v=20260703-v17",
+      "qq-v17":                 "assets/audio/sfx/qq-v17.mp3?v=20260703-v17",
+      "low-heart-miss-v17":     "assets/audio/sfx/low-heart-miss-v17.mp3?v=20260703-v17",
+      "sink-tone-v17":          "assets/audio/sfx/sink-tone-v17.mp3?v=20260703-v17",
+      "phone-qq-crowd-v17":     "assets/audio/sfx/phone-qq-crowd-v17.mp3?v=20260703-v17",
+      "keyboard-phone-v17":     "assets/audio/sfx/keyboard-phone-v17.mp3?v=20260703-v17",
+      "pen-sms-v17":            "assets/audio/sfx/pen-sms-v17.mp3?v=20260703-v17",
+      "money-snap-v17":         "assets/audio/sfx/money-snap-v17.mp3?v=20260703-v17",
     };
 
     // ─── bed / bgm 路径 ──────────────────────────────────────────
     const BED_FILES = {
-      fan:    "assets/audio/bed-fan.mp3",
-      street: "assets/audio/bed-street.mp3",
+      fan:    "assets/audio/bed-fan-pixabay-72370.mp3?v=20260702-72370",
+      street: "assets/audio/bed-street-v17.mp3?v=20260703-v17",
     };
-    const BGM_FILE = "assets/audio/bgm-warm.mp3";
+    const BED_VOLUMES = {
+      fan: 0.16,
+      street: 0.10,
+    };
+    const BGM_FILES = {
+      warmLow: "assets/audio/warm-low-v17.mp3?v=20260703-v17",
+    };
+    const BGM_VOLUMES = {
+      warmLow: 0.035,
+    };
 
     const cards = [
-      { id: "cover",   kind: "center", mood: "cold", img: "assets/img/cover.jpg", text: "2011年。\n长沙，红花坡。", fixed: 3600 },
-      { id: "card-01", img: "assets/img/card-01-v11.png", caption: "夜尾", text: "凌晨三四点。屏上片子停在最后一帧，吊扇还在转。", fixed: 5200,
-        sfx: ["pack-up"] },
-      { id: "card-02", mood: "cold", img: "assets/img/card-02-v11.png", text: "又是下午两三点。\n外面夜宵摊开张。\n一天，也开始了。",
-        sfx: ["open-up"] },
-      { id: "card-03", mood: "cold", img: "assets/img/card-03-v11.png", audio: "card-03.mp3", novel: { head: ["玄幻小说排行榜", "2011"], rows: ["第九百三十七章  结丹", "退婚 / 斗气 / 逆袭", "笔名栏一闪而过，不可读"], next: "下一章" }, text: "主角从谷底爬起来，打怪，变强，封神。\n又一章。还是昨天那本。" },
-      { id: "card-04", mood: "cold", img: "assets/img/card-04-v11.png", text: "爱看那种片子。\n看到最后，才知道——\n原来全错了。" },
-      { id: "card-05", mood: "cold", img: "assets/img/card-05-v11.png", caption: "《强殖入侵》影评页", artNote: "v1.5: MTIME影评页标题处清楚露出《强殖入侵》，下面两三行影评正文可读；旁白不念片名、不解释剧情。", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "一个人对一件事坚信不疑，\n最后真相完全相反", cursor: true }, text: "有一部片子，一直忘不掉。\n影评写完，发上去。" },
-      { id: "card-06", mood: "cold", img: "assets/img/card-06-v11.png", qq: { title: "92级初中同学", messages: ["恭喜刘同学买了新车！", "恭喜王同学买了新房！"] }, text: "92级初中同学群，又亮了。\n看了一眼，点掉。\n心里咯噔一下。\n又把它按回去：\n有什么了不起。\n活得那么累，那么俗。",
-        sfx: ["qq"] },
-      { id: "card-07", mood: "cold", img: "assets/img/card-07-v11.png", review: { site: "Mtime 影评", title: "《强殖入侵》", body: "名和利这些东西，追到最后其实也就那么回事，说白了都是虚的。\n我一直觉得，一个人精神上不空，有书看、有电影看，日子就不算亏。\n外面那些成天忙着追这追那的，未必有这份清醒。", cursor: false }, text: "这套话，写在影评里，\n也在心里说过很多遍。" },
-
-      { id: "card-08",  mood: "cold", img: "assets/img/card-08-v11.png",  sound: "fan", caption: "屏外", artNote: "v3: 重出图时补久坐养出来的松、人是自在的；裸上身或背心掀起、大肚子明显；身体证据只进画面，不进旁白。", text: "屏幕还亮着。\n封神、逆袭、挺好。\n视线从屏上移开。", fixed: 5200 },
-      { id: "card-08b", mood: "cold", img: "assets/img/card-08-v11.png",  sound: "fan", caption: "桌面", text: "白沙烟、泡面桶、纸巾团。\n蓝光打在这一桌生活痕迹上。", fixed: 4800 },
-      { id: "card-09",  mood: "cold", img: "assets/img/card-09-v11.png",  sound: "fan", caption: "口渴", text: "桌角那只白旧发黄的杯子。\n手，下意识探过去。", fixed: 4600 },
-      { id: "card-10",  mood: "cold", img: "assets/img/card-10-v11.png",  sound: "thin", caption: "二三拳头", artNote: "v3: 第一人称略斜俯够杯，前景见肚子、椅背拖住身体，手伸一点又停住；不是嫌脏、不是够不到，是身体懒得动。", text: "够得到。\n只是，要动一下身子。", fixed: 6200 },
       {
-        id: "pause-0",
-        pause: true,
-        mood: "cold",
-        visual: "freeze",
-        sound: "silence",
-        title: "那一下。",
-        text: "身体里，两个声音。",
-        // 停顿〇=两个身体声音的触发器，非真假分支。点任一键只触发"交替二次→卡住"，结局由事实锁定：身子没有动(card-11)。顺序锁：card-11→card-12(饼寓言)不得前置。
-        voices: [
-          { label: "把身子送出去", view: "reach" },
-          { label: "真的不想动", view: "still" }
-        ]
-      },
-      { id: "card-11", mood: "cold", img: "assets/img/card-11-v11.png", sound: "silence", audio: "card-11.mp3", text: "手缩回去了。\n\n身子，没有动。", fixed: 4200 },
-      { id: "card-12", mood: "cold", img: "assets/img/card-12-v11.png", sound: "drop",    artNote: "待重出：懒汉躺着，饼完整挂在脖子上，转一下即可吃；不得画成站立胸前吊饼。", text: "一个懒汉，脖子上挂着饼。\n把饼转一下就能吃。\n他没动。\n……后来，饿死了。", fixed: 9800,
-        sfx: ["drop-tone"] },
-      { id: "card-13", mood: "cold", img: "assets/img/card-13-v11.png", sound: "drop",    text: "", fixed: 4800 },
-      { id: "card-14", mood: "cold", img: "assets/img/card-14-v11.png", sound: "silence", text: "就那么停着。\n\n大概一分钟。", fixed: 5200 },
-      { id: "card-15", kind: "center", mood: "cold", img: "assets/img/card-15-v11.png", sound: "silence", audio: "card-15.mp3", text: "再也不能这样过下去了！\n\n绝对不行！！！", fixed: 6200 },
-
-      { id: "card-15b", mood: "cold", img: "assets/img/card-15-v11.png", text: "屏幕一暗，屋里就一个人。\n忽然有点发冷。\n怎么会成了这样？\n再这样下去，这辈子，会变成什么样？", fixed: 12800 },
-
-      { id: "card-16", mood: "warm", img: "assets/img/card-16-v11.png", text: "那就先出去。\n不是为了马上赚钱。\n再这样下去，最后也会“饿”死。\n先离开这把椅子。\n巷口一抬头，高楼一幢接一幢，车水马龙。\n不知道多少个亿，就在这座城里流动。\n原来外面一直在动。\n钱在动，人也在动。\n有人在长沙有了车，有了房，站住了脚。\n原来这些，不在天上，就在这条街上。", fixed: 17000 },
-      { id: "card-16b", mood: "warm", img: "assets/img/card-16-v11.png", text: "出来以后，靠什么活？\n上班，啥也不会，没人请。\n下力气，心里那点清高又过不去。\n继续倒腾软件，还是那点钱，养不活自己。", fixed: 11200 },
-      { id: "card-17a", mood: "warm", img: "assets/img/card-17-v11.png", text: "可往哪动？\n村里那个大哥，又冒出来。\n同一个村长大的，混社会的，没读过几年书，伙着三四个人，把一笔信托对接给房地产，募了六千万，分一个点，六十万。\n这条路，原来走得通。", fixed: 15200 },
-      { id: "card-17b", mood: "warm", img: "assets/img/card-17-v11.png", text: "他读书不多，更别说会电脑了。\n赚钱这事，也没那么复杂。\n他能，我凭什么不行？", fixed: 10600 },
-      { id: "card-18", kind: "center", mood: "warm", img: "assets/img/card-18-v11.png", text: "没等看清整条路。\n前面全是荆棘，看不清。\n那时候只认一件事：\n先动。\n先试。\n手里有把刀，就先砍眼前这一茬。\n砍开一点，往前挪一点。\n又挡住了，再砍。",
-        sfx: ["single-tone"], fixed: 10800 },
-      { id: "card-18b", mood: "warm", img: "assets/img/card-18-v11.png", text: "刀往哪砍？\n先挤进去，当个传话的。\n一通电话接一通电话，一个中介对一个中介，把这头的话，递到那头。\n第一单，十几个人挤着谈，名单念到最后，没有名字。\n有个还算厚道的，私下塞了一万多。\n第二单，两头连上了，人家自己谈成了，站在外面。\n一单又一单，都没什么指望——\n可脑子里，总蹦出曾国藩那四个字：屡败屡战。", fixed: 15800 },
-      { id: "card-18c", mood: "warm", img: "assets/img/card-18-v11.png", text: "这么传了一年，撞见一个更窄的口子——承兑。\n又是一堆没见过的词。\n承兑、信托、资金方……\n一个个敲进百度，夜里啃。\n啃完，干的还是老本行：\n把收承兑的，和有承兑的，叫到一张桌上。", fixed: 9200 },
-      { id: "card-19", mood: "warm", img: "assets/img/card-19-v11.png", text: "兜里揣个小本子，前几页抄满要点——\n生怕哪个词没弄懂，在两边中间把话传岔了，事就办不成。\n沿街一家家，仰头把招牌上的电话抄进手机，回去一条条群发出去：\n老板，我做承兑业务的。",
-        sfx: ["pen"], fixed: 11600 },
-      { id: "card-20", mood: "warm", img: "assets/img/card-20-v11.png", text: "跑了不知多少家，第一单来了。\n三百万的承兑，把收承兑的资金方和有承兑的企业主连上，做成了。\n资金方赚了万把块，看人老实、头回做业务、穿得也傻不几的，临走甩过来一张一百块：\n“给你的。”\n那时候还穷，也还清高。\n这钱对不对、那点瞧不起该不该受，没算。\n只记住一件事：还成单了。\n路，砍开了第一道口子。",
-        sfx: ["money"], fixed: 13200 },
-
-      {
-        id: "card-21",
-        mood: "cold",
-        kind: "photo",
-        img: "assets/img/card21-photo.png",
-        frog: "assets/img/card21-frog.png",
-        audioFull: "assets/audio/card21.m4a",
-        fixed: 109500,
-        text: "那个下午，到今天，十五年了。\n背脊还是会发凉。\n那时候一点都不觉得有问题。\n是真的感觉挺充实的。\n屏幕一关，现实里，其实就剩一个人。\n不是想通了。\n是被自己吓醒了。\n人生其实还有另一种走法。"
+            "id": "cover",
+            "kind": "center",
+            "mood": "cold",
+            "img": "assets/img/cover-v17-clean-desk-standard-20260706.jpg",
+            "text": "2011年。\n长沙，红花坡。",
+            "fixed": 3600
       },
       {
-        id: "card-22",
-        kind: "center",
-        mood: "warm",
-        img: "assets/img/tail.jpg",
-        text: "你有没有过这样的时刻？\n\n有一件事，\n一直觉得挺正常。\n\n甚至，挺充实。\n\n直到有一个很小的东西，\n忽然照了一下。\n\n才发现——\n\n可能已经很久，\n没有真正出去了。",
-        fixed: 8600
+            "id": "act1-intro",
+            "kind": "center",
+            "mood": "cold",
+            "text": "那时候，真的很充实。",
+            "fixed": 4200
+      },
+      {
+            "id": "card-01",
+            "kind": "night-tail",
+            "mood": "cold",
+            "img": "assets/img/card-01-v17-clean-desk-standard-20260706.jpg",
+            "imgOpacity": 0.94,
+            "imgFilter": "saturate(.72) contrast(1.08) brightness(.66)",
+            "bed": "fan",
+            "text": "",
+            "fixed": 6800,
+            "sfx": [
+                  "night-market-close-v17"
+            ]
+      },
+      {
+            "id": "card-02",
+            "kind": "day-start",
+            "mood": "cold",
+            "img": "assets/img/card-02-v17-clean-desk-standard-20260706.jpg",
+            "imgOpacity": 0.94,
+            "imgFilter": "saturate(.82) contrast(1.06) brightness(.74)",
+            "bed": "fan",
+            "audio": "card-02.mp3",
+            "text": "又是下午两三点。外面夜宵摊开张。一天，也开始了。",
+            "fixed": 7506,
+            "sfx": [
+                  "night-market-open-v17",
+                  "keyboard-plastic-v17"
+            ]
+      },
+      {
+            "id": "card-03",
+            "mood": "cold",
+            "img": "assets/img/card-03-v17-clean-desk-standard-20260706.jpg",
+            "bed": "fan",
+            "audio": "card-03.mp3",
+            "novel": {
+                  "head": [
+                        "玄幻小说排行榜",
+                        "2011"
+                  ],
+                  "rows": [
+                        "第九百三十七章 结丹",
+                        "退婚 / 斗气 / 逆袭",
+                        "笔名栏一闪而过，不可读"
+                  ],
+                  "next": "下一章"
+            },
+            "text": "主角从谷底爬起来，打怪，变强，封神。又一章。还是昨天那本。",
+            "fixed": 8562,
+            "sfx": [
+                  "keyboard-plastic-v17"
+            ]
+      },
+      {
+            "id": "card-04",
+            "mood": "cold",
+            "img": "assets/img/card-04-v17-clean-desk-standard-20260706.jpg",
+            "bed": "fan",
+            "audio": "card-04.mp3",
+            "text": "爱看那种片子。看到最后，才知道——原来全错了。",
+            "fixed": 7506,
+            "sfx": [
+                  "movie-muffle-v17"
+            ]
+      },
+      {
+            "id": "card-05",
+            "mood": "cold",
+            "img": "assets/img/card-05-v17-screen-integrated-20260706.jpg",
+            "bed": "fan",
+            "audio": "card-05.mp3",
+            "review": {
+                  "site": "Mtime 影评",
+                  "title": "《强殖入侵》",
+                  "body": "一个人对一件事坚信不疑。\n到最后，真相完全反过来。\n原来从一开始就错了。",
+                  "cursor": true
+            },
+            "text": "有一部片子，一直忘不掉。影评写完，发上去。",
+            "fixed": 6210,
+            "sfx": [
+                  "keyboard-plastic-v17"
+            ]
+      },
+      {
+            "id": "card-06",
+            "mood": "cold",
+            "img": "assets/img/card-06-v17-screen-integrated-20260706.jpg",
+            "bed": "fan",
+            "audio": "card-06.mp3",
+            "qq": {
+                  "title": "92级初中同学群",
+                  "messages": [
+                        "恭喜刘同学买了新车",
+                        "恭喜王同学买了新房"
+                  ]
+            },
+            "text": "92级初中同学群，又亮了。看了一眼，点掉。心里咯噔一下。又把它按回去：有什么了不起。活得那么累，那么俗。",
+            "fixed": 13554,
+            "sfx": [
+                  "qq-v17"
+            ]
+      },
+      {
+            "id": "card-07",
+            "mood": "cold",
+            "img": "assets/img/card-07-v17-clean-desk-standard-20260706.jpg",
+            "bed": "fan",
+            "audio": "card-07.mp3",
+            "review": {
+                  "site": "Mtime 影评",
+                  "title": "《强殖入侵》",
+                  "body": "名和利这些东西，追到最后其实也就那么回事，说白了都是虚的。\n我一直觉得，一个人精神上不空，有书看、有电影看，日子就不算亏。\n外面那些成天忙着追这追那的，未必有这份清醒。",
+                  "cursor": false
+            },
+            "text": "这套话，写在影评里，也在心里说过很多遍。",
+            "fixed": 5754
+      },
+      {
+            "id": "card-08",
+            "mood": "cold",
+            "img": "assets/img/card-08-v17-clean-desk-standard-20260706.jpg",
+            "bed": "fan",
+            "text": "",
+            "fixed": 5200
+      },
+      {
+            "id": "card-09",
+            "mood": "cold",
+            "img": "assets/img/card-09-v17-clean-desk-standard-20260706.jpg",
+            "bed": "fan",
+            "text": "",
+            "fixed": 4600
+      },
+      {
+            "id": "card-10",
+            "mood": "cold",
+            "img": "assets/img/card-10-v17-clean-desk-standard-20260706.jpg",
+            "bed": "fan",
+            "audio": "card-10.mp3",
+            "sound": "thin",
+            "text": "够得到。只是，要动一下身子。",
+            "fixed": 4650
+      },
+      {
+            "id": "pause-0",
+            "pause": true,
+            "mood": "cold",
+            "visual": "freeze",
+            "bed": "silence",
+            "sound": "silence"
+      },
+      {
+            "id": "card-11",
+            "mood": "cold",
+            "img": "assets/img/card-11-v17-clean-desk-standard-20260706.jpg",
+            "bed": "silence",
+            "sound": "silence",
+            "audio": "card-11.mp3",
+            "text": "身子，没有动。",
+            "fixed": 3354
+      },
+      {
+            "id": "card-12",
+            "mood": "cold",
+            "img": "assets/img/card-12-v17-lazy-fat-bread-neck-eaten-hole.jpg",
+            "bed": "silence",
+            "sound": "silence",
+            "audio": "card-12.mp3",
+            "text": "一个画面闪出来。一个懒汉，脖子上挂着饼。把饼转一下就能吃。可他没动。后来，饿死了。",
+            "fixed": 11154,
+            "sfx": [
+                  "low-heart-miss-v17"
+            ]
+      },
+      {
+            "id": "card-13",
+            "mood": "cold",
+            "img": "assets/img/card-13-v17-clean-desk-standard-20260706.jpg",
+            "bed": "silence",
+            "sound": "silence",
+            "text": "",
+            "fixed": 4800,
+            "sfx": [
+                  "sink-tone-v17"
+            ]
+      },
+      {
+            "id": "card-14",
+            "mood": "cold",
+            "img": "assets/img/card-14-v17-clean-desk-standard-20260706.jpg",
+            "bed": "silence",
+            "sound": "silence",
+            "audio": "card-14.mp3",
+            "text": "就那么停着。大概一分钟。",
+            "fixed": 4482
+      },
+      {
+            "id": "card-15",
+            "kind": "center",
+            "mood": "cold",
+            "img": "assets/img/card-15-v17-clean-desk-standard-20260706.jpg",
+            "bed": "silence",
+            "sound": "silence",
+            "audio": "card-15.mp3",
+            "text": "再也不能这样过下去了！绝对不行！！！",
+            "fixed": 4482
+      },
+      {
+            "id": "card-15b",
+            "mood": "cold",
+            "img": "assets/img/card-15b-v17-clean-desk-standard-20260706.jpg",
+            "bed": "silence",
+            "sound": "silence",
+            "audio": "card-15b.mp3",
+            "text": "屏幕一暗，屋里就一个人。忽然有点发冷。怎么会成了这样？再这样下去，这辈子，会变成什么样？",
+            "fixed": 11010
+      },
+      {
+            "id": "card-16",
+            "mood": "warm",
+            "img": "assets/img/card-16-v17-alley-out.jpg",
+            "bed": "street",
+            "bgm": "warm-low",
+            "audio": "card-16.mp3",
+            "text": "那就先出去。不是为了马上赚钱。再这样下去，最后也会“饿”死。先离开这把椅子。巷口一抬头，高楼一幢接一幢，车水马龙。不知道多少个亿，就在这座城里流动。原来外面一直在动。钱在动，人也在动。在长沙，有辆车，有套房，能站住脚。好像，也不是天上的事。",
+            "fixed": 30306,
+            "scrollText": true
+      },
+      {
+            "id": "card-16b",
+            "mood": "warm",
+            "img": "assets/img/card-16b-v17-street-options.jpg",
+            "bed": "street",
+            "bgm": "warm-low",
+            "audio": "card-16b.mp3",
+            "text": "出来以后，靠什么活？上班，啥也不会，没人请。下力气，心里那点清高又过不去。继续倒腾软件，还是那点钱，养不活自己。",
+            "fixed": 15930,
+            "scrollText": true
+      },
+      {
+            "id": "card-17a",
+            "mood": "warm",
+            "img": "assets/img/card-17a-v17-village-brother.jpg",
+            "bed": "street",
+            "bgm": "warm-low",
+            "audio": "card-17a.mp3",
+            "text": "可往哪动？村里那个大哥，又冒出来。同一个村长大的，混社会的，没读过几年书，伙着三四个人，把一笔信托对接给房地产，募了六千万，分一个点，六十万。这条路，原来走得通。",
+            "fixed": 20298,
+            "scrollText": true
+      },
+      {
+            "id": "card-17b",
+            "mood": "warm",
+            "img": "assets/img/card-17b-v17-hands-old-computer.jpg",
+            "bed": "silence",
+            "bgm": "warm-low",
+            "audio": "card-17b.mp3",
+            "text": "他读书不多，更别说会电脑了。看来赚钱这事，也没那么复杂。他能，我凭什么不行？",
+            "fixed": 10722
+      },
+      {
+            "id": "card-18",
+            "kind": "center",
+            "mood": "warm",
+            "img": "assets/img/card-18-v17-knife-brambles.jpg",
+            "bed": "silence",
+            "bgm": "warm-low",
+            "sound": "low",
+            "audio": "card-18.mp3",
+            "text": "没等看清整条路。前面全是荆棘，看不清。那时候只认一件事：先动。先试。手里有把刀，就先砍眼前这一茬。砍开一点，往前挪一点。又挡住了，再砍。",
+            "fixed": 20562,
+            "scrollText": true
+      },
+      {
+            "id": "card-18b",
+            "mood": "warm",
+            "img": "assets/img/card-18b-v17-loan-messenger-whitecup-20260706.jpg",
+            "bed": "silence",
+            "bgm": "warm-low",
+            "audio": "card-18b.mp3",
+            "text": "刀往哪砍？先挤进去，当个传话的。一通电话接一通电话，一个中介对一个中介，把这头的话，递到那头。第一单，十几个人挤着谈，名单念到最后，没有名字。有个还算厚道的，私下塞了一万多。第二单，两头连上了，人家自己谈成了，站在外面。一单又一单，都没什么指望——可脑子里，总蹦出曾国藩那四个字：屡败屡战。",
+            "fixed": 32250,
+            "scrollText": true,
+            "sfx": [
+                  "phone-qq-crowd-v17"
+            ]
+      },
+      {
+            "id": "card-18c",
+            "mood": "warm",
+            "img": "assets/img/card-18c-v17-baidu-acceptance.jpg",
+            "bed": "silence",
+            "bgm": "warm-low",
+            "audio": "card-18c.mp3",
+            "text": "这么传了一年，撞见一个更窄的口子——承兑。又是一堆没见过的词。承兑、信托、资金方……一个个敲进百度，夜里啃。啃完，干的还是老本行：把收承兑的，和有承兑的，叫到一张桌上。",
+            "fixed": 21186,
+            "scrollText": true,
+            "sfx": [
+                  "keyboard-phone-v17"
+            ]
+      },
+      {
+            "id": "card-19",
+            "mood": "warm",
+            "img": "assets/img/card-19-v17-notebook-nokia-sms.jpg",
+            "bed": "street",
+            "bgm": "warm-low",
+            "audio": "card-19.mp3",
+            "text": "兜里揣个小本子，前几页抄满要点——生怕哪个词没弄懂，在两边中间把话传岔了，事就办不成。沿街一家家，仰头把招牌上的电话抄进手机，回去一条条群发出去：老板，我做承兑业务的。",
+            "fixed": 18786,
+            "scrollText": true,
+            "sfx": [
+                  "pen-sms-v17"
+            ]
+      },
+      {
+            "id": "card-20",
+            "mood": "warm",
+            "img": "assets/img/card-20-v17-100yuan-deal.jpg",
+            "bed": "street",
+            "bgm": "warm-low",
+            "audio": "card-20.mp3",
+            "text": "跑了不知多少家，第一单来了。三百万的承兑，把收承兑的资金方和有承兑的企业主连上，做成了。资金方赚了万把块，看人老实、头回做业务、穿得也傻不几的，临走甩过来一张一百块：“给你的。”那时候还穷，也还清高。这钱对不对、那点瞧不起该不该受，没算。只记住一件事：还成单了。路，砍开了第一道口子。",
+            "fixed": 35490,
+            "scrollText": true,
+            "sfx": [
+                  "money-snap-v17"
+            ]
+      },
+      {
+            "id": "card-21",
+            "mood": "cold",
+            "kind": "photo",
+            "img": "assets/img/card21-photo.jpg",
+            "bed": "silence",
+            "audioFull": "assets/audio/card21.m4a",
+            "fixed": 109500,
+            "text": "那个下午，到今天，十五年了。\n现在想起，背脊还是会发凉。\n那时候一点都不觉得有问题。\n看不起那些追名逐利的人，觉得他们俗。\n看看小说，看看电影，写写影评，就觉得精神上比他们丰富多了。\n不是阿Q那种自我安慰。而是那种“世人皆醉我独醒”的满足。\n是真的感觉挺充实的。\n可是屏幕一关，现实里，其实就剩一个人。\n现在才明白，那是潜意识在逃避。\n给自己的懒，给自己的颓废，编了一个理由。\n而且编得合情合理，连自己都信了。\n水已经烫了，不知道。人快烂了，也不知道。泡着温水，挺舒服的。\n那天，水杯就在手边。身子却像钉在那儿。\n那一下，不是想通了。是被自己吓醒了。\n如果没有那只水杯，也许这一辈子，都不会发现：人生其实还有另一种走法。"
+      },
+      {
+            "id": "card-22",
+            "kind": "center",
+            "mood": "cold",
+            "img": "assets/img/tail.jpg",
+            "imgOpacity": 0.9,
+            "imgFilter": "saturate(.92) contrast(1.02) brightness(.78)",
+            "bed": "silence",
+            "sound": "silence",
+            "text": "你有没有过这样的时刻？\n\n有一件事，\n一直觉得挺正常。\n\n甚至，挺充实。\n\n直到有一个很小的东西，\n忽然照了一下。\n\n才发现——\n\n可能已经很久，\n没有真正出去了。",
+            "fixed": 17000,
+            "scrollText": true
       }
-    ];
+];
 
     const stage      = document.getElementById("stage");
     const content    = document.getElementById("content");
     const cover      = document.getElementById("cover");
     const startBtn   = document.getElementById("startBtn");
-    const sampleBtn  = document.getElementById("sampleBtn");
     const progressBar= document.getElementById("progressBar");
     const phone      = document.getElementById("phone");
     const voiceToggle= document.getElementById("voiceToggle");
@@ -791,6 +1451,7 @@
     let running     = false;
     let paused      = false;
     let pressTimer  = null;
+    let finalStopTimer = null;
     let touchMoved  = false;
     let audioContext= null;
     let soundNodes  = [];
@@ -800,15 +1461,64 @@
     let bgmAudio       = null;
     let currentBedType = null;   // tracks running bed type to avoid restarts
     let bgmRunning     = false;
+    let currentBgmType = null;
 
     // ─── Helpers ────────────────────────────────────────────────
     function escapeHtml(v) {
       return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     }
 
+    const loadedImageUrls = new Set();
+    const imagePreloadJobs = new Map();
+
+    function imageCssValue(src) {
+      return `url("${src}")`;
+    }
+
+    function preloadImage(src) {
+      if (!src) return Promise.resolve("");
+      if (loadedImageUrls.has(src)) return Promise.resolve(src);
+      if (imagePreloadJobs.has(src)) return imagePreloadJobs.get(src);
+
+      const img = new Image();
+      img.decoding = "async";
+      const job = new Promise(resolve => {
+        img.onload = () => {
+          loadedImageUrls.add(src);
+          resolve(src);
+        };
+        img.onerror = () => {
+          console.warn("Image failed to load:", src);
+          resolve("");
+        };
+      });
+      imagePreloadJobs.set(src, job);
+      img.src = src;
+      return job;
+    }
+
     function setImage(card) {
       stage.classList.toggle("has-visual", !!(card && card.visual));
-      stage.style.setProperty("--image", card && card.img ? `url("${card.img}")` : "none");
+      const src = card && card.img ? card.img : "";
+      if (src) {
+        stage.dataset.pendingImage = src;
+        if (loadedImageUrls.has(src)) {
+          stage.style.setProperty("--image", imageCssValue(src));
+        } else {
+          preloadImage(src).then(loadedSrc => {
+            if (loadedSrc && stage.dataset.pendingImage === loadedSrc) {
+              stage.style.setProperty("--image", imageCssValue(loadedSrc));
+            }
+          });
+          if (!stage.style.getPropertyValue("--image")) {
+            stage.style.setProperty("--image", imageCssValue(src));
+          }
+        }
+      } else if (!stage.style.getPropertyValue("--image")) {
+        stage.style.setProperty("--image", "none");
+      }
+      stage.style.setProperty("--image-opacity", card && card.imgOpacity !== undefined ? card.imgOpacity : ".88");
+      stage.style.setProperty("--image-filter", card && card.imgFilter ? card.imgFilter : "saturate(.82) contrast(1.05) brightness(.82)");
       stage.classList.toggle("cold", card && card.mood === "cold");
       stage.classList.toggle("warm", card && card.mood === "warm");
     }
@@ -854,7 +1564,7 @@
 
       const a = new Audio(src);
       a.loop   = true;
-      a.volume = 0.14;
+      a.volume = BED_VOLUMES[type] ?? 0.18;
       bedAudio = a;
       a.play().catch(() => {
         // fallback: oscillator hum
@@ -868,18 +1578,23 @@
     }
 
     // ─── BGM ────────────────────────────────────────────────────
-    function startBgm() {
-      if (bgmRunning) return;
-      bgmRunning = true;
-      const a = new Audio(BGM_FILE);
-      a.loop   = true;
-      a.volume = 0.09;
+    function startBgm(type = "warmLow") {
+      if (bgmAudio && bgmRunning && currentBgmType === type) return;
+      stopBgm();
+      const src = BGM_FILES[type];
+      if (!src) return;
+      const a = new Audio(src);
+      a.loop = true;
+      a.volume = BGM_VOLUMES[type] ?? 0.035;
       bgmAudio = a;
-      a.play().catch(() => {});
+      bgmRunning = true;
+      currentBgmType = type;
+      a.play().catch(() => { bgmRunning = false; });
     }
 
     function stopBgm() {
       bgmRunning = false;
+      currentBgmType = null;
       if (bgmAudio) { bgmAudio.pause(); bgmAudio = null; }
     }
 
@@ -906,6 +1621,22 @@
       stopAudio();
       stopBed();
       stopBgm();
+    }
+
+    function clearFinalStopTimer() {
+      if (finalStopTimer) {
+        clearTimeout(finalStopTimer);
+        finalStopTimer = null;
+      }
+    }
+
+    function scheduleFinalStop(card) {
+      clearFinalStopTimer();
+      if (!running || paused || index !== cards.length - 1) return;
+      finalStopTimer = window.setTimeout(() => {
+        finalStopTimer = null;
+        stopAllAudio();
+      }, durationFor(card) + 5000);
     }
 
     function durationFor(card) {
@@ -954,6 +1685,38 @@
         <div class="hand"></div><div class="distance-mark"></div></div>`;
     }
 
+    const PAUSE_IMAGES = {
+      reach: "assets/img/pause-0-reach-v17-eye-pov-20260706.jpg",
+      still: "assets/img/pause-0-still-v17-eye-pov-20260706.jpg",
+      freeze: "assets/img/pause-0-still-v17-eye-pov-20260706.jpg",
+    };
+
+    function warmAllImages() {
+      const refs = new Set();
+      cards.forEach(card => {
+        if (card.img) refs.add(card.img);
+        if (card.frog) refs.add(card.frog);
+        (card.memoryImgs || []).forEach(src => refs.add(src));
+      });
+      Object.values(PAUSE_IMAGES).forEach(src => refs.add(src));
+
+      refs.forEach(src => {
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.href = src;
+        document.head.appendChild(link);
+        preloadImage(src);
+      });
+    }
+
+    warmAllImages();
+
+    function pauseImageMarkup(name) {
+      const src = PAUSE_IMAGES[name] || PAUSE_IMAGES.still;
+      return `<img src="${escapeHtml(src)}" alt="">`;
+    }
+
     function reviewMarkup(card) {
       if (!card.review) return "";
       return `<div class="review-excerpt">
@@ -981,54 +1744,150 @@
       </div>`;
     }
 
+    const SCREEN_PAGES = {
+      "card-03": { type: "novel",  left: "15.0%", top: "35.6%", width: "61.0%", height: "20.8%", rotate: "-.15deg" },
+      "card-05": { type: "review", left: "9.2%",  top: "27.4%", width: "81.6%", height: "31.4%", rotate: ".35deg" },
+      "card-07": { type: "review", left: "12.4%", top: "24.2%", width: "75.8%", height: "27.8%", rotate: ".1deg" },
+    };
+    const TEXTLESS_VISUAL_CARDS = new Set(["card-03", "card-05", "card-06", "card-07"]);
+
+    function hideVisualText(card) {
+      return card && TEXTLESS_VISUAL_CARDS.has(card.id);
+    }
+
+    function screenPage(card) {
+      return card ? SCREEN_PAGES[card.id] : null;
+    }
+
+    function screenPageStyle(page) {
+      return [
+        `--screen-left:${page.left}`,
+        `--screen-top:${page.top}`,
+        `--screen-width:${page.width}`,
+        `--screen-height:${page.height}`,
+        `--screen-rotate:${page.rotate || "0deg"}`,
+      ].join(";");
+    }
+
+    function pageMarkup(card) {
+      if (hideVisualText(card)) return "";
+      const page = screenPage(card);
+      if (page && (card.review || card.novel)) {
+        return `<div class="screen-page ${page.type}" style="${screenPageStyle(page)}">
+          ${reviewMarkup(card)}
+          ${novelMarkup(card)}
+        </div>`;
+      }
+      return `${reviewMarkup(card)}${qqMarkup(card)}${novelMarkup(card)}`;
+    }
+
+    function captionMarkup(card) {
+      return card.caption && !screenPage(card) && !hideVisualText(card)
+        ? `<div class="caption">${escapeHtml(card.caption)}</div>`
+        : "";
+    }
+
+    function textMarkup(card, cls) {
+      if (!card.text) return "";
+      if (card.audio && card.kind !== "center") {
+        return `<div class="${cls} narration-subtitle">${escapeHtml(card.text)}</div>`;
+      }
+      if (hideVisualText(card)) return "";
+      if ((card.review || card.novel) && screenPage(card)) return "";
+      return `<div class="${cls}">${escapeHtml(card.text)}</div>`;
+    }
+
     function renderVisual(card) {
       content.innerHTML = `
         ${visualMarkup(card.visual)}
-        ${card.caption ? `<div class="caption">${escapeHtml(card.caption)}</div>` : ""}
-        ${reviewMarkup(card)}
-        ${qqMarkup(card)}
-        ${novelMarkup(card)}
-        <div class="text ${card.kind==="center"?"center":"small"}">${escapeHtml(card.text)}</div>`;
+        ${captionMarkup(card)}
+        ${pageMarkup(card)}
+        ${textMarkup(card, `text ${card.kind==="center"?"center":"small"}`)}`;
+    }
+
+    function renderNightTail() {
+      content.innerHTML = `<div class="night-tail" aria-hidden="true"></div>`;
+    }
+
+    function renderDayStart(card) {
+      content.innerHTML = `
+        <div class="day-start" aria-hidden="true"></div>
+        <div class="text small narration-subtitle">${escapeHtml(card.text)}</div>`;
+    }
+
+    function memoryMarkup(card) {
+      if (!card.memoryImgs || !card.memoryImgs.length) return "";
+      return `<div class="memory-strip" aria-hidden="true">${
+        card.memoryImgs.map(src => `<img src="${escapeHtml(src)}" alt="">`).join("")
+      }</div>`;
     }
 
     function renderPhoto(card) {
       content.innerHTML = `
-        <div class="photo-stack">
-          <img class="photo-main" src="${escapeHtml(card.img)}" alt="">
-          <div class="photo-row">
-            <img src="${escapeHtml(card.frog)}" alt="">
-            <div class="truth-note">
-              <div class="kicker">真人真声</div>
-              <div class="caption">无 AI 克隆。保留停顿、不顺和口语节奏。</div>
-            </div>
-          </div>
+        <div class="photo-visual" aria-hidden="true">
+          ${card.frog ? `<div class="frog-drift" aria-hidden="true"><img src="${escapeHtml(card.frog)}" alt=""></div>` : ""}
+          ${memoryMarkup(card)}
         </div>
-        <div class="text small">${escapeHtml(card.text)}</div>`;
+        <div class="rolling-caption" aria-label="正文字幕">
+          <div class="rolling-caption-text">${escapeHtml(card.text)}</div>
+        </div>`;
+      setupRollingCaption(card);
+    }
+
+    function renderScrollingText(card) {
+      content.innerHTML = `
+        <div class="rolling-caption" aria-label="正文字幕">
+          <div class="rolling-caption-text">${escapeHtml(card.text)}</div>
+        </div>`;
+      setupRollingCaption(card);
+    }
+
+    function setupRollingCaption(card) {
+      const windowEl = content.querySelector(".rolling-caption");
+      const textEl = content.querySelector(".rolling-caption-text");
+      if (!windowEl || !textEl) return;
+      window.requestAnimationFrame(() => {
+        const distance = Math.max(0, textEl.scrollHeight - windowEl.clientHeight);
+        textEl.style.setProperty("--scroll-distance", `${distance}px`);
+        textEl.style.setProperty("--scroll-duration", `${card.fixed || durationFor(card)}ms`);
+        textEl.classList.toggle("is-scrolling", distance > 0);
+      });
     }
 
     function render(card) {
       clearTimeout(timer);
+      clearFinalStopTimer();
       stopAudio();   // stops narration + oscillators; bed & bgm persist
       updateProgress();
       setImage(card);
+      const contentClasses = ["content"];
+      if (screenPage(card) && !hideVisualText(card)) contentClasses.push("screen-card");
+      if (card.kind === "photo" || card.scrollText) contentClasses.push("photo-card");
+      content.className = contentClasses.join(" ");
+      content.dataset.cardId = card.id || "";
 
       // ── 声音路由 ──────────────────────────────────────────────
-      const soundType = card.sound;
-      if (soundType === "fan" || soundType === "street") {
-        startBed(soundType);
-      } else if (soundType === "silence") {
+      const bedType = card.bed;
+      if (bedType === "fan" || bedType === "street") {
+        startBed(bedType);
+      } else if (bedType === "silence") {
         stopBed();
-        stopSoundscape();
-      } else if (soundType === undefined) {
+      } else if (bedType === undefined) {
         // no change to bed
       } else {
         stopBed();
+      }
+
+      const soundType = card.sound;
+      if (soundType === "silence" || soundType === undefined) {
+        stopSoundscape();
+      } else {
         startSoundscape(soundType);    // oscillator for drop / thin
       }
 
-      if (card.mood === "warm") {
-        startBgm();
-      } else if (card.mood === "cold") {
+      if (card.bgm === "warm-low") {
+        startBgm("warmLow");
+      } else {
         stopBgm();
       }
 
@@ -1036,19 +1895,19 @@
       playSfx(card.sfx);
 
       if (card.pause) {
-        const voices = card.voices || [];
         content.innerHTML = `
           ${visualMarkup(card.visual)}
-          <div class="kicker">${escapeHtml(card.title)}</div>
-          <div class="text small">${escapeHtml(card.text)}</div>
           <div class="choice-grid" aria-label="两个身体声音触发器">
-            ${voices.map((voice,i)=>`
-              <button class="visual-choice" data-trigger="${i}">
-                <div class="choice-scene">${visualMarkup(voice.view)}</div>
-                <div class="choice-copy"><strong>${escapeHtml(voice.label)}</strong></div>
-              </button>`).join("")}
+            <button class="visual-choice" id="btn-reach">
+              <div class="choice-scene">${pauseImageMarkup("reach")}</div>
+              <div class="choice-copy"><strong>把身子送出去</strong></div>
+            </button>
+            <button class="visual-choice" id="btn-still">
+              <div class="choice-scene">${pauseImageMarkup("still")}</div>
+              <div class="choice-copy"><strong>真的不想动</strong></div>
+            </button>
           </div>`;
-        content.querySelectorAll(".visual-choice").forEach((btn, i) => {
+        content.querySelectorAll(".visual-choice").forEach(btn => {
           btn.addEventListener("click", () => handlePauseTrigger(card));
         });
         return;
@@ -1056,23 +1915,29 @@
 
       if (card.kind === "photo") {
         renderPhoto(card);
+      } else if (card.scrollText) {
+        renderScrollingText(card);
+      } else if (card.kind === "night-tail") {
+        renderNightTail(card);
+      } else if (card.kind === "day-start") {
+        renderDayStart(card);
       } else if (card.visual) {
         renderVisual(card);
       } else {
         const cls = `text ${card.kind==="center"?"center":"small"}`;
         content.innerHTML = `
-          ${card.caption ? `<div class="caption">${escapeHtml(card.caption)}</div>` : ""}
-          ${reviewMarkup(card)}
-          ${qqMarkup(card)}
-          ${novelMarkup(card)}
-          <div class="${cls}">${escapeHtml(card.text)}</div>`;
+          ${captionMarkup(card)}
+          ${pageMarkup(card)}
+          ${textMarkup(card, cls)}`;
       }
 
       const hasAudio = playAudio(card, ok => {
         if (ok) { timer = window.setTimeout(next, 900); }
         else     { schedule(card); }
+        scheduleFinalStop(card);
       });
       if (!hasAudio) schedule(card);
+      scheduleFinalStop(card);
     }
 
     function next() {
@@ -1092,20 +1957,19 @@
       const renderFrame = () => {
         const view = sequence[frame];
         content.innerHTML = `
-          <div class="kicker">${escapeHtml(card.title)}</div>
-          <div class="text small">${escapeHtml(frame < sequence.length - 1 ? card.text : "")}</div>
-          <div class="pause-animation">${visualMarkup(view)}</div>`;
+          <div class="pause-animation">${pauseImageMarkup(view)}</div>`;
         if (frame < sequence.length - 1) {
           frame += 1;
-          timer = window.setTimeout(renderFrame, 400);
+          timer = window.setTimeout(renderFrame, 600);
         } else {
-          timer = window.setTimeout(() => jumpTo("card-11"), 600);
+          timer = window.setTimeout(() => jumpTo("card-11"), 500);
         }
       };
       renderFrame();
     }
 
     function jumpTo(id) {
+      clearFinalStopTimer();
       const nextIndex = cards.findIndex(c => c.id === id);
       index   = nextIndex >= 0 ? nextIndex : 0;
       running = true;
@@ -1115,6 +1979,7 @@
     }
 
     function start() {
+      clearFinalStopTimer();
       running = true;
       paused  = false;
       cover.style.display = "none";
@@ -1126,6 +1991,7 @@
       if (!running || paused) return;
       paused = true;
       clearTimeout(timer);
+      clearFinalStopTimer();
       if (activeAudio) activeAudio.pause();
       if (bedAudio)    bedAudio.pause();
       if (bgmAudio)    bgmAudio.pause();
@@ -1140,10 +2006,10 @@
       if (bedAudio)    bedAudio.play().catch(()=>{});
       if (bgmAudio)    bgmAudio.play().catch(()=>{});
       if (!activeAudio) schedule(cards[index]);
+      if (!activeAudio) scheduleFinalStop(cards[index]);
     }
 
     startBtn.addEventListener("click", start);
-    sampleBtn.addEventListener("click", () => jumpTo("card-08"));
 
     voiceToggle.addEventListener("click", e => {
       e.stopPropagation();
