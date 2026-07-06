@@ -432,6 +432,41 @@
       background: rgba(255,255,255,.42);
     }
 
+    .screen-page.locked-review {
+      background: rgba(241,244,239,.96);
+      opacity: .95;
+      filter: saturate(.96) contrast(1.02);
+      box-shadow:
+        0 16px 42px rgba(0,0,0,.38),
+        inset 0 0 0 1px rgba(35,73,117,.2);
+    }
+
+    .fact-pin {
+      position: absolute;
+      left: var(--fact-left, 7%);
+      top: var(--fact-top, 57%);
+      width: var(--fact-width, 42%);
+      z-index: 5;
+      padding: 12px 14px;
+      border: 1px solid rgba(45,36,24,.2);
+      border-radius: 4px;
+      background:
+        linear-gradient(180deg, rgba(243,238,220,.97), rgba(218,208,181,.96));
+      box-shadow: 0 18px 40px rgba(0,0,0,.38);
+      color: #2a241b;
+      font-family: "KaiTi", "SimSun", serif;
+      font-size: 20px;
+      line-height: 1.7;
+      letter-spacing: 0;
+      transform: rotate(var(--fact-rotate, -2deg));
+      white-space: pre-line;
+    }
+
+    .content > .fact-pin {
+      position: absolute;
+      z-index: 5;
+    }
+
     .choice {
       width: 100%;
       min-height: 56px;
@@ -1104,7 +1139,6 @@
             "imgOpacity": 0.94,
             "imgFilter": "saturate(.82) contrast(1.06) brightness(.74)",
             "bed": "fan",
-            "audio": "card-02.mp3",
             "text": "又是下午两三点。外面夜宵摊开张。一天，也开始了。",
             "fixed": 7506,
             "sfx": [
@@ -1141,7 +1175,6 @@
             "mood": "cold",
             "img": "assets/img/card-04-v17-clean-desk-standard-20260706.jpg",
             "bed": "fan",
-            "audio": "card-04.mp3",
             "text": "爱看那种片子。看到最后，才知道——原来全错了。",
             "fixed": 7506,
             "sfx": [
@@ -1153,11 +1186,11 @@
             "mood": "cold",
             "img": "assets/img/card-05-v17-native-clear-20260706.jpg",
             "bed": "fan",
-            "audio": "card-05.mp3",
+            "lockScreen": true,
             "review": {
                   "site": "Mtime 影评",
                   "title": "《强殖入侵》",
-                  "body": "一个人对一件事坚信不疑。\n到最后，真相完全反过来。\n原来从一开始就错了。",
+                  "body": "一个人对一件事坚信不疑，最后真相完全相反",
                   "cursor": true
             },
             "text": "有一部片子，一直忘不掉。影评写完，发上去。",
@@ -1171,7 +1204,6 @@
             "mood": "cold",
             "img": "assets/img/card-06-v17-native-clear-20260706.jpg",
             "bed": "fan",
-            "audio": "card-06.mp3",
             "qq": {
                   "title": "92级初中同学群",
                   "messages": [
@@ -1190,7 +1222,7 @@
             "mood": "cold",
             "img": "assets/img/card-07-v17-native-clear-20260706.jpg",
             "bed": "fan",
-            "audio": "card-07.mp3",
+            "lockScreen": true,
             "review": {
                   "site": "Mtime 影评",
                   "title": "《强殖入侵》",
@@ -1221,7 +1253,6 @@
             "mood": "cold",
             "img": "assets/img/card-10-v17-clean-desk-standard-20260706.jpg",
             "bed": "fan",
-            "audio": "card-10.mp3",
             "sound": "thin",
             "text": "够得到。只是，要动一下身子。",
             "fixed": 4650
@@ -1250,8 +1281,7 @@
             "img": "assets/img/card-12-v17-lazy-fat-bread-neck-eaten-hole.jpg",
             "bed": "silence",
             "sound": "silence",
-            "audio": "card-12.mp3",
-            "text": "一个画面闪出来。一个懒汉，脖子上挂着饼。把饼转一下就能吃。可他没动。后来，饿死了。",
+            "text": "一个懒汉，脖子上挂着饼。把饼转一下就能吃。他没动。……后来，饿死了。",
             "fixed": 11154,
             "sfx": [
                   "low-heart-miss-v17"
@@ -1275,7 +1305,6 @@
             "img": "assets/img/card-14-v17-clean-desk-standard-20260706.jpg",
             "bed": "silence",
             "sound": "silence",
-            "audio": "card-14.mp3",
             "text": "就那么停着。大概一分钟。",
             "fixed": 4482
       },
@@ -1286,8 +1315,7 @@
             "img": "assets/img/card-15-v17-clean-desk-standard-20260706.jpg",
             "bed": "silence",
             "sound": "silence",
-            "audio": "card-15.mp3",
-            "text": "再也不能这样过下去了！绝对不行！！！",
+            "text": "再也不能这样过下去了。绝对不行。",
             "fixed": 4482
       },
       {
@@ -1296,7 +1324,6 @@
             "img": "assets/img/card-15b-v17-clean-desk-standard-20260706.jpg",
             "bed": "silence",
             "sound": "silence",
-            "audio": "card-15b.mp3",
             "text": "屏幕一暗，屋里就一个人。忽然有点发冷。怎么会成了这样？再这样下去，这辈子，会变成什么样？",
             "fixed": 11010
       },
@@ -1306,8 +1333,7 @@
             "img": "assets/img/card-16-v17-alley-out.jpg",
             "bed": "street",
             "bgm": "warm-low",
-            "audio": "card-16.mp3",
-            "text": "那就先出去。不是为了马上赚钱。再这样下去，最后也会“饿”死。先离开这把椅子。巷口一抬头，高楼一幢接一幢，车水马龙。不知道多少个亿，就在这座城里流动。原来外面一直在动。钱在动，人也在动。在长沙，有辆车，有套房，能站住脚。好像，也不是天上的事。",
+            "text": "那就先出去。不是为了马上赚钱。再这样下去，最后也会“饿”死。先离开这把椅子。巷口一抬头，高楼一幢接一幢，车水马龙。不知道多少个亿，就在这座城里流动。原来外面一直在动。钱在动，人也在动。有人在长沙有了车，有了房，站住了脚。原来这些，不在天上，就在这条街上。",
             "fixed": 30306,
             "scrollText": true
       },
@@ -1317,7 +1343,6 @@
             "img": "assets/img/card-16b-v17-street-options.jpg",
             "bed": "street",
             "bgm": "warm-low",
-            "audio": "card-16b.mp3",
             "text": "出来以后，靠什么活？上班，啥也不会，没人请。下力气，心里那点清高又过不去。继续倒腾软件，还是那点钱，养不活自己。",
             "fixed": 15930,
             "scrollText": true
@@ -1328,7 +1353,13 @@
             "img": "assets/img/card-17a-v17-village-brother.jpg",
             "bed": "street",
             "bgm": "warm-low",
-            "audio": "card-17a.mp3",
+            "factPin": {
+                  "text": "信托\n房地产\n6000万\n一个点\n60万",
+                  "left": "7%",
+                  "top": "58%",
+                  "width": "38%",
+                  "rotate": "-3deg"
+            },
             "text": "可往哪动？村里那个大哥，又冒出来。同一个村长大的，混社会的，没读过几年书，伙着三四个人，把一笔信托对接给房地产，募了六千万，分一个点，六十万。这条路，原来走得通。",
             "fixed": 20298,
             "scrollText": true
@@ -1339,8 +1370,7 @@
             "img": "assets/img/card-17b-v17-hands-old-computer.jpg",
             "bed": "silence",
             "bgm": "warm-low",
-            "audio": "card-17b.mp3",
-            "text": "他读书不多，更别说会电脑了。看来赚钱这事，也没那么复杂。他能，我凭什么不行？",
+            "text": "他读书不多，更别说会电脑了。赚钱这事，也没那么复杂。他能，我凭什么不行？",
             "fixed": 10722
       },
       {
@@ -1351,7 +1381,6 @@
             "bed": "silence",
             "bgm": "warm-low",
             "sound": "low",
-            "audio": "card-18.mp3",
             "text": "没等看清整条路。前面全是荆棘，看不清。那时候只认一件事：先动。先试。手里有把刀，就先砍眼前这一茬。砍开一点，往前挪一点。又挡住了，再砍。",
             "fixed": 20562,
             "scrollText": true
@@ -1362,7 +1391,6 @@
             "img": "assets/img/card-18b-v17-loan-messenger-whitecup-20260706.jpg",
             "bed": "silence",
             "bgm": "warm-low",
-            "audio": "card-18b.mp3",
             "text": "刀往哪砍？先挤进去，当个传话的。一通电话接一通电话，一个中介对一个中介，把这头的话，递到那头。第一单，十几个人挤着谈，名单念到最后，没有名字。有个还算厚道的，私下塞了一万多。第二单，两头连上了，人家自己谈成了，站在外面。一单又一单，都没什么指望——可脑子里，总蹦出曾国藩那四个字：屡败屡战。",
             "fixed": 32250,
             "scrollText": true,
@@ -1376,7 +1404,6 @@
             "img": "assets/img/card-18c-v17-baidu-acceptance.jpg",
             "bed": "silence",
             "bgm": "warm-low",
-            "audio": "card-18c.mp3",
             "text": "这么传了一年，撞见一个更窄的口子——承兑。又是一堆没见过的词。承兑、信托、资金方……一个个敲进百度，夜里啃。啃完，干的还是老本行：把收承兑的，和有承兑的，叫到一张桌上。",
             "fixed": 21186,
             "scrollText": true,
@@ -1390,7 +1417,6 @@
             "img": "assets/img/card-19-v17-notebook-nokia-sms.jpg",
             "bed": "street",
             "bgm": "warm-low",
-            "audio": "card-19.mp3",
             "text": "兜里揣个小本子，前几页抄满要点——生怕哪个词没弄懂，在两边中间把话传岔了，事就办不成。沿街一家家，仰头把招牌上的电话抄进手机，回去一条条群发出去：老板，我做承兑业务的。",
             "fixed": 18786,
             "scrollText": true,
@@ -1404,7 +1430,6 @@
             "img": "assets/img/card-20-v17-100yuan-deal.jpg",
             "bed": "street",
             "bgm": "warm-low",
-            "audio": "card-20.mp3",
             "text": "跑了不知多少家，第一单来了。三百万的承兑，把收承兑的资金方和有承兑的企业主连上，做成了。资金方赚了万把块，看人老实、头回做业务、穿得也傻不几的，临走甩过来一张一百块：“给你的。”那时候还穷，也还清高。这钱对不对、那点瞧不起该不该受，没算。只记住一件事：还成单了。路，砍开了第一道口子。",
             "fixed": 35490,
             "scrollText": true,
@@ -1749,7 +1774,7 @@
       "card-05": { type: "review", left: "9.2%",  top: "27.4%", width: "81.6%", height: "31.4%", rotate: ".35deg" },
       "card-07": { type: "review", left: "12.4%", top: "24.2%", width: "75.8%", height: "27.8%", rotate: ".1deg" },
     };
-    const TEXTLESS_VISUAL_CARDS = new Set(["card-03", "card-05", "card-06", "card-07"]);
+    const TEXTLESS_VISUAL_CARDS = new Set(["card-03", "card-06"]);
 
     function hideVisualText(card) {
       return card && TEXTLESS_VISUAL_CARDS.has(card.id);
@@ -1773,12 +1798,25 @@
       if (hideVisualText(card)) return "";
       const page = screenPage(card);
       if (page && (card.review || card.novel)) {
-        return `<div class="screen-page ${page.type}" style="${screenPageStyle(page)}">
+        const lockClass = card.lockScreen ? " locked-review" : "";
+        return `<div class="screen-page ${page.type}${lockClass}" style="${screenPageStyle(page)}">
           ${reviewMarkup(card)}
           ${novelMarkup(card)}
         </div>`;
       }
       return `${reviewMarkup(card)}${qqMarkup(card)}${novelMarkup(card)}`;
+    }
+
+    function factPinMarkup(card) {
+      if (!card.factPin) return "";
+      const pin = card.factPin;
+      const style = [
+        `--fact-left:${pin.left || "7%"}`,
+        `--fact-top:${pin.top || "57%"}`,
+        `--fact-width:${pin.width || "42%"}`,
+        `--fact-rotate:${pin.rotate || "-2deg"}`,
+      ].join(";");
+      return `<div class="fact-pin" style="${style}">${escapeHtml(pin.text)}</div>`;
     }
 
     function captionMarkup(card) {
@@ -1836,6 +1874,7 @@
 
     function renderScrollingText(card) {
       content.innerHTML = `
+        ${factPinMarkup(card)}
         <div class="rolling-caption" aria-label="正文字幕">
           <div class="rolling-caption-text">${escapeHtml(card.text)}</div>
         </div>`;
