@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>人生馆001号｜2011，那只水杯</title>
+  <title>人生馆001号｜2011 · 那只水杯</title>
   <style>
     :root {
       color-scheme: dark;
@@ -385,6 +385,10 @@
       background: rgba(232,239,247,.64);
     }
 
+    .screen-page.history {
+      background: rgba(222,232,238,.72);
+    }
+
     .screen-page .review-excerpt,
     .screen-page .novel-panel {
       width: auto;
@@ -430,6 +434,71 @@
       padding: 4px 7px;
       font-size: 10px;
       background: rgba(255,255,255,.42);
+    }
+
+    .history-panel {
+      width: min(100%, 330px);
+      padding: 11px 12px 12px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 6px;
+      background: rgba(238,243,246,.88);
+      color: #1f3445;
+      box-shadow: 0 12px 28px rgba(0,0,0,.25);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    }
+
+    .history-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(25,50,68,.22);
+      color: rgba(30,54,72,.72);
+      font-size: 10px;
+      line-height: 1.2;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 4px;
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 1.38;
+      color: rgba(24,38,49,.88);
+    }
+
+    .history-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 3px;
+      border-bottom: 1px solid rgba(34,58,76,.12);
+      white-space: nowrap;
+    }
+
+    .history-date {
+      color: rgba(42,67,84,.52);
+      font-size: .9em;
+      flex: 0 0 auto;
+    }
+
+    .screen-page .history-panel {
+      width: auto;
+      height: 100%;
+      max-width: none;
+      padding: 8px 10px;
+      overflow: hidden;
+    }
+
+    .screen-page .history-head {
+      font-size: 8px;
+    }
+
+    .screen-page .history-list {
+      gap: 2px;
+      margin-top: 5px;
+      font-size: 9px;
+      line-height: 1.22;
     }
 
     .screen-page.locked-review {
@@ -730,7 +799,8 @@
       to { transform: translateY(calc(-1 * var(--scroll-distance, 0px))); }
     }
 
-    .night-tail {
+    .night-tail,
+    .content > .day-start {
       position: absolute;
       inset: 0;
       z-index: 1;
@@ -738,85 +808,170 @@
       pointer-events: none;
     }
 
-    .night-tail::before {
-      content: "";
-      position: absolute;
-      left: 28%;
-      top: 43%;
-      width: 45%;
-      height: 15%;
-      border-radius: 4px;
-      border: 1px solid rgba(91,139,178,.22);
-      background:
-        linear-gradient(180deg, rgba(78,133,184,.52), rgba(16,27,38,.76)),
-        repeating-linear-gradient(0deg, transparent 0 12px, rgba(255,255,255,.05) 12px 13px);
-      box-shadow: 0 0 46px rgba(53,111,169,.3);
-      animation: screenSleep 6.8s ease-in forwards;
-    }
-
-    .night-tail::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: #000;
-      opacity: 0;
-      animation: nightBlack 6.8s ease-in forwards;
-    }
-
-    @keyframes screenSleep {
-      0%, 42% { opacity: .72; filter: brightness(1); }
-      62% { opacity: .36; filter: brightness(.58); }
-      78% { opacity: .08; filter: brightness(.22); }
-      100% { opacity: 0; filter: brightness(0); }
-    }
-
-    @keyframes nightBlack {
-      0%, 76% { opacity: 0; }
-      90% { opacity: .38; }
-      100% { opacity: .84; }
-    }
-
     .content > .day-start {
+      z-index: 0;
+    }
+
+    .screen-cycle {
       position: absolute;
       inset: 0;
-      z-index: 0;
       overflow: hidden;
+    }
+
+    .screen-cycle__desktop,
+    .screen-cycle__saver,
+    .screen-cycle__black {
+      position: absolute;
       pointer-events: none;
     }
 
-    .day-start::before {
+    .screen-cycle__desktop {
+      left: 18%;
+      top: 34%;
+      width: 64%;
+      height: 24%;
+      border-radius: 4px;
+      border: 1px solid rgba(111,156,192,.28);
+      background:
+        linear-gradient(180deg, rgba(33,64,94,.92), rgba(10,18,28,.96)),
+        repeating-linear-gradient(0deg, transparent 0 11px, rgba(255,255,255,.045) 11px 12px);
+      box-shadow: 0 0 48px rgba(67,128,184,.28);
+      overflow: hidden;
+    }
+
+    .screen-cycle__desktop::after {
       content: "";
       position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 12%;
+      background: rgba(13,24,35,.82);
+    }
+
+    .screen-cycle__window {
+      position: absolute;
+      top: 16%;
+      bottom: 18%;
+      border: 1px solid rgba(225,239,255,.14);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .screen-cycle__window--movie {
+      left: 7%;
+      width: 39%;
+      background:
+        linear-gradient(135deg, rgba(100,150,195,.58), rgba(8,17,27,.82)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 1px, transparent 1px 11px);
+    }
+
+    .screen-cycle__window--novel {
+      right: 7%;
+      width: 39%;
+      background:
+        linear-gradient(180deg, rgba(226,231,215,.66), rgba(55,77,82,.52)),
+        repeating-linear-gradient(0deg, transparent 0 7px, rgba(20,31,38,.2) 7px 8px);
+    }
+
+    .screen-cycle__saver {
+      left: 19%;
+      top: 33%;
+      width: 62%;
+      height: 25%;
+      border-radius: 4px;
+      border: 1px solid rgba(91,137,178,.16);
+      background:
+        linear-gradient(126deg, transparent 0 28%, rgba(91,156,210,.5) 34%, transparent 43%),
+        linear-gradient(310deg, transparent 0 42%, rgba(207,231,245,.32) 48%, transparent 57%),
+        linear-gradient(180deg, rgba(4,10,18,.96), rgba(8,20,34,.98));
+      filter: blur(.5px);
+      box-shadow: 0 0 42px rgba(65,127,182,.24);
+      opacity: 0;
+    }
+
+    .screen-cycle__saver::before {
+      content: "";
+      position: absolute;
+      inset: 14% 10%;
+      background:
+        linear-gradient(100deg, transparent 0 18%, rgba(105,174,225,.46) 28%, transparent 38%),
+        linear-gradient(260deg, transparent 0 48%, rgba(228,237,202,.32) 58%, transparent 68%);
+      transform: translateX(-18%);
+      animation: saverDrift 2.9s linear infinite;
+    }
+
+    .screen-cycle__black {
       inset: 0;
       background: #000;
-      animation: dayStartBlack 5.2s ease-out forwards;
-    }
-
-    .day-start::after {
-      content: "";
-      position: absolute;
-      left: 29%;
-      top: 39%;
-      width: 43%;
-      height: 21%;
-      border-radius: 5px;
-      background: radial-gradient(circle at 50% 50%, rgba(90,180,255,.78), rgba(33,91,164,.22) 64%, transparent 72%);
-      filter: blur(2px);
       opacity: 0;
-      animation: blueWake 5.2s ease-out forwards;
     }
 
-    @keyframes dayStartBlack {
-      0%, 18% { opacity: .96; }
-      32% { opacity: .42; }
-      100% { opacity: 0; }
+    .screen-cycle--sleep .screen-cycle__desktop {
+      animation: sleepDesktop 7.6s ease-in forwards;
     }
 
-    @keyframes blueWake {
-      0%, 18% { opacity: 0; transform: scale(.92); }
-      24% { opacity: .88; transform: scale(1.04); }
-      46% { opacity: .46; transform: scale(1); }
-      100% { opacity: .16; transform: scale(1.02); }
+    .screen-cycle--sleep .screen-cycle__saver {
+      animation: sleepSaver 7.6s ease-in forwards;
+    }
+
+    .screen-cycle--sleep .screen-cycle__black {
+      animation: sleepBlack 7.6s ease-in forwards;
+    }
+
+    .screen-cycle--wake .screen-cycle__black {
+      opacity: .96;
+      animation: wakeBlack 6.6s ease-out forwards;
+    }
+
+    .screen-cycle--wake .screen-cycle__saver {
+      animation: wakeSaver 6.6s ease-out forwards;
+    }
+
+    .screen-cycle--wake .screen-cycle__desktop {
+      opacity: 0;
+      animation: wakeDesktop 6.6s ease-out forwards;
+    }
+
+    @keyframes saverDrift {
+      to { transform: translateX(16%); }
+    }
+
+    @keyframes sleepDesktop {
+      0%, 36% { opacity: .78; filter: brightness(1); }
+      44%, 58% { opacity: .24; filter: brightness(.42); }
+      66%, 100% { opacity: 0; filter: brightness(0); }
+    }
+
+    @keyframes sleepSaver {
+      0%, 34% { opacity: 0; }
+      44% { opacity: .88; }
+      62% { opacity: .64; }
+      78%, 100% { opacity: 0; }
+    }
+
+    @keyframes sleepBlack {
+      0%, 72% { opacity: 0; }
+      88% { opacity: .44; }
+      100% { opacity: .88; }
+    }
+
+    @keyframes wakeBlack {
+      0%, 20% { opacity: .96; }
+      36% { opacity: .52; }
+      58%, 100% { opacity: 0; }
+    }
+
+    @keyframes wakeSaver {
+      0%, 16% { opacity: 0; }
+      24%, 42% { opacity: .82; }
+      58%, 100% { opacity: 0; }
+    }
+
+    @keyframes wakeDesktop {
+      0%, 46% { opacity: 0; filter: brightness(.4); }
+      62% { opacity: .5; filter: brightness(.76); }
+      100% { opacity: .72; filter: brightness(1); }
     }
 
     .micro-scene {
@@ -1054,7 +1209,7 @@
       <div class="hint">已暂停</div>
       <div class="cover" id="cover">
         <div class="kicker">人生馆001号</div>
-        <div class="title">2011，那只水杯</div>
+        <div class="title">2011 · 那只水杯</div>
         <p class="cover-hook">他一直觉得这样挺好——直到那只水杯，让他看见三十五岁的自己，一动没动。</p>
         <p class="muted-note">戴上耳机，约 5 分钟。</p>
         <button class="primary" id="startBtn">开始</button>
@@ -1126,7 +1281,7 @@
             "imgFilter": "saturate(.72) contrast(1.08) brightness(.66)",
             "bed": "fan",
             "text": "",
-            "fixed": 6800,
+            "fixed": 7600,
             "sfx": [
                   "night-market-close-v17"
             ]
@@ -1139,8 +1294,8 @@
             "imgOpacity": 0.94,
             "imgFilter": "saturate(.82) contrast(1.06) brightness(.74)",
             "bed": "fan",
-            "text": "又是下午两三点。外面夜宵摊开张。一天，也开始了。",
-            "fixed": 7506,
+            "text": "",
+            "fixed": 6600,
             "sfx": [
                   "night-market-open-v17",
                   "keyboard-plastic-v17"
@@ -1151,7 +1306,6 @@
             "mood": "cold",
             "img": "assets/img/card-03-v17-clean-desk-standard-20260706.jpg",
             "bed": "fan",
-            "audio": "card-03.mp3",
             "novel": {
                   "head": [
                         "玄幻小说排行榜",
@@ -1164,8 +1318,8 @@
                   ],
                   "next": "下一章"
             },
-            "text": "主角从谷底爬起来，打怪，变强，封神。又一章。还是昨天那本。",
-            "fixed": 8562,
+            "text": "",
+            "fixed": 5200,
             "sfx": [
                   "keyboard-plastic-v17"
             ]
@@ -1175,8 +1329,22 @@
             "mood": "cold",
             "img": "assets/img/card-04-v17-clean-desk-standard-20260706.jpg",
             "bed": "fan",
-            "text": "爱看那种片子。看到最后，才知道——原来全错了。",
-            "fixed": 7506,
+            "movieHistory": {
+                  "site": "Mtime 观影记录",
+                  "title": "我看过的电影",
+                  "rows": [
+                        "强殖入侵",
+                        "盗梦空间",
+                        "禁闭岛",
+                        "源代码",
+                        "恐怖游轮",
+                        "致命ID",
+                        "搏击俱乐部",
+                        "蝴蝶效应"
+                  ]
+            },
+            "text": "",
+            "fixed": 7800,
             "sfx": [
                   "movie-muffle-v17"
             ]
@@ -1193,7 +1361,7 @@
                   "body": "一个人对一件事坚信不疑，最后真相完全相反",
                   "cursor": true
             },
-            "text": "有一部片子，一直忘不掉。影评写完，发上去。",
+            "text": "",
             "fixed": 6210,
             "sfx": [
                   "keyboard-plastic-v17"
@@ -1229,8 +1397,8 @@
                   "body": "名和利这些东西，追到最后其实也就那么回事，说白了都是虚的。\n我一直觉得，一个人精神上不空，有书看、有电影看，日子就不算亏。\n外面那些成天忙着追这追那的，未必有这份清醒。",
                   "cursor": false
             },
-            "text": "这套话，写在影评里，也在心里说过很多遍。",
-            "fixed": 5754
+            "text": "",
+            "fixed": 7200
       },
       {
             "id": "card-08",
@@ -1769,8 +1937,19 @@
       </div>`;
     }
 
+    function movieHistoryMarkup(card) {
+      if (!card.movieHistory) return "";
+      const history = card.movieHistory;
+      return `<div class="history-panel">
+        <div class="history-head"><span>${escapeHtml(history.site || "Mtime")}</span><span>2011</span></div>
+        <div class="review-title">${escapeHtml(history.title || "我看过的电影")}</div>
+        <div class="history-list">${(history.rows || []).map((row, index) => `<div class="history-row"><span>${escapeHtml(row)}</span><span class="history-date">${index + 1}</span></div>`).join("")}</div>
+      </div>`;
+    }
+
     const SCREEN_PAGES = {
       "card-03": { type: "novel",  left: "15.0%", top: "35.6%", width: "61.0%", height: "20.8%", rotate: "-.15deg" },
+      "card-04": { type: "history", left: "11.5%", top: "29.2%", width: "76.8%", height: "34.6%", rotate: ".22deg" },
       "card-05": { type: "review", left: "9.2%",  top: "27.4%", width: "81.6%", height: "31.4%", rotate: ".35deg" },
       "card-07": { type: "review", left: "12.4%", top: "24.2%", width: "75.8%", height: "27.8%", rotate: ".1deg" },
     };
@@ -1797,14 +1976,15 @@
     function pageMarkup(card) {
       if (hideVisualText(card)) return "";
       const page = screenPage(card);
-      if (page && (card.review || card.novel)) {
+      if (page && (card.review || card.novel || card.movieHistory)) {
         const lockClass = card.lockScreen ? " locked-review" : "";
         return `<div class="screen-page ${page.type}${lockClass}" style="${screenPageStyle(page)}">
           ${reviewMarkup(card)}
           ${novelMarkup(card)}
+          ${movieHistoryMarkup(card)}
         </div>`;
       }
-      return `${reviewMarkup(card)}${qqMarkup(card)}${novelMarkup(card)}`;
+      return `${reviewMarkup(card)}${qqMarkup(card)}${novelMarkup(card)}${movieHistoryMarkup(card)}`;
     }
 
     function factPinMarkup(card) {
@@ -1831,7 +2011,7 @@
         return `<div class="${cls} narration-subtitle">${escapeHtml(card.text)}</div>`;
       }
       if (hideVisualText(card)) return "";
-      if ((card.review || card.novel) && screenPage(card)) return "";
+      if ((card.review || card.novel || card.movieHistory) && screenPage(card)) return "";
       return `<div class="${cls}">${escapeHtml(card.text)}</div>`;
     }
 
@@ -1843,14 +2023,26 @@
         ${textMarkup(card, `text ${card.kind==="center"?"center":"small"}`)}`;
     }
 
+    function screenCycleMarkup(mode) {
+      return `<div class="screen-cycle screen-cycle--${mode}" aria-hidden="true">
+        <div class="screen-cycle__desktop">
+          <div class="screen-cycle__window screen-cycle__window--movie"></div>
+          <div class="screen-cycle__window screen-cycle__window--novel"></div>
+        </div>
+        <div class="screen-cycle__saver"></div>
+        <div class="screen-cycle__black"></div>
+      </div>`;
+    }
+
     function renderNightTail() {
-      content.innerHTML = `<div class="night-tail" aria-hidden="true"></div>`;
+      content.innerHTML = `<div class="night-tail">${screenCycleMarkup("sleep")}</div>`;
     }
 
     function renderDayStart(card) {
+      const subtitle = card.text ? `<div class="text small narration-subtitle">${escapeHtml(card.text)}</div>` : "";
       content.innerHTML = `
-        <div class="day-start" aria-hidden="true"></div>
-        <div class="text small narration-subtitle">${escapeHtml(card.text)}</div>`;
+        <div class="day-start">${screenCycleMarkup("wake")}</div>
+        ${subtitle}`;
     }
 
     function memoryMarkup(card) {
