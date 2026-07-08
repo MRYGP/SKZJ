@@ -297,6 +297,43 @@
       color: #26333d;
     }
 
+    .sms-panel {
+      justify-self: start;
+      width: min(100%, 286px);
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      background: rgba(236,239,234,.94);
+      color: #131912;
+      box-shadow: 0 16px 40px rgba(0,0,0,.42);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      transform: rotate(-.35deg);
+    }
+
+    .sms-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(45,60,45,.18);
+      color: #4f5d4d;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .sms-message {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .content[data-card-id="card-15c"] .text.small {
+      font-size: 18px;
+      line-height: 1.58;
+    }
+
     .novel-panel {
       width: min(100%, 330px);
       padding: 11px 12px 12px;
@@ -420,6 +457,20 @@
       font-size: 9px;
       line-height: 1.5;
       color: rgba(26,35,43,.82);
+    }
+
+    .screen-page .review-excerpt.review-long {
+      padding: 7px 9px;
+    }
+
+    .screen-page .review-long .review-title {
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .screen-page .review-long .review-body {
+      font-size: 8px;
+      line-height: 1.42;
     }
 
     .screen-page .novel-list {
@@ -1238,6 +1289,7 @@
       "keyboard-phone-v17":     "assets/audio/sfx/keyboard-phone-v17.mp3?v=20260703-v17",
       "pen-sms-v17":            "assets/audio/sfx/pen-sms-v17.mp3?v=20260703-v17",
       "money-snap-v17":         "assets/audio/sfx/money-snap-v17.mp3?v=20260703-v17",
+      "sms-tone-v18":           "assets/audio/sfx/single-tone.mp3?v=20260708-v18",
     };
 
     // ─── bed / bgm 路径 ──────────────────────────────────────────
@@ -1334,6 +1386,7 @@
                   "title": "我看过的电影",
                   "rows": [
                         "强殖入侵",
+                        "小岛惊魂",
                         "盗梦空间",
                         "禁闭岛",
                         "源代码",
@@ -1358,11 +1411,12 @@
             "review": {
                   "site": "Mtime 影评",
                   "title": "《强殖入侵》",
-                  "body": "一个人对一件事坚信不疑，最后真相完全相反",
+                  "body": "看完好几天了，还没缓过来。\n未来星际战争，一个武器工程师突然被政府认定是外星复制人、体内藏着炸弹。他逃命，拼了命想证明自己是人。\n说到底就一件事：一个人对一件事坚信不疑，把日子都过在这份坚信里——到最后才发现，真相完全是反的。\n最可怕的不是真相反了，是他从头到尾都没怀疑过。",
+                  "long": true,
                   "cursor": true
             },
             "text": "",
-            "fixed": 6210,
+            "fixed": 15000,
             "sfx": [
                   "keyboard-plastic-v17"
             ]
@@ -1496,14 +1550,30 @@
             "fixed": 11010
       },
       {
+            "id": "card-15c",
+            "mood": "cold",
+            "img": "assets/img/card-15b-v17-clean-desk-standard-20260706.jpg",
+            "bed": "silence",
+            "sound": "silence",
+            "sms": {
+                  "title": "短信",
+                  "time": "昨天",
+                  "message": "哥，爸昨天生日，你又忘了。"
+            },
+            "text": "胖成这样，懒成这样，废成这样——怎么会的？整天没精神，门都懒得出。朋友，一个都没剩下。爸妈那边，没事就不回。想来想去，只有一个答案——早就不在这个世界里了。日子全在网上过。这边，只是路过。连过客都算不上——过客，起码还抬头看一眼。",
+            "fixed": 22000,
+            "sfx": [
+                  "sms-tone-v18"
+            ]
+      },
+      {
             "id": "card-16",
             "mood": "warm",
             "img": "assets/img/card-16-v17-alley-out.jpg",
             "bed": "street",
             "bgm": "warm-low",
-            "text": "那就先出去。不是为了马上赚钱。再这样下去，最后也会“饿”死。先离开这把椅子。巷口一抬头，高楼一幢接一幢，车水马龙。不知道多少个亿，就在这座城里流动。原来外面一直在动。钱在动，人也在动。有人在长沙有了车，有了房，站住了脚。原来这些，不在天上，就在这条街上。",
-            "fixed": 30306,
-            "scrollText": true
+            "text": "再这样下去，最后也会\"饿\"死。先离开这把椅子。",
+            "fixed": 7800
       },
       {
             "id": "card-16b",
@@ -1511,8 +1581,8 @@
             "img": "assets/img/card-16b-v17-street-options.jpg",
             "bed": "street",
             "bgm": "warm-low",
-            "text": "出来以后，靠什么活？上班，啥也不会，没人请。下力气，心里那点清高又过不去。继续倒腾软件，还是那点钱，养不活自己。",
-            "fixed": 15930,
+            "text": "离开这把椅子，去做什么呢。总不能，就是出去转一圈。上班，啥也不会，没人请。下力气，心里那点清高又过不去。继续倒腾软件，还是那点钱。",
+            "fixed": 19000,
             "scrollText": true
       },
       {
@@ -1565,6 +1635,16 @@
             "sfx": [
                   "phone-qq-crowd-v17"
             ]
+      },
+      {
+            "id": "card-18b2",
+            "mood": "warm",
+            "img": "assets/img/card-16-v17-alley-out.jpg",
+            "bed": "street",
+            "bgm": "warm-low",
+            "text": "巷口一抬头，高楼一幢接一幢，车水马龙。不知道多少个亿，就在这座城里流动。原来外面一直在动。钱在动，人也在动。有人在长沙有了车，有了房，站住了脚。原来这些，不在天上，就在这条街上。",
+            "fixed": 21000,
+            "scrollText": true
       },
       {
             "id": "card-18c",
@@ -1912,7 +1992,8 @@
 
     function reviewMarkup(card) {
       if (!card.review) return "";
-      return `<div class="review-excerpt">
+      const longClass = card.review.long ? " review-long" : "";
+      return `<div class="review-excerpt${longClass}">
         <div class="review-site">${escapeHtml(card.review.site)}</div>
         <div class="review-title">${escapeHtml(card.review.title)}</div>
         <div class="review-body">${escapeHtml(card.review.body)}${card.review.cursor ? `<span class="review-cursor"></span>` : ""}</div>
@@ -1924,6 +2005,14 @@
       return `<div class="qq-panel">
         <div class="qq-title">${escapeHtml(card.qq.title)}</div>
         ${(card.qq.messages || []).map(msg => `<div class="qq-msg">${escapeHtml(msg)}</div>`).join("")}
+      </div>`;
+    }
+
+    function smsMarkup(card) {
+      if (!card.sms) return "";
+      return `<div class="sms-panel">
+        <div class="sms-title"><span>${escapeHtml(card.sms.title || "短信")}</span><span>${escapeHtml(card.sms.time || "")}</span></div>
+        <div class="sms-message">${escapeHtml(card.sms.message)}</div>
       </div>`;
     }
 
@@ -1984,7 +2073,7 @@
           ${movieHistoryMarkup(card)}
         </div>`;
       }
-      return `${reviewMarkup(card)}${qqMarkup(card)}${novelMarkup(card)}${movieHistoryMarkup(card)}`;
+      return `${reviewMarkup(card)}${qqMarkup(card)}${smsMarkup(card)}${novelMarkup(card)}${movieHistoryMarkup(card)}`;
     }
 
     function factPinMarkup(card) {
