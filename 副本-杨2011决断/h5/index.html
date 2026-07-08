@@ -850,6 +850,164 @@
       to { transform: translateY(calc(-1 * var(--scroll-distance, 0px))); }
     }
 
+    .evidence-stack {
+      position: absolute;
+      left: 50%;
+      top: 54px;
+      width: calc(100% - 38px);
+      max-height: 48%;
+      transform: translateX(-50%);
+      z-index: 4;
+      display: grid;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .evidence-card {
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      background: rgba(12,15,18,.78);
+      box-shadow: 0 18px 42px rgba(0,0,0,.36);
+      color: rgba(255,246,228,.92);
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+    }
+
+    .evidence-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.07);
+      font-size: 10px;
+      line-height: 1.2;
+      color: rgba(255,246,228,.7);
+    }
+
+    .phone-evidence {
+      grid-template-columns: 1fr;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    }
+
+    .call-list,
+    .sent-list {
+      display: grid;
+      gap: 4px;
+      padding: 8px 10px;
+    }
+
+    .call-row {
+      display: grid;
+      grid-template-columns: 34px 34px 1fr 52px;
+      gap: 5px;
+      align-items: center;
+      font-size: 10px;
+      line-height: 1.22;
+      color: rgba(255,247,232,.86);
+    }
+
+    .call-row span:last-child {
+      text-align: right;
+      color: rgba(255,210,150,.78);
+    }
+
+    .sent-list {
+      border-top: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+    }
+
+    .sent-row {
+      display: grid;
+      gap: 2px;
+      padding: 5px 7px;
+      border-radius: 7px;
+      background: rgba(255,255,255,.08);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .sent-name {
+      color: rgba(255,211,150,.8);
+      font-weight: 700;
+    }
+
+    .search-evidence {
+      width: min(100%, 330px);
+      justify-self: end;
+      background: rgba(238,242,232,.9);
+      color: rgba(28,35,38,.86);
+    }
+
+    .search-evidence .evidence-title {
+      background: rgba(52,84,119,.1);
+      color: rgba(31,43,51,.62);
+      border-bottom-color: rgba(39,55,64,.16);
+    }
+
+    .search-list {
+      display: grid;
+      gap: 5px;
+      padding: 9px 10px 10px;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 8px;
+      border: 1px solid rgba(33,46,54,.13);
+      border-radius: 6px;
+      background: rgba(255,255,255,.58);
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .search-index {
+      color: rgba(80,102,120,.72);
+      font-family: Georgia, serif;
+    }
+
+    .notebook-evidence {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: rgba(222,205,168,.92);
+      color: rgba(45,35,24,.88);
+      transform: rotate(-1deg);
+    }
+
+    .notebook-page {
+      min-height: 158px;
+      padding: 13px 11px 12px;
+      background:
+        repeating-linear-gradient(0deg, transparent 0 20px, rgba(65,80,104,.17) 20px 21px),
+        linear-gradient(90deg, rgba(255,255,255,.18), transparent 22%);
+      font-family: "KaiTi", "STKaiti", serif;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .notebook-page + .notebook-page {
+      border-left: 1px solid rgba(80,58,34,.28);
+      background:
+        repeating-linear-gradient(0deg, transparent 0 20px, rgba(65,80,104,.16) 20px 21px),
+        linear-gradient(270deg, rgba(255,255,255,.12), transparent 24%);
+    }
+
+    .notebook-page-title {
+      margin-bottom: 6px;
+      font-size: 10px;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      color: rgba(86,58,31,.7);
+    }
+
+    .notebook-line {
+      margin-bottom: 4px;
+    }
+
     .night-tail,
     .content > .day-start {
       position: absolute;
@@ -1245,6 +1403,24 @@
       .title { font-size: 28px; }
       .text { font-size: 22px; }
       .text.small { font-size: 18px; }
+      .evidence-stack {
+        top: 50px;
+        width: calc(100% - 28px);
+        max-height: 48%;
+      }
+      .call-row {
+        grid-template-columns: 30px 30px 1fr 48px;
+        font-size: 9px;
+      }
+      .sent-row,
+      .search-row,
+      .notebook-page {
+        font-size: 9px;
+      }
+      .notebook-page {
+        min-height: 150px;
+        padding: 12px 9px;
+      }
     }
   </style>
 </head>
@@ -1630,6 +1806,21 @@
             "bed": "silence",
             "bgm": "warm-low",
             "text": "刀往哪砍？先挤进去，当个传话的。一通电话接一通电话，一个中介对一个中介，把这头的话，递到那头。第一单，十几个人挤着谈，名单念到最后，没有名字。有个还算厚道的，私下塞了一万多。第二单，两头连上了，人家自己谈成了，站在外面。一单又一单，都没什么指望——可脑子里，总蹦出曾国藩那四个字：屡败屡战。",
+            "phonePanel": {
+                  "calls": [
+                        ["昨天", "拨出", "军哥", "未接通"],
+                        ["昨天", "拨出", "军哥", "1分12秒"],
+                        ["昨天", "拨出", "承兑徐", "未接通"],
+                        ["昨天", "拨出", "李担保", "未接通"],
+                        ["昨天", "拨出", "李担保", "32秒"],
+                        ["前天", "拨出", "承兑徐", "未接通"],
+                        ["前天", "拨出", "军哥", "未接通"]
+                  ],
+                  "messages": [
+                        ["军哥", "军哥，上次说的那个资金方，这两天方便见一面吗？随时都行。"],
+                        ["李担保", "李总您好，项目方那边对接好了，您看什么时候方便碰一下？"]
+                  ]
+            },
             "fixed": 32250,
             "scrollText": true,
             "sfx": [
@@ -1653,6 +1844,16 @@
             "bed": "silence",
             "bgm": "warm-low",
             "text": "这么传了一年，撞见一个更窄的口子——承兑。又是一堆没见过的词。承兑、信托、资金方……一个个敲进百度，夜里啃。啃完，干的还是老本行：把收承兑的，和有承兑的，叫到一张桌上。",
+            "searchPanel": {
+                  "terms": [
+                        "承兑汇票是什么",
+                        "银行承兑 商业承兑 区别",
+                        "承兑汇票 贴现",
+                        "贴现率 怎么算",
+                        "承兑汇票 背书 转让",
+                        "资金方 是什么意思"
+                  ]
+            },
             "fixed": 21186,
             "scrollText": true,
             "sfx": [
@@ -1666,6 +1867,20 @@
             "bed": "street",
             "bgm": "warm-low",
             "text": "兜里揣个小本子，前几页抄满要点——生怕哪个词没弄懂，在两边中间把话传岔了，事就办不成。沿街一家家，仰头把招牌上的电话抄进手机，回去一条条群发出去：老板，我做承兑业务的。",
+            "notebookPanel": {
+                  "left": [
+                        "承兑：银行承兑=银行付 商业承兑=企业付（风险大！）",
+                        "贴现率 按月算 千分之几 要问清！！",
+                        "到期日 必须看清 差一天都不行",
+                        "背书 要连续 少一手都不收",
+                        "先问：票在不在手上？多大金额？什么行的？"
+                  ],
+                  "right": [
+                        "××建材 138××××7726 张",
+                        "恒×贸易 0731-8×××526",
+                        "××钢材 王老板 139××××3315（说下周再打）"
+                  ]
+            },
             "fixed": 18786,
             "scrollText": true,
             "sfx": [
@@ -2016,6 +2231,55 @@
       </div>`;
     }
 
+    function phonePanelMarkup(card) {
+      if (!card.phonePanel) return "";
+      const calls = (card.phonePanel.calls || []).map(row => `
+        <div class="call-row">
+          <span>${escapeHtml(row[0])}</span>
+          <span>${escapeHtml(row[1])}</span>
+          <span>${escapeHtml(row[2])}</span>
+          <span>${escapeHtml(row[3])}</span>
+        </div>`).join("");
+      const messages = (card.phonePanel.messages || []).map(row => `
+        <div class="sent-row">
+          <span class="sent-name">→ ${escapeHtml(row[0])}</span>
+          <span>${escapeHtml(row[1])}</span>
+        </div>`).join("");
+      return `<div class="evidence-card phone-evidence">
+        <div class="evidence-title"><span>通话记录</span><span>2011</span></div>
+        <div class="call-list">${calls}</div>
+        <div class="sent-list">${messages}</div>
+      </div>`;
+    }
+
+    function searchPanelMarkup(card) {
+      if (!card.searchPanel) return "";
+      return `<div class="evidence-card search-evidence">
+        <div class="evidence-title"><span>百度搜索</span><span>夜里</span></div>
+        <div class="search-list">${(card.searchPanel.terms || []).map((term, i) => `
+          <div class="search-row"><span class="search-index">${i + 1}</span><span>${escapeHtml(term)}</span></div>
+        `).join("")}</div>
+      </div>`;
+    }
+
+    function notebookPanelMarkup(card) {
+      if (!card.notebookPanel) return "";
+      const pageMarkup = (title, rows) => `<div class="notebook-page">
+        <div class="notebook-page-title">${escapeHtml(title)}</div>
+        ${(rows || []).map(row => `<div class="notebook-line">${escapeHtml(row)}</div>`).join("")}
+      </div>`;
+      return `<div class="evidence-card notebook-evidence">
+        ${pageMarkup("要点", card.notebookPanel.left)}
+        ${pageMarkup("电话", card.notebookPanel.right)}
+      </div>`;
+    }
+
+    function evidenceMarkup(card) {
+      if (!card) return "";
+      const html = `${phonePanelMarkup(card)}${searchPanelMarkup(card)}${notebookPanelMarkup(card)}`;
+      return html ? `<div class="evidence-stack" aria-label="屏内物证">${html}</div>` : "";
+    }
+
     function novelMarkup(card) {
       if (!card.novel) return "";
       const head = card.novel.head || [];
@@ -2073,7 +2337,7 @@
           ${movieHistoryMarkup(card)}
         </div>`;
       }
-      return `${reviewMarkup(card)}${qqMarkup(card)}${smsMarkup(card)}${novelMarkup(card)}${movieHistoryMarkup(card)}`;
+      return `${reviewMarkup(card)}${qqMarkup(card)}${smsMarkup(card)}${novelMarkup(card)}${movieHistoryMarkup(card)}${evidenceMarkup(card)}`;
     }
 
     function factPinMarkup(card) {
@@ -2156,6 +2420,7 @@
     function renderScrollingText(card) {
       content.innerHTML = `
         ${factPinMarkup(card)}
+        ${evidenceMarkup(card)}
         <div class="rolling-caption" aria-label="正文字幕">
           <div class="rolling-caption-text">${escapeHtml(card.text)}</div>
         </div>`;
@@ -2183,6 +2448,7 @@
       const contentClasses = ["content"];
       if (screenPage(card) && !hideVisualText(card)) contentClasses.push("screen-card");
       if (card.kind === "photo" || card.scrollText) contentClasses.push("photo-card");
+      if (evidenceMarkup(card)) contentClasses.push("evidence-host");
       content.className = contentClasses.join(" ");
       content.dataset.cardId = card.id || "";
 

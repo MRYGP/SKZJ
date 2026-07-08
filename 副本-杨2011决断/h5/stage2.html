@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>001水杯 · 第二阶段</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101111;
+      --panel: rgba(247,244,235,.08);
+      --line: rgba(255,255,255,.14);
+      --text: #f3ead7;
+      --muted: rgba(243,234,215,.68);
+      --accent: #d6b36a;
+      --ink: #1d1b17;
+      --paper: #efe6d0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, #191817, #0d0e0e 58%, #070808);
+      color: var(--text);
+      font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .shell {
+      width: min(100%, 430px);
+      min-height: min(840px, calc(100vh - 36px));
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), transparent 22%),
+        #111313;
+      box-shadow: 0 28px 80px rgba(0,0,0,.45);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+
+    .progress {
+      flex: 1;
+      height: 4px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,.1);
+    }
+
+    .progress span {
+      display: block;
+      width: 20%;
+      height: 100%;
+      background: var(--accent);
+      transition: width .24s ease;
+    }
+
+    main {
+      min-height: 0;
+      padding: 22px 18px;
+      display: grid;
+      align-content: center;
+    }
+
+    .screen {
+      display: none;
+      gap: 18px;
+    }
+
+    .screen.active {
+      display: grid;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      letter-spacing: 0;
+      line-height: 1.25;
+    }
+
+    h1 { font-size: 26px; }
+    h2 { font-size: 22px; }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.72;
+      font-size: 15px;
+    }
+
+    .lead {
+      color: var(--text);
+      font-size: 19px;
+      line-height: 1.66;
+      white-space: pre-line;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .btn {
+      min-height: 48px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      padding: 12px 14px;
+    }
+
+    .btn.primary {
+      background: rgba(214,179,106,.18);
+      border-color: rgba(214,179,106,.55);
+    }
+
+    .btn:disabled {
+      opacity: .52;
+      cursor: default;
+    }
+
+    .btn.inline {
+      min-height: 38px;
+      text-align: center;
+      justify-self: start;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .card {
+      min-height: 330px;
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 8px;
+      background: rgba(255,255,255,.065);
+    }
+
+    .card-label {
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    .example-text {
+      color: var(--text);
+      white-space: pre-line;
+      font-size: 18px;
+      line-height: 1.72;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      background: rgba(0,0,0,.24);
+      color: var(--text);
+      padding: 12px;
+      line-height: 1.6;
+      outline: none;
+    }
+
+    .recorder {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 8px;
+      background: rgba(255,255,255,.05);
+    }
+
+    .record-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    audio {
+      width: 100%;
+    }
+
+    .quote-options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .quote-options .btn.selected {
+      border-color: rgba(214,179,106,.8);
+      background: rgba(214,179,106,.22);
+    }
+
+    .mine {
+      padding: 14px;
+      border-radius: 8px;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.65;
+    }
+
+    .comments {
+      display: none;
+      gap: 10px;
+    }
+
+    .comments.show {
+      display: grid;
+    }
+
+    .comment {
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px;
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .foot {
+      padding: 12px 16px;
+      border-top: 1px solid var(--line);
+      color: rgba(243,234,215,.52);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 460px) {
+      .app { padding: 0; }
+      .shell {
+        min-height: 100vh;
+        border: 0;
+        border-radius: 0;
+      }
+      main { padding: 20px 16px; }
+      .card { min-height: 315px; padding: 18px; }
+      h1 { font-size: 24px; }
+      .lead,
+      .example-text { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="shell">
+      <header class="topbar">
+        <span>第二阶段</span>
+        <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+        <span id="stepLabel">1/5</span>
+      </header>
+
+      <main>
+        <section class="screen active" data-screen="entry">
+          <h1>你有没有过这样的时刻？</h1>
+          <div class="lead">有一件事，一直觉得挺正常。
+甚至，挺充实。
+
+直到有一个很小的东西，忽然照了一下。</div>
+          <div class="actions">
+            <button class="btn primary" data-go="tell">我也有过这样的时候</button>
+            <button class="btn" data-go="examples">让我想想……看看别人的</button>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="tell">
+          <h2>说说那件事</h2>
+          <p>不用想怎么说得好，就说说你那件"一直觉得挺好、其实只是舒服"的事。</p>
+          <div class="recorder">
+            <div class="record-row">
+              <button class="btn inline primary" id="recordStart">开始录音</button>
+              <button class="btn inline" id="recordStop" disabled>停止</button>
+              <button class="btn inline" id="typeOnly">我想打字</button>
+            </div>
+            <div class="status" id="recordStatus">说错了没关系，这里没有别人。</div>
+            <audio id="playback" controls hidden></audio>
+          </div>
+          <textarea id="storyText" placeholder="也可以直接打字。"></textarea>
+          <div class="actions">
+            <button class="btn primary" data-go="quote">继续</button>
+            <button class="btn" data-go="examples">先看看别人的</button>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="examples">
+          <div class="card">
+            <div class="card-label" id="exampleLabel">例子 1/5</div>
+            <div class="example-text" id="exampleText"></div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="nextExample">下一张</button>
+            <button class="btn" data-go="tell">现在想说说我的了</button>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="quietEnd">
+          <h2>也可以什么都不说。</h2>
+          <p>有些事，放在心里转一转，就够了。</p>
+          <div class="actions">
+            <button class="btn" data-go="entry">回到前面</button>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="quote">
+          <h2>这是你的那句。</h2>
+          <p>你刚说的这个，也许可以先收成一句话。</p>
+          <div class="quote-options" id="quoteOptions"></div>
+          <div class="mine" id="chosenQuote">请选择一句。</div>
+          <div class="actions">
+            <button class="btn primary" data-go="publish">继续</button>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="publish">
+          <h2>愿意贴出来，让别人也看看吗？</h2>
+          <div class="actions">
+            <button class="btn primary" id="privateBtn">仅自己可见</button>
+            <button class="btn" id="publicBtn">愿意公开</button>
+          </div>
+          <p id="publishResult">评论墙默认隐藏，真人测试时不预置假评论。</p>
+          <button class="btn inline" id="toggleDemo">显示演示内容</button>
+          <div class="comments" id="demoComments">
+            <div class="status">以下为演示内容</div>
+            <div class="comment">我一直觉得忙就是有价值，看到这里才想起，好像很久没问过自己到底在躲什么。</div>
+            <div class="comment">不是突然懂了，是忽然有个地方被照了一下。</div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="foot">独立 stage2 框架；不接主片卡22，不混入主片冷读数据。录音验收走 HTTPS/localhost，file:// 失败不算失败。</footer>
+    </section>
+  </div>
+
+  <script>
+    const screens = [...document.querySelectorAll(".screen")];
+    const progress = document.getElementById("progress");
+    const stepLabel = document.getElementById("stepLabel");
+    const order = { entry: 1, tell: 2, examples: 3, quietEnd: 3, quote: 4, publish: 5 };
+    const examples = [
+      {
+        label: "例子 1/5",
+        text: "那两部片子，《强殖入侵》《小岛惊魂》。一个坚信自己是人，一个坚信闹鬼的是别人。都不傻，都很清醒——就是从头到尾，没怀疑过自己。看片的时候谁都看得出来。轮到自己，就看不出来了。"
+      },
+      {
+        label: "例子 2/5",
+        text: "回老家，照旧是找同学吃饭、吹牛、喝酒。爸妈的饭，吃完就走。\n\n——有没有可能，哪一次留下来，帮他们做点事，听他们把话说完？"
+      },
+      {
+        label: "例子 3/5",
+        text: "说个现在的事。五年前，确诊了糖尿病。后知后觉——回头一算，2011年那会儿，多半就已经有了。泡着挺舒服的那些年，身体一直在坏。剑一下悬在了头上，人也就动了。没吃药，就是锻炼、管住吃的。四五年，基本扳回来了。以前胖的时候，真心觉得胖才好看。现在回头看，怎么看怎么不对——连“什么叫好看”，都跟着变了。"
+      },
+      {
+        label: "例子 4/5",
+        text: "可烟，还是戒不了。戒过一回，两个月，又抽回去了。抽的时候是舒服的，身体也没什么动静。道理全懂——迟早的事。有本书里讲过一只火鸡：被喂了一千天，每一天都觉得日子挺好。它不知道，第一千零一天是感恩节。那件事，有东西照了一下。这件事，还没有——现在还在找，能照它一下的那只“水杯”。"
+      },
+      {
+        label: "例子 5/5",
+        text: "你的那件事，是什么？"
+      }
+    ];
+    const quoteCandidates = [
+      "原来不是没道理，是还没被照见。",
+      "最难动的不是身体，是那个一直觉得挺好的自己。",
+      "有些舒服，是身体替未来先付了账。"
+    ];
+
+    let exampleIndex = 0;
+    let recorder = null;
+    let chunks = [];
+    let chosenQuote = "";
+
+    function show(name) {
+      screens.forEach(screen => screen.classList.toggle("active", screen.dataset.screen === name));
+      const step = order[name] || 1;
+      progress.style.width = `${step * 20}%`;
+      stepLabel.textContent = `${step}/5`;
+      if (name === "examples") renderExample();
+      if (name === "quote") renderQuotes();
+    }
+
+    function renderExample() {
+      document.getElementById("exampleLabel").textContent = examples[exampleIndex].label;
+      document.getElementById("exampleText").textContent = examples[exampleIndex].text;
+      document.getElementById("nextExample").textContent = exampleIndex >= examples.length - 1 ? "不说也可以" : "下一张";
+    }
+
+    function renderQuotes() {
+      const box = document.getElementById("quoteOptions");
+      box.innerHTML = quoteCandidates.map((quote, index) => `
+        <button class="btn" data-quote="${index}">${quote}</button>
+      `).join("");
+    }
+
+    document.addEventListener("click", event => {
+      const go = event.target.closest("[data-go]");
+      if (go) show(go.dataset.go);
+
+      const quote = event.target.closest("[data-quote]");
+      if (quote) {
+        chosenQuote = quoteCandidates[Number(quote.dataset.quote)];
+        document.querySelectorAll("[data-quote]").forEach(btn => btn.classList.toggle("selected", btn === quote));
+        document.getElementById("chosenQuote").textContent = chosenQuote;
+      }
+    });
+
+    document.getElementById("nextExample").addEventListener("click", () => {
+      if (exampleIndex >= examples.length - 1) {
+        show("quietEnd");
+        return;
+      }
+      exampleIndex += 1;
+      renderExample();
+    });
+
+    document.getElementById("typeOnly").addEventListener("click", () => {
+      document.getElementById("storyText").focus();
+      document.getElementById("recordStatus").textContent = "可以直接打字。";
+    });
+
+    document.getElementById("privateBtn").addEventListener("click", () => {
+      document.getElementById("publishResult").textContent = "已设为仅自己可见。";
+    });
+
+    document.getElementById("publicBtn").addEventListener("click", () => {
+      document.getElementById("publishResult").textContent = "框架版只记录意愿，不真正发布。";
+    });
+
+    document.getElementById("toggleDemo").addEventListener("click", () => {
+      const comments = document.getElementById("demoComments");
+      comments.classList.toggle("show");
+      document.getElementById("toggleDemo").textContent = comments.classList.contains("show") ? "隐藏演示内容" : "显示演示内容";
+    });
+
+    async function startRecording() {
+      const status = document.getElementById("recordStatus");
+      const start = document.getElementById("recordStart");
+      const stop = document.getElementById("recordStop");
+      if (!navigator.mediaDevices || !window.MediaRecorder) {
+        status.textContent = "当前环境不能录音，可直接打字。file:// 录音失败不算功能失败，录音验收走 HTTPS/localhost。";
+        document.getElementById("storyText").focus();
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        chunks = [];
+        recorder = new MediaRecorder(stream);
+        recorder.ondataavailable = event => { if (event.data.size) chunks.push(event.data); };
+        recorder.onstop = () => {
+          const blob = new Blob(chunks, { type: recorder.mimeType || "audio/webm" });
+          const url = URL.createObjectURL(blob);
+          const playback = document.getElementById("playback");
+          playback.src = url;
+          playback.hidden = false;
+          stream.getTracks().forEach(track => track.stop());
+          status.textContent = "录好了。框架版只本地回放，不上传。";
+        };
+        recorder.start();
+        start.disabled = true;
+        stop.disabled = false;
+        status.textContent = "正在录音。";
+      } catch (error) {
+        status.textContent = "当前环境不能录音，可直接打字。file:// 录音失败不算功能失败，录音验收走 HTTPS/localhost。";
+        document.getElementById("storyText").focus();
+      }
+    }
+
+    function stopRecording() {
+      if (!recorder || recorder.state !== "recording") return;
+      recorder.stop();
+      document.getElementById("recordStart").disabled = false;
+      document.getElementById("recordStop").disabled = true;
+    }
+
+    document.getElementById("recordStart").addEventListener("click", startRecording);
+    document.getElementById("recordStop").addEventListener("click", stopRecording);
+
+    renderExample();
+    renderQuotes();
+  </script>
+</body>
+</html>
