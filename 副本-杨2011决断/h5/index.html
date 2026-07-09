@@ -1558,7 +1558,7 @@
             "img": "assets/img/card-04-v17-clean-desk-standard-20260706.jpg",
             "bed": "fan",
             "movieHistory": {
-                  "site": "Mtime 观影记录",
+                  "site": "Mtime 时光网",
                   "title": "我看过的电影",
                   "rows": [
                         "强殖入侵",
@@ -1585,7 +1585,7 @@
             "bed": "fan",
             "lockScreen": true,
             "review": {
-                  "site": "Mtime 影评",
+                  "site": "Mtime 时光网",
                   "title": "《强殖入侵》",
                   "body": "看完好几天了，还没缓过来。\n未来星际战争，一个武器工程师突然被政府认定是外星复制人、体内藏着炸弹。他逃命，拼了命想证明自己是人。\n说到底就一件事：一个人对一件事坚信不疑，把日子都过在这份坚信里——到最后才发现，真相完全是反的。\n最可怕的不是真相反了，是他从头到尾都没怀疑过。",
                   "long": true,
@@ -1622,7 +1622,7 @@
             "bed": "fan",
             "lockScreen": true,
             "review": {
-                  "site": "Mtime 影评",
+                  "site": "Mtime 时光网",
                   "title": "《强殖入侵》",
                   "body": "名和利这些东西，追到最后其实也就那么回事，说白了都是虚的。\n我一直觉得，一个人精神上不空，有书看、有电影看，日子就不算亏。\n外面那些成天忙着追这追那的，未必有这份清醒。",
                   "cursor": false
@@ -2294,7 +2294,7 @@
       if (!card.movieHistory) return "";
       const history = card.movieHistory;
       return `<div class="history-panel">
-        <div class="history-head"><span>${escapeHtml(history.site || "Mtime")}</span><span>2011</span></div>
+        <div class="history-head"><span>${escapeHtml(history.site || "Mtime 时光网")}</span><span>2011</span></div>
         <div class="review-title">${escapeHtml(history.title || "我看过的电影")}</div>
         <div class="history-list">${(history.rows || []).map((row, index) => `<div class="history-row"><span>${escapeHtml(row)}</span><span class="history-date">${index + 1}</span></div>`).join("")}</div>
       </div>`;
