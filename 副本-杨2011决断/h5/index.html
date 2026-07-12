@@ -810,6 +810,24 @@
       box-shadow: 0 18px 48px rgba(0,0,0,.38);
     }
 
+    .content.dual-caption {
+      align-content: stretch;
+    }
+
+    .content.dual-caption .tail-display-text {
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      top: 76px;
+      bottom: calc(min(24%, 180px) + 58px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-size: 22px;
+      line-height: 1.42;
+    }
+
     .rolling-caption::before,
     .rolling-caption::after {
       content: "";
@@ -1906,9 +1924,9 @@
             "kind": "photo",
             "img": "assets/img/card21-photo.jpg",
             "bed": "silence",
-            "audioFull": "assets/audio/card21.m4a",
-            "fixed": 109500,
-            "text": "那个下午，到今天，十五年了。\n现在想起，背脊还是会发凉。\n那时候一点都不觉得有问题。\n看不起那些追名逐利的人，觉得他们俗。\n看看小说，看看电影，写写影评，就觉得精神上比他们丰富多了。\n不是阿Q那种自我安慰。而是那种“世人皆醉我独醒”的满足。\n是真的感觉挺充实的。\n可是屏幕一关，现实里，其实就剩一个人。\n现在才明白，那是潜意识在逃避。\n给自己的懒，给自己的颓废，编了一个理由。\n而且编得合情合理，连自己都信了。\n水已经烫了，不知道。人快烂了，也不知道。泡着温水，挺舒服的。\n那天，水杯就在手边。身子却像钉在那儿。\n那一下，不是想通了。是被自己吓醒了。\n如果没有那只水杯，也许这一辈子，都不会发现：人生其实还有另一种走法。"
+            "audioFull": "assets/audio/card21-v2.m4a",
+            "fixed": 103179,
+            "text": "那个下午到今天 15 年了，现在想起背脊还是会发凉。那时候其实很充实，自得其乐。看到别人热忱于追名逐利，我还觉得他们俗不可耐。我看看小说，看看电影，听听音乐，日子安逸的很。不是阿Q那种自我安慰，而是那种世人皆醉我独醒的满足。可是屏幕一暗，这个世界好像就只剩下我一个人。一个过客，现在才明白，那是潜意识在逃避，给自己的懒，给自己的颓废编了一个理由，而且编的合情合理，连自己都信了。水已经烫了不知道，人都快烂了也不知道，泡着温水挺舒服的。那天水杯就在手边，身子却钉在那里。那一下被自己吓醒了，如果没有那只水杯，我这一辈子可能就是旁人嘴里的一声感叹，一个笑话。"
       },
       {
             "id": "card-22",
@@ -1919,8 +1937,10 @@
             "imgFilter": "saturate(.92) contrast(1.02) brightness(.78)",
             "bed": "silence",
             "sound": "silence",
-            "text": "你有没有过这样的时刻？\n\n有一件事，\n一直觉得挺正常。\n\n甚至，挺安逸。\n\n直到有一个很小的东西，\n忽然照了一下。\n\n才发现——\n\n可能不是它真的正常，\n\n是自己泡在里面，\n太久了。",
-            "fixed": 17000,
+            "audioFull": "assets/audio/card22-v1.m4a",
+            "displayText": "你有没有过这样的时刻？\n\n有一件事，\n一直觉得挺正常。\n\n甚至，挺安逸。\n\n直到有一个很小的东西，\n忽然照了一下。\n\n才发现——\n\n可能不是它真的正常，\n\n是自己泡在里面，\n太久了。",
+            "text": "你有没有这样的时刻？有一件事一直都觉得挺正常的，甚至觉得挺舒服、挺安逸，直到有一个很小的东西突然照了一下，才发现可能不是它真的正常，是自己泡在里面太久了。",
+            "fixed": 29650,
             "scrollText": true
       }
 ];
@@ -2421,6 +2441,7 @@
       content.innerHTML = `
         ${factPinMarkup(card)}
         ${evidenceMarkup(card)}
+        ${card.displayText ? `<div class="text center tail-display-text">${escapeHtml(card.displayText)}</div>` : ""}
         <div class="rolling-caption" aria-label="正文字幕">
           <div class="rolling-caption-text">${escapeHtml(card.text)}</div>
         </div>`;
@@ -2448,6 +2469,7 @@
       const contentClasses = ["content"];
       if (screenPage(card) && !hideVisualText(card)) contentClasses.push("screen-card");
       if (card.kind === "photo" || card.scrollText) contentClasses.push("photo-card");
+      if (card.displayText) contentClasses.push("dual-caption");
       if (evidenceMarkup(card)) contentClasses.push("evidence-host");
       content.className = contentClasses.join(" ");
       content.dataset.cardId = card.id || "";
