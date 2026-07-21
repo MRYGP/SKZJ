@@ -106,6 +106,11 @@
         linear-gradient(180deg, rgba(20,14,7,.14), rgba(0,0,0,.68));
     }
 
+    .stage.blackout,
+    .stage.blackout::after {
+      background: #000;
+    }
+
     .hud {
       position: absolute;
       inset: 16px 16px auto;
@@ -626,9 +631,24 @@
       align-content: end;
       gap: 18px;
       padding: 40px 28px;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.7)),
-      url("assets/img/cover-v17-clean-desk-standard-20260706.jpg") center / cover;
+      background: #000;
+    }
+
+    .cover-tag {
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+      letter-spacing: .08em;
+    }
+
+    .version-mark {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      color: rgba(255,255,255,.25);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: .02em;
+      pointer-events: none;
     }
 
     .primary {
@@ -1165,7 +1185,7 @@
     }
 
     .screen-cycle--wake .screen-cycle__black {
-      opacity: .96;
+      opacity: 1;
       animation: wakeBlack 6.6s ease-out forwards;
     }
 
@@ -1197,12 +1217,12 @@
 
     @keyframes sleepBlack {
       0%, 72% { opacity: 0; }
-      88% { opacity: .44; }
-      100% { opacity: .88; }
+      82% { opacity: .44; }
+      88%, 100% { opacity: 1; }
     }
 
     @keyframes wakeBlack {
-      0%, 20% { opacity: .96; }
+      0%, 20% { opacity: 1; }
       36% { opacity: .52; }
       58%, 100% { opacity: 0; }
     }
@@ -1474,9 +1494,11 @@
       <div class="cover" id="cover">
         <div class="kicker">人生馆001号</div>
         <div class="title">2011 · 那只水杯</div>
+        <div class="cover-tag">2011 · 长沙红花坡</div>
         <p class="cover-hook">他一直觉得这样挺好——直到那只水杯，让他看见三十五岁的自己，一动没动。</p>
         <p class="muted-note">戴上耳机，约 5 分钟。</p>
         <button class="primary" id="startBtn">开始</button>
+        <div class="version-mark" id="versionMark">v1.8-H5 · nightfix-20260722</div>
       </div>
     </section>
   </main>
@@ -1486,6 +1508,12 @@
       A: "assets/audio/narration-A/",
       B: "assets/audio/narration-B/"
     };
+
+    const versionMark = document.getElementById("versionMark");
+    const buildRef = new URLSearchParams(window.location.search).get("build");
+    if (versionMark && /^[0-9a-f]{7,12}$/i.test(buildRef || "")) {
+      versionMark.textContent = `v1.8-H5 · ${buildRef}`;
+    }
 
     // 技术占位：edge-tts 云健声线，非最终真人配音。
     const TTS_DIR = "assets/audio/narration-TTS/";
@@ -1524,19 +1552,15 @@
       warmLow: 0.035,
     };
 
+    // 补强池（本轮只登记、不实现）：卡1屏内真双窗资产；卡2专属镜像资产；
+    // 卡3翻页循环动画；键盘渐停/渐起音效；鼾声音效。
     const cards = [
-      {
-            "id": "cover",
-            "kind": "center",
-            "mood": "cold",
-            "img": "assets/img/cover-v17-clean-desk-standard-20260706.jpg",
-            "text": "2011年。\n长沙，红花坡。",
-            "fixed": 3600
-      },
       {
             "id": "act1-intro",
             "kind": "center",
             "mood": "cold",
+            "clearImage": true,
+            "blackout": true,
             "text": "那时候，真的很充实。",
             "fixed": 4200
       },
@@ -1558,7 +1582,7 @@
             "id": "card-02",
             "kind": "day-start",
             "mood": "cold",
-            "img": "assets/img/card-02-v17-clean-desk-standard-20260706.jpg",
+            "img": "assets/img/card-01-v17-clean-desk-standard-20260706.jpg",
             "imgOpacity": 0.94,
             "imgFilter": "saturate(.82) contrast(1.06) brightness(.74)",
             "bed": "fan",
@@ -2050,6 +2074,7 @@
 
     function setImage(card) {
       stage.classList.toggle("has-visual", !!(card && card.visual));
+      stage.classList.toggle("blackout", !!(card && card.blackout));
       const src = card && card.img ? card.img : "";
       if (src) {
         stage.dataset.pendingImage = src;
@@ -2065,6 +2090,9 @@
             stage.style.setProperty("--image", imageCssValue(src));
           }
         }
+      } else if (card && card.clearImage) {
+        stage.dataset.pendingImage = "";
+        stage.style.setProperty("--image", "none");
       } else if (!stage.style.getPropertyValue("--image")) {
         stage.style.setProperty("--image", "none");
       }
