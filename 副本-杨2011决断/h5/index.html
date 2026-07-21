@@ -135,14 +135,32 @@
     }
 
     .sound-toggle {
-      width: 42px;
-      height: 28px;
+      width: 48px;
+      height: 44px;
       border-radius: 99px;
       background: rgba(0,0,0,.28);
       color: var(--muted);
       font-size: 12px;
       pointer-events: auto;
     }
+
+    .sound-retry {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      z-index: 9;
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      transform: translateX(-50%);
+      background: rgba(15, 12, 9, .9);
+      color: #f3dfb8;
+      border: 1px solid rgba(243, 223, 184, .46);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .sound-retry[hidden] { display: none; }
 
     .content {
       position: absolute;
@@ -1452,6 +1470,7 @@
       </div>
       <div class="content" id="content"></div>
       <div class="hint">已暂停</div>
+      <button class="sound-retry" id="soundRetry" hidden>声音未播？点此继续</button>
       <div class="cover" id="cover">
         <div class="kicker">人生馆001号</div>
         <div class="title">2011 · 那只水杯</div>
@@ -1952,6 +1971,7 @@
     const progressBar= document.getElementById("progressBar");
     const phone      = document.getElementById("phone");
     const voiceToggle= document.getElementById("voiceToggle");
+    const soundRetry = document.getElementById("soundRetry");
 
     let index       = 0;
     let timer       = null;
@@ -1961,6 +1981,9 @@
     let pressTimer  = null;
     let finalStopTimer = null;
     let touchMoved  = false;
+    let longPressTriggered = false;
+    let lastAdvanceAt = 0;
+    let pendingAudioCard = null;
     let audioContext= null;
     let soundNodes  = [];
 
@@ -2039,8 +2062,8 @@
 
     function startSoundscape(type) {
       stopSoundscape();
-      // fan / street are handled by file-based bed; silence = nothing
-      if (!type || type === "silence" || type === "fan" || type === "street") return;
+      // silence = nothing; fan/street can reach here as file-load fallbacks.
+      if (!type || type === "silence") return;
       audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
       if (audioContext.state === "suspended") audioContext.resume().catch(()=>{});
       const gain = audioContext.createGain();
@@ -2048,7 +2071,7 @@
       gain.connect(audioContext.destination);
       const osc = audioContext.createOscillator();
       osc.type = "sine";
-      osc.frequency.value = type === "drop" ? 48 : type === "thin" ? 82 : 66;
+      osc.frequency.value = type === "drop" ? 48 : type === "thin" ? 82 : type === "fan" ? 58 : 66;
       osc.connect(gain); osc.start();
       soundNodes.push(osc, gain);
       if (type === "drop") {
@@ -2121,6 +2144,8 @@
     // ─── Audio lifecycle ────────────────────────────────────────
     function stopAudio() {
       if (activeAudio) { activeAudio.pause(); activeAudio = null; }
+      pendingAudioCard = null;
+      soundRetry.hidden = true;
       stopSoundscape();
       // NOTE: bed and bgm are NOT stopped here; they persist across cards
     }
@@ -2170,7 +2195,13 @@
       const audio = new Audio(src);
       activeAudio = audio;
       let settled = false;
-      const fallback = () => { if (settled || audio !== activeAudio) return; settled=true; done(false); };
+      const fallback = () => {
+        if (settled || audio !== activeAudio) return;
+        settled = true;
+        pendingAudioCard = card;
+        soundRetry.hidden = false;
+        done(false);
+      };
       audio.addEventListener("ended", () => { if (settled || audio !== activeAudio) return; settled=true; done(true); });
       audio.addEventListener("error", fallback, { once: true });
       audio.play().catch(fallback);
@@ -2548,9 +2579,12 @@
       scheduleFinalStop(card);
     }
 
-    function next() {
+    function next(force = false) {
       if (!running) return;
       if (index >= cards.length - 1) return;
+      const now = Date.now();
+      if (!force && now - lastAdvanceAt < 700) return;
+      lastAdvanceAt = now;
       index = Math.min(index + 1, cards.length - 1);
       render(cards[index]);
     }
@@ -2588,11 +2622,21 @@
 
     function start() {
       clearFinalStopTimer();
+      primeAudio();
       running = true;
       paused  = false;
       cover.style.display = "none";
       index   = 0;
       render(cards[index]);
+    }
+
+    function primeAudio() {
+      audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioContext.state === "suspended") audioContext.resume().catch(()=>{});
+      const silentWav = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQQAAACAgICA";
+      const primer = new Audio(silentWav);
+      primer.volume = 0;
+      primer.play().then(() => primer.pause()).catch(()=>{});
     }
 
     function pause() {
@@ -2625,16 +2669,51 @@
       voiceToggle.textContent = voiceSet;
     });
 
-    phone.addEventListener("pointerdown", () => { touchMoved=false; pressTimer=window.setTimeout(pause,520); });
+    [voiceToggle, soundRetry].forEach(control => {
+      ["pointerdown", "pointerup", "click"].forEach(type => {
+        control.addEventListener(type, event => event.stopPropagation());
+      });
+    });
+
+    soundRetry.addEventListener("click", () => {
+      const card = pendingAudioCard;
+      if (!card || card !== cards[index]) {
+        soundRetry.hidden = true;
+        return;
+      }
+      clearTimeout(timer);
+      soundRetry.hidden = true;
+      primeAudio();
+      const hasAudio = playAudio(card, ok => {
+        if (ok) timer = window.setTimeout(next, 900);
+        else schedule(card);
+      });
+      if (!hasAudio) schedule(card);
+    });
+
+    phone.addEventListener("pointerdown", () => {
+      touchMoved = false;
+      longPressTriggered = false;
+      pressTimer = window.setTimeout(() => {
+        longPressTriggered = true;
+        pause();
+      }, 520);
+    });
     phone.addEventListener("pointermove", () => { touchMoved=true; clearTimeout(pressTimer); });
     phone.addEventListener("pointerup",   () => {
       clearTimeout(pressTimer);
       if (!running || touchMoved) return;
+      if (longPressTriggered) return;
       if (paused) { resume(); return; }
       const card = cards[index];
       if (!card.pause) next();
     });
     phone.addEventListener("pointerleave", () => clearTimeout(pressTimer));
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) pause();
+    });
+    window.addEventListener("pagehide", pause);
   </script>
 </body>
 </html>
