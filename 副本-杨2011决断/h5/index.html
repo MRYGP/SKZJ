@@ -1595,7 +1595,7 @@
       {
             "id": "card-04",
             "mood": "cold",
-            "img": "assets/img/card-04-v17-clean-desk-standard-20260706.jpg",
+            "img": "assets/img/card-04-v18b-mtime-history-9films-native-20260708-display.webp",
             "bed": "fan",
             "movieHistory": {
                   "site": "Mtime 时光网",
@@ -1764,7 +1764,7 @@
       {
             "id": "card-15b",
             "mood": "cold",
-            "img": "assets/img/card-15b-v17-clean-desk-standard-20260706.jpg",
+            "img": "assets/img/card-15c-v18-family-sms-20260708-display.webp",
             "bed": "silence",
             "sound": "silence",
             "tts": "card-15b.mp3",
@@ -1792,7 +1792,7 @@
       {
             "id": "card-16",
             "mood": "warm",
-            "img": "assets/img/card-16-v17-alley-out.jpg",
+            "img": "assets/img/card-18b2-v18-street-gut-20260708-display.webp",
             "bed": "street",
             "bgm": "warm-low",
             "tts": "card-16.mp3",
@@ -2377,7 +2377,8 @@
       "card-05": { type: "review", left: "9.2%",  top: "27.4%", width: "81.6%", height: "31.4%", rotate: ".35deg" },
       "card-07": { type: "review", left: "12.4%", top: "24.2%", width: "75.8%", height: "27.8%", rotate: ".1deg" },
     };
-    const TEXTLESS_VISUAL_CARDS = new Set(["card-03", "card-06"]);
+    // 这些卡的承重字已逐字核在原生图中，不再叠加 CSS 准字层。
+    const TEXTLESS_VISUAL_CARDS = new Set(["card-03", "card-04", "card-06", "card-15c"]);
 
     function hideVisualText(card) {
       return card && TEXTLESS_VISUAL_CARDS.has(card.id);
