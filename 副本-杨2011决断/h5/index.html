@@ -426,6 +426,29 @@
       position: absolute;
     }
 
+    /* card-06 原生图仍烙有旧群名；本层只覆盖群名，原图不改。 */
+    .native-title-fix {
+      position: absolute;
+      left: 27.7%;
+      top: 24.7%;
+      width: 27.5%;
+      height: 2.45%;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      padding-left: 1.25%;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(185,210,229,.99), rgba(151,187,216,.99));
+      color: #263746;
+      font: 600 10px/1 "Microsoft YaHei", "PingFang SC", sans-serif;
+      letter-spacing: 0;
+      white-space: nowrap;
+      text-shadow: 0 1px rgba(255,255,255,.42);
+      transform: rotate(.05deg);
+      box-shadow: inset 0 1px rgba(229,241,250,.45), inset 0 -1px rgba(91,137,173,.3);
+      pointer-events: none;
+    }
+
     .screen-page::after {
       content: "";
       position: absolute;
@@ -1667,15 +1690,15 @@
             "img": "assets/img/card-06-v17-native-clear-20260706.jpg",
             "bed": "fan",
             "qq": {
-                  "title": "92级初中同学群",
+                  "title": "92届初中同学群",
                   "messages": [
                         "恭喜刘同学买了新车",
                         "恭喜王同学买了新房"
                   ]
             },
             "tts": "card-06.mp3",
-            "text": "92级初中同学群，又亮了。看了一眼。心里咯噔一下。",
-            "fixed": 7549,
+            "text": "92届初中同学群，又亮了。看了一眼。心里咯噔一下。",
+            "fixed": 7497,
             "sfx": [
                   "qq-v17"
             ]
@@ -2427,7 +2450,10 @@
     }
 
     function pageMarkup(card) {
-      if (hideVisualText(card)) return "";
+      const nativeFix = card && card.id === "card-06"
+        ? `<div class="native-title-fix" aria-label="92届初中同学群">92届初中同学群</div>`
+        : "";
+      if (hideVisualText(card)) return nativeFix;
       const page = screenPage(card);
       if (page && (card.review || card.novel || card.movieHistory)) {
         const lockClass = card.lockScreen ? " locked-review" : "";
@@ -2437,7 +2463,7 @@
           ${movieHistoryMarkup(card)}
         </div>`;
       }
-      return `${reviewMarkup(card)}${qqMarkup(card)}${smsMarkup(card)}${novelMarkup(card)}${movieHistoryMarkup(card)}${evidenceMarkup(card)}`;
+      return `${nativeFix}${reviewMarkup(card)}${qqMarkup(card)}${smsMarkup(card)}${novelMarkup(card)}${movieHistoryMarkup(card)}${evidenceMarkup(card)}`;
     }
 
     function factPinMarkup(card) {
