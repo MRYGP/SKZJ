@@ -106,6 +106,11 @@
         linear-gradient(180deg, rgba(20,14,7,.14), rgba(0,0,0,.68));
     }
 
+    .stage.blackout,
+    .stage.blackout::after {
+      background: #000;
+    }
+
     .hud {
       position: absolute;
       inset: 16px 16px auto;
@@ -135,14 +140,32 @@
     }
 
     .sound-toggle {
-      width: 42px;
-      height: 28px;
+      width: 48px;
+      height: 44px;
       border-radius: 99px;
       background: rgba(0,0,0,.28);
       color: var(--muted);
       font-size: 12px;
       pointer-events: auto;
     }
+
+    .sound-retry {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      z-index: 9;
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      transform: translateX(-50%);
+      background: rgba(15, 12, 9, .9);
+      color: #f3dfb8;
+      border: 1px solid rgba(243, 223, 184, .46);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .sound-retry[hidden] { display: none; }
 
     .content {
       position: absolute;
@@ -403,6 +426,29 @@
       position: absolute;
     }
 
+    /* card-06 原生图仍烙有旧群名；本层只覆盖群名，原图不改。 */
+    .native-title-fix {
+      position: absolute;
+      left: 27.7%;
+      top: 24.7%;
+      width: 27.5%;
+      height: 2.45%;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      padding-left: 1.25%;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(185,210,229,.99), rgba(151,187,216,.99));
+      color: #263746;
+      font: 600 10px/1 "Microsoft YaHei", "PingFang SC", sans-serif;
+      letter-spacing: 0;
+      white-space: nowrap;
+      text-shadow: 0 1px rgba(255,255,255,.42);
+      transform: rotate(.05deg);
+      box-shadow: inset 0 1px rgba(229,241,250,.45), inset 0 -1px rgba(91,137,173,.3);
+      pointer-events: none;
+    }
+
     .screen-page::after {
       content: "";
       position: absolute;
@@ -608,9 +654,24 @@
       align-content: end;
       gap: 18px;
       padding: 40px 28px;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.7)),
-      url("assets/img/cover-v17-clean-desk-standard-20260706.jpg") center / cover;
+      background: #000;
+    }
+
+    .cover-tag {
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+      letter-spacing: .08em;
+    }
+
+    .version-mark {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      color: rgba(255,255,255,.25);
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: .02em;
+      pointer-events: none;
     }
 
     .primary {
@@ -1147,7 +1208,7 @@
     }
 
     .screen-cycle--wake .screen-cycle__black {
-      opacity: .96;
+      opacity: 1;
       animation: wakeBlack 6.6s ease-out forwards;
     }
 
@@ -1179,12 +1240,12 @@
 
     @keyframes sleepBlack {
       0%, 72% { opacity: 0; }
-      88% { opacity: .44; }
-      100% { opacity: .88; }
+      82% { opacity: .44; }
+      88%, 100% { opacity: 1; }
     }
 
     @keyframes wakeBlack {
-      0%, 20% { opacity: .96; }
+      0%, 20% { opacity: 1; }
       36% { opacity: .52; }
       58%, 100% { opacity: 0; }
     }
@@ -1452,12 +1513,15 @@
       </div>
       <div class="content" id="content"></div>
       <div class="hint">已暂停</div>
+      <button class="sound-retry" id="soundRetry" hidden>声音未播？点此继续</button>
       <div class="cover" id="cover">
         <div class="kicker">人生馆001号</div>
         <div class="title">2011 · 那只水杯</div>
+        <div class="cover-tag">2011 · 长沙红花坡</div>
         <p class="cover-hook">他一直觉得这样挺好——直到那只水杯，让他看见三十五岁的自己，一动没动。</p>
         <p class="muted-note">戴上耳机，约 5 分钟。</p>
         <button class="primary" id="startBtn">开始</button>
+        <div class="version-mark" id="versionMark">v1.8-H5 · nightfix-20260722</div>
       </div>
     </section>
   </main>
@@ -1468,53 +1532,58 @@
       B: "assets/audio/narration-B/"
     };
 
+    const versionMark = document.getElementById("versionMark");
+    const buildRef = new URLSearchParams(window.location.search).get("build");
+    if (versionMark && /^[0-9a-f]{7,12}$/i.test(buildRef || "")) {
+      versionMark.textContent = `v1.8-H5 · ${buildRef}`;
+    }
+
+    // 技术占位：edge-tts 云健声线，非最终真人配音。
+    const TTS_DIR = "assets/audio/narration-TTS/";
+
     let voiceSet = "A";
 
     // ─── sfx 路径 ───────────────────────────────────────────────
     const SFX = {
-      "night-market-close-v17": "assets/audio/sfx/night-market-close-v17.mp3?v=20260703-v17",
-      "night-market-open-v17":  "assets/audio/sfx/night-market-open-v17.mp3?v=20260703-v17",
-      "keyboard-plastic-v17":   "assets/audio/sfx/keyboard-plastic-v17.mp3?v=20260703-v17",
-      "movie-muffle-v17":       "assets/audio/sfx/movie-muffle-v17.mp3?v=20260703-v17",
-      "qq-v17":                 "assets/audio/sfx/qq-v17.mp3?v=20260703-v17",
-      "low-heart-miss-v17":     "assets/audio/sfx/low-heart-miss-v17.mp3?v=20260703-v17",
-      "sink-tone-v17":          "assets/audio/sfx/sink-tone-v17.mp3?v=20260703-v17",
-      "phone-qq-crowd-v17":     "assets/audio/sfx/phone-qq-crowd-v17.mp3?v=20260703-v17",
-      "keyboard-phone-v17":     "assets/audio/sfx/keyboard-phone-v17.mp3?v=20260703-v17",
-      "pen-sms-v17":            "assets/audio/sfx/pen-sms-v17.mp3?v=20260703-v17",
-      "money-snap-v17":         "assets/audio/sfx/money-snap-v17.mp3?v=20260703-v17",
+      "night-market-close-v17": "assets/audio/sfx/pack-up.mp3?v=20260721-assembly",
+      "night-market-open-v17":  "assets/audio/sfx/open-up.mp3?v=20260721-assembly",
+      "keyboard-plastic-v17":   null, // 待补产：无唯一语义对应，当前静音
+      "movie-muffle-v17":       null, // 待补产：无唯一语义对应，当前静音
+      "qq-v17":                 "assets/audio/sfx/qq.mp3?v=20260721-assembly",
+      "low-heart-miss-v17":     null, // 待补产：无唯一语义对应，当前静音
+      "sink-tone-v17":          null, // 待补产：无唯一语义对应，当前静音
+      "phone-qq-crowd-v17":     null, // 待补产：无唯一语义对应，当前静音
+      "keyboard-phone-v17":     null, // 待补产：无唯一语义对应，当前静音
+      "pen-sms-v17":            "assets/audio/sfx/pen.mp3?v=20260721-assembly",
+      "money-snap-v17":         "assets/audio/sfx/money.mp3?v=20260721-assembly",
       "sms-tone-v18":           "assets/audio/sfx/single-tone.mp3?v=20260708-v18",
     };
 
     // ─── bed / bgm 路径 ──────────────────────────────────────────
     const BED_FILES = {
-      fan:    "assets/audio/bed-fan-pixabay-72370.mp3?v=20260702-72370",
-      street: "assets/audio/bed-street-v17.mp3?v=20260703-v17",
+      fan:    "assets/audio/bed-fan.mp3?v=20260721-assembly",
+      street: "assets/audio/bed-street.mp3?v=20260721-assembly",
     };
     const BED_VOLUMES = {
       fan: 0.16,
       street: 0.10,
     };
     const BGM_FILES = {
-      warmLow: "assets/audio/warm-low-v17.mp3?v=20260703-v17",
+      warmLow: "assets/audio/bgm-warm.mp3?v=20260721-assembly",
     };
     const BGM_VOLUMES = {
       warmLow: 0.035,
     };
 
+    // 补强池（本轮只登记、不实现）：卡1屏内真双窗资产；卡2专属镜像资产；
+    // 卡3翻页循环动画；键盘渐停/渐起音效；鼾声音效。
     const cards = [
-      {
-            "id": "cover",
-            "kind": "center",
-            "mood": "cold",
-            "img": "assets/img/cover-v17-clean-desk-standard-20260706.jpg",
-            "text": "2011年。\n长沙，红花坡。",
-            "fixed": 3600
-      },
       {
             "id": "act1-intro",
             "kind": "center",
             "mood": "cold",
+            "clearImage": true,
+            "blackout": true,
             "text": "那时候，真的很充实。",
             "fixed": 4200
       },
@@ -1536,7 +1605,7 @@
             "id": "card-02",
             "kind": "day-start",
             "mood": "cold",
-            "img": "assets/img/card-02-v17-clean-desk-standard-20260706.jpg",
+            "img": "assets/img/card-01-v17-clean-desk-standard-20260706.jpg",
             "imgOpacity": 0.94,
             "imgFilter": "saturate(.82) contrast(1.06) brightness(.74)",
             "bed": "fan",
@@ -1573,7 +1642,7 @@
       {
             "id": "card-04",
             "mood": "cold",
-            "img": "assets/img/card-04-v17-clean-desk-standard-20260706.jpg",
+            "img": "assets/img/card-04-v18b-mtime-history-9films-native-20260708-display.webp",
             "bed": "fan",
             "movieHistory": {
                   "site": "Mtime 时光网",
@@ -1621,14 +1690,15 @@
             "img": "assets/img/card-06-v17-native-clear-20260706.jpg",
             "bed": "fan",
             "qq": {
-                  "title": "92级初中同学群",
+                  "title": "92届初中同学群",
                   "messages": [
                         "恭喜刘同学买了新车",
                         "恭喜王同学买了新房"
                   ]
             },
-            "text": "92级初中同学群，又亮了。看了一眼，点掉。心里咯噔一下。又把它按回去：有什么了不起。活得那么累，那么俗。",
-            "fixed": 13554,
+            "tts": "card-06.mp3",
+            "text": "92届初中同学群，又亮了。看了一眼。心里咯噔一下。",
+            "fixed": 7497,
             "sfx": [
                   "qq-v17"
             ]
@@ -1670,8 +1740,9 @@
             "img": "assets/img/card-10-v17-clean-desk-standard-20260706.jpg",
             "bed": "fan",
             "sound": "thin",
+            "tts": "card-10.mp3",
             "text": "够得到。只是，要动一下身子。",
-            "fixed": 4650
+            "fixed": 4519
       },
       {
             "id": "pause-0",
@@ -1689,7 +1760,7 @@
             "sound": "silence",
             "audio": "card-11.mp3",
             "text": "身子，没有动。",
-            "fixed": 3354
+            "fixed": 5496
       },
       {
             "id": "card-12",
@@ -1697,8 +1768,9 @@
             "img": "assets/img/card-12-v17-lazy-fat-bread-neck-eaten-hole.jpg",
             "bed": "silence",
             "sound": "silence",
+            "tts": "card-12.mp3",
             "text": "一个懒汉，脖子上挂着饼。把饼转一下就能吃。他没动。……后来，饿死了。",
-            "fixed": 11154,
+            "fixed": 9273,
             "sfx": [
                   "low-heart-miss-v17"
             ]
@@ -1721,8 +1793,9 @@
             "img": "assets/img/card-14-v17-clean-desk-standard-20260706.jpg",
             "bed": "silence",
             "sound": "silence",
+            "tts": "card-14.mp3",
             "text": "就那么停着。大概一分钟。",
-            "fixed": 4482
+            "fixed": 3892
       },
       {
             "id": "card-15",
@@ -1731,17 +1804,19 @@
             "img": "assets/img/card-15-v17-clean-desk-standard-20260706.jpg",
             "bed": "silence",
             "sound": "silence",
+            "tts": "card-15.mp3",
             "text": "再也不能这样过下去了。绝对不行。",
-            "fixed": 4482
+            "fixed": 4519
       },
       {
             "id": "card-15b",
             "mood": "cold",
-            "img": "assets/img/card-15b-v17-clean-desk-standard-20260706.jpg",
+            "img": "assets/img/card-15c-v18-family-sms-20260708-display.webp",
             "bed": "silence",
             "sound": "silence",
+            "tts": "card-15b.mp3",
             "text": "屏幕一暗，屋里就一个人。忽然有点发冷。怎么会成了这样？再这样下去，这辈子，会变成什么样？",
-            "fixed": 11010
+            "fixed": 11912
       },
       {
             "id": "card-15c",
@@ -1754,8 +1829,9 @@
                   "time": "昨天",
                   "message": "哥，爸昨天生日，你又忘了。"
             },
+            "tts": "card-15c.mp3",
             "text": "胖成这样，懒成这样，废成这样——怎么会的？整天没精神，门都懒得出。朋友，一个都没剩下。爸妈那边，没事就不回。想来想去，只有一个答案——早就不在这个世界里了。日子全在网上过。这边，只是路过。连过客都算不上——过客，起码还抬头看一眼。",
-            "fixed": 22000,
+            "fixed": 28369,
             "sfx": [
                   "sms-tone-v18"
             ]
@@ -1763,11 +1839,12 @@
       {
             "id": "card-16",
             "mood": "warm",
-            "img": "assets/img/card-16-v17-alley-out.jpg",
+            "img": "assets/img/card-18b2-v18-street-gut-20260708-display.webp",
             "bed": "street",
             "bgm": "warm-low",
+            "tts": "card-16.mp3",
             "text": "再这样下去，最后也会\"饿\"死。先离开这把椅子。",
-            "fixed": 7800
+            "fixed": 6139
       },
       {
             "id": "card-16b",
@@ -1775,8 +1852,9 @@
             "img": "assets/img/card-16b-v17-street-options.jpg",
             "bed": "street",
             "bgm": "warm-low",
+            "tts": "card-16b.mp3",
             "text": "离开这把椅子，去做什么呢。总不能，就是出去转一圈。上班，啥也不会，没人请。下力气，心里那点清高又过不去。继续倒腾软件，还是那点钱。",
-            "fixed": 19000,
+            "fixed": 17476,
             "scrollText": true
       },
       {
@@ -1785,6 +1863,7 @@
             "img": "assets/img/card-17a-v17-village-brother.jpg",
             "bed": "street",
             "bgm": "warm-low",
+            "tts": "card-17a.mp3",
             "factPin": {
                   "text": "信托\n房地产\n6000万\n一个点\n60万",
                   "left": "7%",
@@ -1793,7 +1872,7 @@
                   "rotate": "-3deg"
             },
             "text": "可往哪动？村里那个大哥，又冒出来。同一个村长大的，混社会的，没读过几年书，伙着三四个人，把一笔信托对接给房地产，募了六千万，分一个点，六十万。这条路，原来走得通。",
-            "fixed": 20298,
+            "fixed": 19540,
             "scrollText": true
       },
       {
@@ -1802,8 +1881,9 @@
             "img": "assets/img/card-17b-v17-hands-old-computer.jpg",
             "bed": "silence",
             "bgm": "warm-low",
+            "tts": "card-17b.mp3",
             "text": "他读书不多，更别说会电脑了。赚钱这事，也没那么复杂。他能，我凭什么不行？",
-            "fixed": 10722
+            "fixed": 9796
       },
       {
             "id": "card-18",
@@ -1813,8 +1893,9 @@
             "bed": "silence",
             "bgm": "warm-low",
             "sound": "low",
+            "tts": "card-18.mp3",
             "text": "没等看清整条路。前面全是荆棘，看不清。那时候只认一件事：先动。先试。手里有把刀，就先砍眼前这一茬。砍开一点，往前挪一点。又挡住了，再砍。",
-            "fixed": 20562,
+            "fixed": 19017,
             "scrollText": true
       },
       {
@@ -1823,6 +1904,7 @@
             "img": "assets/img/card-18b-v17-loan-messenger-whitecup-20260706.jpg",
             "bed": "silence",
             "bgm": "warm-low",
+            "tts": "card-18b.mp3",
             "text": "刀往哪砍？先挤进去，当个传话的。一通电话接一通电话，一个中介对一个中介，把这头的话，递到那头。第一单，十几个人挤着谈，名单念到最后，没有名字。有个还算厚道的，私下塞了一万多。第二单，两头连上了，人家自己谈成了，站在外面。一单又一单，都没什么指望——可脑子里，总蹦出曾国藩那四个字：屡败屡战。",
             "phonePanel": {
                   "calls": [
@@ -1839,7 +1921,7 @@
                         ["李担保", "李总您好，项目方那边对接好了，您看什么时候方便碰一下？"]
                   ]
             },
-            "fixed": 32250,
+            "fixed": 34873,
             "scrollText": true,
             "sfx": [
                   "phone-qq-crowd-v17"
@@ -1851,8 +1933,9 @@
             "img": "assets/img/card-16-v17-alley-out.jpg",
             "bed": "street",
             "bgm": "warm-low",
+            "tts": "card-18b2.mp3",
             "text": "巷口一抬头，高楼一幢接一幢，车水马龙。不知道多少个亿，就在这座城里流动。原来外面一直在动。钱在动，人也在动。有人在长沙有了车，有了房，站住了脚。原来这些，不在天上，就在这条街上。",
-            "fixed": 21000,
+            "fixed": 22491,
             "scrollText": true
       },
       {
@@ -1861,6 +1944,7 @@
             "img": "assets/img/card-18c-v17-baidu-acceptance.jpg",
             "bed": "silence",
             "bgm": "warm-low",
+            "tts": "card-18c.mp3",
             "text": "这么传了一年，撞见一个更窄的口子——承兑。又是一堆没见过的词。承兑、信托、资金方……一个个敲进百度，夜里啃。啃完，干的还是老本行：把收承兑的，和有承兑的，叫到一张桌上。",
             "searchPanel": {
                   "terms": [
@@ -1872,7 +1956,7 @@
                         "资金方 是什么意思"
                   ]
             },
-            "fixed": 21186,
+            "fixed": 20010,
             "scrollText": true,
             "sfx": [
                   "keyboard-phone-v17"
@@ -1884,6 +1968,7 @@
             "img": "assets/img/card-19-v17-notebook-nokia-sms.jpg",
             "bed": "street",
             "bgm": "warm-low",
+            "tts": "card-19.mp3",
             "text": "兜里揣个小本子，前几页抄满要点——生怕哪个词没弄懂，在两边中间把话传岔了，事就办不成。沿街一家家，仰头把招牌上的电话抄进手机，回去一条条群发出去：老板，我做承兑业务的。",
             "notebookPanel": {
                   "left": [
@@ -1899,7 +1984,7 @@
                         "××钢材 王老板 139××××3315（说下周再打）"
                   ]
             },
-            "fixed": 18786,
+            "fixed": 19148,
             "scrollText": true,
             "sfx": [
                   "pen-sms-v17"
@@ -1911,8 +1996,9 @@
             "img": "assets/img/card-20-v17-100yuan-deal.jpg",
             "bed": "street",
             "bgm": "warm-low",
+            "tts": "card-20.mp3",
             "text": "跑了不知多少家，第一单来了。三百万的承兑，把收承兑的资金方和有承兑的企业主连上，做成了。资金方赚了万把块，看人老实、头回做业务、穿得也傻不几的，临走甩过来一张一百块：“给你的。”那时候还穷，也还清高。这钱对不对、那点瞧不起该不该受，没算。只记住一件事：还成单了。路，砍开了第一道口子。",
-            "fixed": 35490,
+            "fixed": 33724,
             "scrollText": true,
             "sfx": [
                   "money-snap-v17"
@@ -1952,6 +2038,7 @@
     const progressBar= document.getElementById("progressBar");
     const phone      = document.getElementById("phone");
     const voiceToggle= document.getElementById("voiceToggle");
+    const soundRetry = document.getElementById("soundRetry");
 
     let index       = 0;
     let timer       = null;
@@ -1961,6 +2048,9 @@
     let pressTimer  = null;
     let finalStopTimer = null;
     let touchMoved  = false;
+    let longPressTriggered = false;
+    let lastAdvanceAt = 0;
+    let pendingAudioCard = null;
     let audioContext= null;
     let soundNodes  = [];
 
@@ -2007,6 +2097,7 @@
 
     function setImage(card) {
       stage.classList.toggle("has-visual", !!(card && card.visual));
+      stage.classList.toggle("blackout", !!(card && card.blackout));
       const src = card && card.img ? card.img : "";
       if (src) {
         stage.dataset.pendingImage = src;
@@ -2022,6 +2113,9 @@
             stage.style.setProperty("--image", imageCssValue(src));
           }
         }
+      } else if (card && card.clearImage) {
+        stage.dataset.pendingImage = "";
+        stage.style.setProperty("--image", "none");
       } else if (!stage.style.getPropertyValue("--image")) {
         stage.style.setProperty("--image", "none");
       }
@@ -2039,8 +2133,8 @@
 
     function startSoundscape(type) {
       stopSoundscape();
-      // fan / street are handled by file-based bed; silence = nothing
-      if (!type || type === "silence" || type === "fan" || type === "street") return;
+      // silence = nothing; fan/street can reach here as file-load fallbacks.
+      if (!type || type === "silence") return;
       audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
       if (audioContext.state === "suspended") audioContext.resume().catch(()=>{});
       const gain = audioContext.createGain();
@@ -2048,7 +2142,7 @@
       gain.connect(audioContext.destination);
       const osc = audioContext.createOscillator();
       osc.type = "sine";
-      osc.frequency.value = type === "drop" ? 48 : type === "thin" ? 82 : 66;
+      osc.frequency.value = type === "drop" ? 48 : type === "thin" ? 82 : type === "fan" ? 58 : 66;
       osc.connect(gain); osc.start();
       soundNodes.push(osc, gain);
       if (type === "drop") {
@@ -2121,6 +2215,8 @@
     // ─── Audio lifecycle ────────────────────────────────────────
     function stopAudio() {
       if (activeAudio) { activeAudio.pause(); activeAudio = null; }
+      pendingAudioCard = null;
+      soundRetry.hidden = true;
       stopSoundscape();
       // NOTE: bed and bgm are NOT stopped here; they persist across cards
     }
@@ -2165,12 +2261,18 @@
 
     function playAudio(card, done) {
       if (activeAudio) { activeAudio.pause(); activeAudio = null; }
-      const src = card.audioFull || (card.audio ? `${voiceSets[voiceSet]}${card.audio}` : "");
+      const src = card.audioFull || (card.tts ? `${TTS_DIR}${card.tts}` : card.audio ? `${voiceSets[voiceSet]}${card.audio}` : "");
       if (!src) return false;
       const audio = new Audio(src);
       activeAudio = audio;
       let settled = false;
-      const fallback = () => { if (settled || audio !== activeAudio) return; settled=true; done(false); };
+      const fallback = () => {
+        if (settled || audio !== activeAudio) return;
+        settled = true;
+        pendingAudioCard = card;
+        soundRetry.hidden = false;
+        done(false);
+      };
       audio.addEventListener("ended", () => { if (settled || audio !== activeAudio) return; settled=true; done(true); });
       audio.addEventListener("error", fallback, { once: true });
       audio.play().catch(fallback);
@@ -2326,7 +2428,8 @@
       "card-05": { type: "review", left: "9.2%",  top: "27.4%", width: "81.6%", height: "31.4%", rotate: ".35deg" },
       "card-07": { type: "review", left: "12.4%", top: "24.2%", width: "75.8%", height: "27.8%", rotate: ".1deg" },
     };
-    const TEXTLESS_VISUAL_CARDS = new Set(["card-03", "card-06"]);
+    // 这些卡的承重字已逐字核在原生图中，不再叠加 CSS 准字层。
+    const TEXTLESS_VISUAL_CARDS = new Set(["card-03", "card-04", "card-06", "card-15c"]);
 
     function hideVisualText(card) {
       return card && TEXTLESS_VISUAL_CARDS.has(card.id);
@@ -2347,7 +2450,10 @@
     }
 
     function pageMarkup(card) {
-      if (hideVisualText(card)) return "";
+      const nativeFix = card && card.id === "card-06"
+        ? `<div class="native-title-fix" aria-label="92届初中同学群">92届初中同学群</div>`
+        : "";
+      if (hideVisualText(card)) return nativeFix;
       const page = screenPage(card);
       if (page && (card.review || card.novel || card.movieHistory)) {
         const lockClass = card.lockScreen ? " locked-review" : "";
@@ -2357,7 +2463,7 @@
           ${movieHistoryMarkup(card)}
         </div>`;
       }
-      return `${reviewMarkup(card)}${qqMarkup(card)}${smsMarkup(card)}${novelMarkup(card)}${movieHistoryMarkup(card)}${evidenceMarkup(card)}`;
+      return `${nativeFix}${reviewMarkup(card)}${qqMarkup(card)}${smsMarkup(card)}${novelMarkup(card)}${movieHistoryMarkup(card)}${evidenceMarkup(card)}`;
     }
 
     function factPinMarkup(card) {
@@ -2380,7 +2486,7 @@
 
     function textMarkup(card, cls) {
       if (!card.text) return "";
-      if (card.audio && card.kind !== "center") {
+      if ((card.audio || card.tts) && card.kind !== "center") {
         return `<div class="${cls} narration-subtitle">${escapeHtml(card.text)}</div>`;
       }
       if (hideVisualText(card)) return "";
@@ -2548,9 +2654,12 @@
       scheduleFinalStop(card);
     }
 
-    function next() {
+    function next(force = false) {
       if (!running) return;
       if (index >= cards.length - 1) return;
+      const now = Date.now();
+      if (!force && now - lastAdvanceAt < 700) return;
+      lastAdvanceAt = now;
       index = Math.min(index + 1, cards.length - 1);
       render(cards[index]);
     }
@@ -2588,11 +2697,21 @@
 
     function start() {
       clearFinalStopTimer();
+      primeAudio();
       running = true;
       paused  = false;
       cover.style.display = "none";
       index   = 0;
       render(cards[index]);
+    }
+
+    function primeAudio() {
+      audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioContext.state === "suspended") audioContext.resume().catch(()=>{});
+      const silentWav = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQQAAACAgICA";
+      const primer = new Audio(silentWav);
+      primer.volume = 0;
+      primer.play().then(() => primer.pause()).catch(()=>{});
     }
 
     function pause() {
@@ -2625,16 +2744,51 @@
       voiceToggle.textContent = voiceSet;
     });
 
-    phone.addEventListener("pointerdown", () => { touchMoved=false; pressTimer=window.setTimeout(pause,520); });
+    [voiceToggle, soundRetry].forEach(control => {
+      ["pointerdown", "pointerup", "click"].forEach(type => {
+        control.addEventListener(type, event => event.stopPropagation());
+      });
+    });
+
+    soundRetry.addEventListener("click", () => {
+      const card = pendingAudioCard;
+      if (!card || card !== cards[index]) {
+        soundRetry.hidden = true;
+        return;
+      }
+      clearTimeout(timer);
+      soundRetry.hidden = true;
+      primeAudio();
+      const hasAudio = playAudio(card, ok => {
+        if (ok) timer = window.setTimeout(next, 900);
+        else schedule(card);
+      });
+      if (!hasAudio) schedule(card);
+    });
+
+    phone.addEventListener("pointerdown", () => {
+      touchMoved = false;
+      longPressTriggered = false;
+      pressTimer = window.setTimeout(() => {
+        longPressTriggered = true;
+        pause();
+      }, 520);
+    });
     phone.addEventListener("pointermove", () => { touchMoved=true; clearTimeout(pressTimer); });
     phone.addEventListener("pointerup",   () => {
       clearTimeout(pressTimer);
       if (!running || touchMoved) return;
+      if (longPressTriggered) return;
       if (paused) { resume(); return; }
       const card = cards[index];
       if (!card.pause) next();
     });
     phone.addEventListener("pointerleave", () => clearTimeout(pressTimer));
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) pause();
+    });
+    window.addEventListener("pagehide", pause);
   </script>
 </body>
 </html>
