@@ -6,7 +6,9 @@
 
 ## 最小启动包（按序读）
 
-> 现行系统指令备份：`KAIROS系统指令-现行备份-v2.7.md`（杨已重贴 claude.ai 运行时；CODEX 执行前必读）。
+> 现行系统指令备份：`KAIROS系统指令-现行备份-v2.8.md`（claude.ai 运行时待杨重贴；CODEX 执行前必读）。
+>
+> CEO Project 运行指令：`投喂包/主控Project/系统指令/ChatGPT-CEO-Project运行指令-v1.0.md`（原 ChatGPT 主控已归档）。
 
 1. 最新 `前情提要-*.md`（以文件日期/看板确认现行）—— 当前状态快照 + 技术线任务包
 2. `KAIROS人生馆-项目总纲-v0.4.md` —— 商业结构主文档
