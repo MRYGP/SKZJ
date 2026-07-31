@@ -1,3 +1,7 @@
+> ⚠️ 已取代（2026-07-25）：本文件被 `投喂包/主控Project/系统指令/ChatGPT-CEO-Project运行指令-v1.0.md` 取代，不得再粘贴使用。
+> 名实不符备注：本文件名为 v2.5，文内标题为 v2.7-ChatGPT运行版——历史遗留，归档时原样保留、不改名，以本横幅说明为准。
+> 本文件「ChatGPT 默认不能读取本地 D 盘」整套前提已作废（杨 2026-07-25 确认桌面版可读盘）。
+
 # KAIROS人生馆 / SKZJ · ChatGPT Project 主控指令 v2.7-ChatGPT运行版
 
 > 性质：ChatGPT Project 运行时自定义指令备份。用途：粘进 ChatGPT 的 KAIROS / SKZJ 主控 Project。
